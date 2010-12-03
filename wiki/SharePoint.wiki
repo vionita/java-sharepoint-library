@@ -4,4 +4,4 @@ Microsoft Sharepoint is a Web technology based server that can be used to build 
 
 Sharepoint can also be used as a building platform to build systems atop of its framework.
 
-_Source: http://en.wikipedia.org/wiki/Microsoft_SharePoint_
+_Source: http://en.wikipedia.org/wiki/Microsoft_SharePoint
