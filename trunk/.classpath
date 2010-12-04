@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/axiom-api-1.2.9.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/axiom-impl-1.2.9.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/axis2-adb-1.5.2.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/axis2-kernel-1.5.2.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/axis2-transport-http-1.5.2.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/axis2-transport-local-1.5.2.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/commons-codec-1.3.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/httpcore-4.0.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/log4j-1.2.16.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/mail-1.4.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/neethi-2.0.4.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/not-yet-commons-ssl-0.3.11.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/wsdl4j-1.6.2.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/xmlbeans-2.3.0.jar"/>
+	<classpathentry kind="lib" path="/home/vkorecky/workspace/GordicInternalApplication/SharePoint/lib/XmlSchema-1.4.3.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
