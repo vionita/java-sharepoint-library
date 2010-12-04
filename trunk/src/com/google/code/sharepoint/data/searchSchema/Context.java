@@ -28,13 +28,13 @@ import com.google.code.sharepoint.data.Support;
 //---------
 //QueryText
 
-public class SpContext extends DataObject {		
-	private SpQueryText queryText = null;
+public class Context extends DataObject {		
+	private QueryText queryText = null;
 
 	/**
 	 * Specifies the parent element for the search query issued to the Query Web service
 	 */
-	public SpContext() {
+	public Context() {
 	}
 
 	/**
@@ -43,7 +43,7 @@ public class SpContext extends DataObject {
 	 * @throws XMLStreamException
 	 * @throws ParseException
 	 */
-	public SpContext(String xmlString) throws XMLStreamException,
+	public Context(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
@@ -58,7 +58,7 @@ public class SpContext extends DataObject {
 	 * @param xmlElement
 	 * @throws ParseException
 	 */
-	public SpContext(OMElement xmlElement) throws ParseException {
+	public Context(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}
 
@@ -68,7 +68,7 @@ public class SpContext extends DataObject {
 		while (children.hasNext()) {
 			OMElement childElement = (OMElement) children.next();
 			if (childElement.getQName().getLocalPart().equals("QueryText")) {
-				this.setQueryText(new SpQueryText(childElement));
+				this.setQueryText(new QueryText(childElement));
 				break;
 			}
 		}		
@@ -88,7 +88,7 @@ public class SpContext extends DataObject {
 	 * QueryText
 	 * @return
 	 */
-	public SpQueryText getQueryText() {
+	public QueryText getQueryText() {
 		return queryText;
 	}
 
@@ -96,7 +96,7 @@ public class SpContext extends DataObject {
 	 * QueryText
 	 * @param queryText
 	 */
-	public void setQueryText(SpQueryText queryText) {
+	public void setQueryText(QueryText queryText) {
 		this.queryText = queryText;
 	}
 

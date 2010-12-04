@@ -93,35 +93,54 @@ import com.google.code.sharepoint.data.Support;
 //IncludeRelevantResults
 //IncludeHighConfidenceResults 
 
-public class SpQuery extends DataObject {		
+public class Query extends DataObject {		
 	/** A GUID that uniquely identifies a search query request to the Query Web service */
 	private String queryID = null;
 	/** Specifies the parent element for the search query issued to the Query Web service */
-	private SpContext context = null;
+	private Context context = null;
 	/** Contains information about the range of the query, including the size and the number of results requested from the Query Web service */
-	private SpRange range = null;
+	private Range range = null;
 	/** Contains the managed properties to include in the search results that are returned by the Query Web service */
-	private SpProperties properties = null;
+	private Properties properties = null;
 	/** Contains information for sorting the search results returned by the Query Web service */
-	private SpSortByProperties sortByProperties = null;
+	private SortByProperties sortByProperties = null;
 	/** Specifies whether there is a default AND between terms in the search query request to the Query Web service */
 	private Boolean implicitAndBehavior = null;	
 	/** Specifies the unique identifier of the ranking model to use when processing the request to the Query Web service */
 	private String relevanceModel = null;
 	/** Specifies whether inflectional forms of the search terms are used when processing the request to the Query Web service */
 	private Boolean enableStemming = null;	
-	/**
-	 * Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint
+	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
 	 * Specifies whether duplicates are removed before the search results are returned by the Query Web service.
 	 * For FAST Search Server 2010 for SharePoint, this element can also be used to collapse hits in the result set by using a group identifier (ID).
 	 */
-	private SpTrimDuplicates trimDuplicates = null;
+	private TrimDuplicates trimDuplicates = null;
+	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether special term results are included in the response returned by the Query Web service
+  	 */
+	private Boolean includeSpecialTermResults = null;
+	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether pre query suggestions are included in the response from the Query Web service
+  	 */
+	private Boolean preQuerySuggestions = null;
+	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether parts of the query suggestion that are returned by the Query Web service are highlighted
+  	 */
+	private Boolean highlightQuerySuggestions = null;
+	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether the first letter in the query suggestion that is returned by the Query Web service appears in uppercase letters
+  	 */
+	private Boolean capitalizeFirstLetters = null;
+	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies the results provider for the Query Web service
+  	 */
+	private String resultProvider = null;
 	
 
-	public SpQuery() {
+	public Query() {
 	}
 
-	public SpQuery(String xmlString) throws XMLStreamException,
+	public Query(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
@@ -131,7 +150,7 @@ public class SpQuery extends DataObject {
 		}
 	}
 
-	public SpQuery(OMElement xmlElement) throws ParseException {
+	public Query(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}
 
@@ -145,16 +164,16 @@ public class SpQuery extends DataObject {
 				this.setQueryID(childElement.getText());
 			}
 			if (childElement.getQName().getLocalPart().equals("Context")) {
-				this.setContext(new SpContext(childElement));
+				this.setContext(new Context(childElement));
 			}		
 			if (childElement.getQName().getLocalPart().equals("Range")) {
-				this.setRange(new SpRange(childElement));
+				this.setRange(new Range(childElement));
 			}				
 			if (childElement.getQName().getLocalPart().equals("Properties")) {
-				this.setProperties(new SpProperties(childElement));
+				this.setProperties(new Properties(childElement));
 			}
 			if (childElement.getQName().getLocalPart().equals("SortByProperties")) {
-				this.setSortByProperties(new SpSortByProperties(childElement));
+				this.setSortByProperties(new SortByProperties(childElement));
 			}
 			if (childElement.getQName().getLocalPart().equals("ImplicitAndBehavior")) {
 				this.setImplicitAndBehavior(Boolean.valueOf(childElement.getText()));
@@ -165,8 +184,23 @@ public class SpQuery extends DataObject {
 			if (childElement.getQName().getLocalPart().equals("EnableStemming")) {
 				this.setEnableStemming(Boolean.valueOf(childElement.getText()));
 			}
-			if (childElement.getQName().getLocalPart().equals("Properties")) {
-				this.setTrimDuplicates(new SpTrimDuplicates(childElement));
+			if (childElement.getQName().getLocalPart().equals("TrimDuplicates")) {
+				this.setTrimDuplicates(new TrimDuplicates(childElement));
+			}
+			if (childElement.getQName().getLocalPart().equals("IncludeSpecialTermResults")) {
+				this.setIncludeSpecialTermResults(Boolean.valueOf(childElement.getText()));
+			}
+			if (childElement.getQName().getLocalPart().equals("PreQuerySuggestions")) {
+				this.setPreQuerySuggestions(Boolean.valueOf(childElement.getText()));
+			}
+			if (childElement.getQName().getLocalPart().equals("HighlightQuerySuggestions")) {
+				this.setHighlightQuerySuggestions(Boolean.valueOf(childElement.getText()));
+			}
+			if (childElement.getQName().getLocalPart().equals("CapitalizeFirstLetters")) {
+				this.setCapitalizeFirstLetters(Boolean.valueOf(childElement.getText()));
+			}
+			if (childElement.getQName().getLocalPart().equals("ResultProvider")) {
+				this.setResultProvider(childElement.getText());
 			}
 		}
 	}
@@ -219,6 +253,41 @@ public class SpQuery extends DataObject {
 		// TrimDuplicates
 		if (this.getTrimDuplicates() != null)
 			stringWriter.append(this.getTrimDuplicates().GetAsXmlString());
+		// IncludeSpecialTermResults
+		if (this.getIncludeSpecialTermResults() != null)
+		{
+			stringWriter.append("<IncludeSpecialTermResults>");
+			stringWriter.append(String.valueOf(this.getIncludeSpecialTermResults()));
+			stringWriter.append("</IncludeSpecialTermResults>");
+		}
+		// PreQuerySuggestions
+		if (this.getPreQuerySuggestions() != null)
+		{
+			stringWriter.append("<PreQuerySuggestions>");
+			stringWriter.append(String.valueOf(this.getPreQuerySuggestions()));
+			stringWriter.append("</PreQuerySuggestions>");
+		}
+		// HighlightQuerySuggestions
+		if (this.getHighlightQuerySuggestions() != null)
+		{
+			stringWriter.append("<HighlightQuerySuggestions>");
+			stringWriter.append(String.valueOf(this.getHighlightQuerySuggestions()));
+			stringWriter.append("</HighlightQuerySuggestions>");
+		}		
+		// CapitalizeFirstLetters
+		if (this.getCapitalizeFirstLetters() != null)
+		{
+			stringWriter.append("<CapitalizeFirstLetters>");
+			stringWriter.append(String.valueOf(this.getCapitalizeFirstLetters()));
+			stringWriter.append("</CapitalizeFirstLetters>");
+		}
+		// ResultProvider
+		if (this.getResultProvider() != null)
+		{
+			stringWriter.append("<CapitalizeFirstLetters>");
+			stringWriter.append(String.valueOf(this.getResultProvider()));
+			stringWriter.append("</CapitalizeFirstLetters>");
+		}
 		
 		stringWriter.append("</Query>");
 
@@ -245,7 +314,7 @@ public class SpQuery extends DataObject {
 	 * Specifies the parent element for the search query issued to the Query Web service
 	 * @return
 	 */
-	public SpContext getContext() {
+	public Context getContext() {
 		return context;
 	}
 
@@ -253,7 +322,7 @@ public class SpQuery extends DataObject {
 	 * Specifies the parent element for the search query issued to the Query Web service
 	 * @param context
 	 */
-	public void setContext(SpContext context) {
+	public void setContext(Context context) {
 		this.context = context;
 	}
 
@@ -261,7 +330,7 @@ public class SpQuery extends DataObject {
 	 * Contains information about the range of the query, including the size and the number of results requested from the Query Web service
 	 * @return
 	 */
-	public SpRange getRange() {
+	public Range getRange() {
 		return range;
 	}
 
@@ -269,7 +338,7 @@ public class SpQuery extends DataObject {
 	 * Contains information about the range of the query, including the size and the number of results requested from the Query Web service
 	 * @param range
 	 */
-	public void setRange(SpRange range) {
+	public void setRange(Range range) {
 		this.range = range;
 	}
 
@@ -277,7 +346,7 @@ public class SpQuery extends DataObject {
 	 * Contains the managed properties to include in the search results that are returned by the Query Web service
 	 * @return
 	 */
-	public SpProperties getProperties() {
+	public Properties getProperties() {
 		return properties;
 	}
 
@@ -285,7 +354,7 @@ public class SpQuery extends DataObject {
 	 * Contains the managed properties to include in the search results that are returned by the Query Web service
 	 * @param properties
 	 */
-	public void setProperties(SpProperties properties) {
+	public void setProperties(Properties properties) {
 		this.properties = properties;
 	}
 
@@ -293,7 +362,7 @@ public class SpQuery extends DataObject {
 	 * Contains information for sorting the search results returned by the Query Web service
 	 * @return
 	 */
-	public SpSortByProperties getSortByProperties() {
+	public SortByProperties getSortByProperties() {
 		return sortByProperties;
 	}
 
@@ -301,7 +370,7 @@ public class SpQuery extends DataObject {
 	 * Contains information for sorting the search results returned by the Query Web service
 	 * @param sortByProperties
 	 */
-	public void setSortByProperties(SpSortByProperties sortByProperties) {
+	public void setSortByProperties(SortByProperties sortByProperties) {
 		this.sortByProperties = sortByProperties;
 	}
 
@@ -354,24 +423,118 @@ public class SpQuery extends DataObject {
 	}	
 
 	/**
-	 * Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
 	 * Specifies whether duplicates are removed before the search results are returned by the Query Web service.
 	 * For FAST Search Server 2010 for SharePoint, this element can also be used to collapse hits in the result set by using a group identifier (ID).
 	 * @return
 	 */
-	public SpTrimDuplicates getTrimDuplicates() {
+	public TrimDuplicates getTrimDuplicates() {
 		return trimDuplicates;
 	}
 
 	/**
-	 * Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
 	 * Specifies whether duplicates are removed before the search results are returned by the Query Web service.
 	 * For FAST Search Server 2010 for SharePoint, this element can also be used to collapse hits in the result set by using a group identifier (ID). 
 	 * @param rimDuplicates
 	 */
-	public void setTrimDuplicates(SpTrimDuplicates trimDuplicates) {
+	public void setTrimDuplicates(TrimDuplicates trimDuplicates) {
 		this.trimDuplicates = trimDuplicates;
 	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether special term results are included in the response returned by the Query Web service
+	 * @return
+	 */
+	public Boolean getIncludeSpecialTermResults() {
+		return includeSpecialTermResults;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether special term results are included in the response returned by the Query Web service
+	 * @param includeSpecialTermResults
+	 */
+	public void setIncludeSpecialTermResults(Boolean includeSpecialTermResults) {
+		this.includeSpecialTermResults = includeSpecialTermResults;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether pre query suggestions are included in the response from the Query Web service
+	 * @return
+	 */
+	public Boolean getPreQuerySuggestions() {
+		return preQuerySuggestions;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether pre query suggestions are included in the response from the Query Web service
+	 * @param preQuerySuggestions
+	 */
+	public void setPreQuerySuggestions(Boolean preQuerySuggestions) {
+		this.preQuerySuggestions = preQuerySuggestions;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether parts of the query suggestion that are returned by the Query Web service are highlighted
+	 * @return
+	 */
+	public Boolean getHighlightQuerySuggestions() {
+		return highlightQuerySuggestions;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether parts of the query suggestion that are returned by the Query Web service are highlighted
+	 * @param highlightQuerySuggestions
+	 */
+	public void setHighlightQuerySuggestions(Boolean highlightQuerySuggestions) {
+		this.highlightQuerySuggestions = highlightQuerySuggestions;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether the first letter in the query suggestion that is returned by the Query Web service appears in uppercase letters
+	 * @return
+	 */
+	public Boolean getCapitalizeFirstLetters() {
+		return capitalizeFirstLetters;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies whether the first letter in the query suggestion that is returned by the Query Web service appears in uppercase letters
+	 * @param capitalizeFirstLetters
+	 */
+	public void setCapitalizeFirstLetters(Boolean capitalizeFirstLetters) {
+		this.capitalizeFirstLetters = capitalizeFirstLetters;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies the results provider for the Query Web service
+	 * @return
+	 */
+	public String getResultProvider() {
+		return resultProvider;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+  	 * Specifies the results provider for the Query Web service
+	 * @param resultProvider
+	 */
+	public void setResultProvider(String resultProvider) {
+		this.resultProvider = resultProvider;
+	}
+	
+	
+	
+	
 	
 	
 }

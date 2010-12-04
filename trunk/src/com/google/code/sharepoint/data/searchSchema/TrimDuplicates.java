@@ -27,7 +27,7 @@ import com.google.code.sharepoint.data.Support;
 // includeid
 //Specifies the value associated with a collapse group, typically used when a user clicks the Duplicates(n) link of an item with duplicates.
 
-public class SpTrimDuplicates extends DataObject {
+public class TrimDuplicates extends DataObject {
 	/**
 	 * Optional attribute indicating the name of a non-default managed property
 	 * to use as the basis for duplicate removal.
@@ -46,10 +46,10 @@ public class SpTrimDuplicates extends DataObject {
 	/** trim duplicates */
 	private Boolean trimDuplicates = null;
 
-	public SpTrimDuplicates() {
+	public TrimDuplicates() {
 	}
 
-	public SpTrimDuplicates(String xmlString) throws XMLStreamException,
+	public TrimDuplicates(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
@@ -59,7 +59,7 @@ public class SpTrimDuplicates extends DataObject {
 		}
 	}
 
-	public SpTrimDuplicates(OMElement xmlElement) throws ParseException {
+	public TrimDuplicates(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}
 

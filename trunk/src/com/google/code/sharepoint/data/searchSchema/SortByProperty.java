@@ -37,7 +37,7 @@ import com.google.code.sharepoint.data.Support;
 //This attribute is not used when specifying a rank profile name in the name attribute (rank sorting is always descending). This applies to FAST Search Server 2010 for SharePoint only.
 //The default value is Descending.
 
-public class SpSortByProperty extends DataObject {
+public class SortByProperty extends DataObject {
 	enum DirectionEnum {
 		Ascending, Descending
 	}
@@ -47,10 +47,10 @@ public class SpSortByProperty extends DataObject {
 	// value
 	private DirectionEnum direction = null;
 
-	public SpSortByProperty() {
+	public SortByProperty() {
 	}
 
-	public SpSortByProperty(String xmlString) throws XMLStreamException,
+	public SortByProperty(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
@@ -60,7 +60,7 @@ public class SpSortByProperty extends DataObject {
 		}
 	}
 
-	public SpSortByProperty(OMElement xmlElement) throws ParseException {
+	public SortByProperty(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}
 

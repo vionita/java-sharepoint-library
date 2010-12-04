@@ -11,7 +11,7 @@ import java.security.GeneralSecurityException;
 
 import com.google.code.sharepoint.data.SpListItems;
 import com.google.code.sharepoint.data.Support;
-import com.google.code.sharepoint.data.searchSchema.SpQueryText;
+import com.google.code.sharepoint.data.searchSchema.QueryText;
 import com.google.code.sharepoint.soap.QueryServiceStub;
 import com.google.code.sharepoint.soap.ListsStub.GetListItemsResult_type0;
 import com.google.code.sharepoint.soap.ListsStub.QueryOptions_type0;
@@ -57,7 +57,7 @@ public class SearchWS extends BaseWebService {
         InitializeWebService(webServiceStub);
     }
 
-    public String Query(SpQueryText queryText) throws RemoteException {
+    public String Query(QueryText queryText) throws RemoteException {
         String result = null;    
         
         String query = "<QueryPacket xmlns='urn:Microsoft.Search.Query'>" +

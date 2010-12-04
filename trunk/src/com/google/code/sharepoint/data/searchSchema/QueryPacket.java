@@ -12,47 +12,43 @@ import org.apache.axiom.om.OMElement;
 import com.google.code.sharepoint.data.DataObject;
 import com.google.code.sharepoint.data.Support;
 
-//<QueryText language=xml:lang type={STRING|MSSQLFT}>
-//	searchQuery
-//</QueryText>
+//<QueryPacket xmlns='urn:Microsoft.Search.Query'>
+// <Query>
+//   <Context>
+//     <QueryText language='en-US' type='STRING'>SharePoint</QueryText>
+//   </Context>
+// </Query>
+//</QueryPacket>
 
 
 //ATTRIBUTES:
 //---------
-// type
-// Identifies the query type (see type Attribute below)
+// revision
+// Unsigned integer indicating the revision of the schema used in the request.
 //
-// language
-// Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site.
+// build
+// Optional String attribute. The build number for the client making the request.
 
-// type Attribute
+// xmlns
+// Optional String attribute. Specifies the URL to the XML schema that is used to validate the configuration file. The value for SharePoint Server search is "urn:Microsoft.Search.Query".
+
+// Child Elements
 //---------
-// STRING
-// Indicates type of query is keyword query.
-//
-// MSSQLFT
-// Indicates type of query is Microsoft SQL Full Text Syntax query.
+// QUERY
 
-public class SpQueryText extends DataObject {
-	enum TypeEnum
-	{
-		/** Indicates type of query is keyword query.*/
-		STRING,
-		/** Indicates type of query is Microsoft SQL Full Text Syntax query.*/
-		MSSQLFT
-	}	
-	
+public class QueryPacket extends DataObject {
+		
 	// Identifies the query type (see type Attribute below)
 	private TypeEnum type = TypeEnum.STRING;
 	// Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site.
-	private String language = null;
+	private String language = "xml:lang";
 	// Search query
 	private String searchQuery = null;
 
-	public SpQueryText() {
+	public QueryPacket() {
 	}
 
-	public SpQueryText(String xmlString) throws XMLStreamException,
+	public QueryPacket(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
@@ -62,7 +58,7 @@ public class SpQueryText extends DataObject {
 		}
 	}
 
-	public SpQueryText(OMElement xmlElement) throws ParseException {
+	public QueryPacket(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}
 
@@ -88,13 +84,13 @@ public class SpQueryText extends DataObject {
 	@Override
 	public String GetAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
-		stringWriter.append("<QueryText ");
+		stringWriter.append("<QueryText");
 		
 		if ((this.getLanguage() != null) && (this.getLanguage().length() > 0))
-			stringWriter.append("language=\"" + this.getLanguage() + "\"");
+			stringWriter.append("language=" + this.getLanguage());
 		
 		if (this.getType() != null)
-			stringWriter.append("type=\"" + String.valueOf(this.getType()) + "\"");
+			stringWriter.append("type=" + String.valueOf(this.getType()));
 
 		stringWriter.append(">");
 		stringWriter.append(this.getSearchQuery());
@@ -120,7 +116,7 @@ public class SpQueryText extends DataObject {
 	}
 
 	/**
-	 * Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site.
+	 * Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site. Default is "xml:lang"
 	 * @return
 	 */
 	public String getLanguage() {
@@ -128,7 +124,7 @@ public class SpQueryText extends DataObject {
 	}
 
 	/**
-	 * Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site.
+	 * Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site. Default is "xml:lang"
 	 * @param language
 	 */
 	public void setLanguage(String language) {

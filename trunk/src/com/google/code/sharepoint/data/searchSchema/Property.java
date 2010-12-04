@@ -36,16 +36,16 @@ import com.google.code.sharepoint.data.Support;
 //-  PictureThumbnailURL
 
 
-public class SpProperty extends DataObject {	
+public class Property extends DataObject {	
 	// name
 	private String name = null;
 	// value
 	private String value = null;
 
-	public SpProperty() {
+	public Property() {
 	}
 
-	public SpProperty(String xmlString) throws XMLStreamException,
+	public Property(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
@@ -55,7 +55,7 @@ public class SpProperty extends DataObject {
 		}
 	}
 
-	public SpProperty(OMElement xmlElement) throws ParseException {
+	public Property(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}
 

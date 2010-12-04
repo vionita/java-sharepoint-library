@@ -31,14 +31,14 @@ import com.google.code.sharepoint.data.Support;
 //StartAt
 //Count
 
-public class SpRange extends DataObject {		
+public class Range extends DataObject {		
 	private Integer startAt = null;
 	private Integer count = null;
 
 	/**
 	 * Contains information about the range of the query, including the size and the number of results requested from the Query Web service
 	 */
-	public SpRange() {
+	public Range() {
 	}
 
 	/**
@@ -47,7 +47,7 @@ public class SpRange extends DataObject {
 	 * @throws XMLStreamException
 	 * @throws ParseException
 	 */
-	public SpRange(String xmlString) throws XMLStreamException,
+	public Range(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
@@ -62,7 +62,7 @@ public class SpRange extends DataObject {
 	 * @param xmlElement
 	 * @throws ParseException
 	 */
-	public SpRange(OMElement xmlElement) throws ParseException {
+	public Range(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}
 

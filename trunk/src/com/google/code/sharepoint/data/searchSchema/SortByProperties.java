@@ -15,10 +15,10 @@ import com.google.code.sharepoint.data.DataObject;
 import com.google.code.sharepoint.data.Support;
 
 
-//<Properties>
-//<Property name=managedPropertyName></Property>
-//</Properties>
-
+//<SortByProperties>
+//<SortByProperty name="author" direction="Ascending"></SortByProperty>
+//<SortByProperty name="topic" direction="Ascending"></SortByProperty>
+//</SortByProperties>
 
 
 //ATTRIBUTES:
@@ -26,15 +26,15 @@ import com.google.code.sharepoint.data.Support;
 
 //Child Elements
 //---------
-//Property
+//SortByProperty
 
-public class SpProperties extends DataObject {
-	private List<SpProperty> properyCollection = new ArrayList<SpProperty>();	
+public class SortByProperties extends DataObject {
+	private List<SortByProperty> properyCollection = new ArrayList<SortByProperty>();	
 	
-	public SpProperties() {
+	public SortByProperties() {
     }    
 
-	public SpProperties(String xmlString) throws XMLStreamException, ParseException { 
+	public SortByProperties(String xmlString) throws XMLStreamException, ParseException { 
 		OMElement xmlElement = null;
 		xmlElement = Support.StringToOmElement(xmlString);
 
@@ -43,19 +43,19 @@ public class SpProperties extends DataObject {
 		}
 	}
 
-	public SpProperties(OMElement xmlElement) throws ParseException {
+	public SortByProperties(OMElement xmlElement) throws ParseException {
 		Parse(xmlElement);
 	}	
 
 	@Override
 	public void Parse(OMElement xmlElement) throws ParseException {		
-		List<SpProperty> properties = new ArrayList<SpProperty>();
+		List<SortByProperty> properties = new ArrayList<SortByProperty>();
 		
 		Iterator children = xmlElement.getChildElements();
 		while (children.hasNext()) {
 			OMElement childElement = (OMElement) children.next();
-			if (childElement.getQName().getLocalPart().equals("Property")) {
-				SpProperty newProperty = new SpProperty(childElement);
+			if (childElement.getQName().getLocalPart().equals("SortByProperty")) {
+				SortByProperty newProperty = new SortByProperty(childElement);
 				properties.add(newProperty);
 			}
 		}
@@ -65,12 +65,12 @@ public class SpProperties extends DataObject {
 	@Override
 	public String GetAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
-		stringWriter.append("<Properties>");
-		for (SpProperty property : this.getProperyCollection())
+		stringWriter.append("<SortByProperty>");
+		for (SortByProperty property : this.getProperyCollection())
 		{
 			stringWriter.append(property.GetAsXmlString());
 		}
-		stringWriter.append("</Properties>");
+		stringWriter.append("</SortByProperty>");
 		return stringWriter.toString();
 	}
 
@@ -78,7 +78,7 @@ public class SpProperties extends DataObject {
 	 * Property Collection
 	 * @return
 	 */
-	public List<SpProperty> getProperyCollection() {
+	public List<SortByProperty> getProperyCollection() {
 		return properyCollection;
 	}
 
@@ -86,7 +86,7 @@ public class SpProperties extends DataObject {
 	 *  Property Collection
 	 * @param properyCollection
 	 */
-	public void setProperyCollection(List<SpProperty> properyCollection) {
+	public void setProperyCollection(List<SortByProperty> properyCollection) {
 		this.properyCollection = properyCollection;
 	}	
 	
