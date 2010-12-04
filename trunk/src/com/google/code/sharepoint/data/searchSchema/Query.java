@@ -135,7 +135,10 @@ public class Query extends DataObject {
   	 * Specifies the results provider for the Query Web service
   	 */
 	private String resultProvider = null;
-	
+	/** <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Specifies the criteria for automatically resubmitting a query that yielded no results
+  	 */
+	private ResubmitFlags resubmitFlags = null;
 
 	public Query() {
 	}
@@ -201,6 +204,9 @@ public class Query extends DataObject {
 			}
 			if (childElement.getQName().getLocalPart().equals("ResultProvider")) {
 				this.setResultProvider(childElement.getText());
+			}
+			if (childElement.getQName().getLocalPart().equals("ResubmitFlags")) {
+				this.setResubmitFlags(new ResubmitFlags(childElement));
 			}
 		}
 	}
@@ -288,6 +294,9 @@ public class Query extends DataObject {
 			stringWriter.append(String.valueOf(this.getResultProvider()));
 			stringWriter.append("</CapitalizeFirstLetters>");
 		}
+		// ResubmitFlags
+		if (this.getResubmitFlags() != null)
+			stringWriter.append(this.getResubmitFlags().GetAsXmlString());
 		
 		stringWriter.append("</Query>");
 
@@ -530,6 +539,24 @@ public class Query extends DataObject {
 	 */
 	public void setResultProvider(String resultProvider) {
 		this.resultProvider = resultProvider;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Specifies the criteria for automatically resubmitting a query that yielded no results
+	 * @return
+	 */
+	public ResubmitFlags getResubmitFlags() {
+		return resubmitFlags;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Specifies the criteria for automatically resubmitting a query that yielded no results
+	 * @param resubmitFlags
+	 */
+	public void setResubmitFlags(ResubmitFlags resubmitFlags) {
+		this.resubmitFlags = resubmitFlags;
 	}
 	
 	
