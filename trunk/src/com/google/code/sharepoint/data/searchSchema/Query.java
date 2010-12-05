@@ -110,28 +110,28 @@ public class Query extends DataObject {
 	private String relevanceModel = null;
 	/** Specifies whether inflectional forms of the search terms are used when processing the request to the Query Web service */
 	private Boolean enableStemming = null;	
-	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
 	 * Specifies whether duplicates are removed before the search results are returned by the Query Web service.
 	 * For FAST Search Server 2010 for SharePoint, this element can also be used to collapse hits in the result set by using a group identifier (ID).
 	 */
 	private TrimDuplicates trimDuplicates = null;
-	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether special term results are included in the response returned by the Query Web service
   	 */
 	private Boolean includeSpecialTermResults = null;
-	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether pre query suggestions are included in the response from the Query Web service
   	 */
 	private Boolean preQuerySuggestions = null;
-	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether parts of the query suggestion that are returned by the Query Web service are highlighted
   	 */
 	private Boolean highlightQuerySuggestions = null;
-	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether the first letter in the query suggestion that is returned by the Query Web service appears in uppercase letters
   	 */
 	private Boolean capitalizeFirstLetters = null;
-	/** <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies the results provider for the Query Web service
   	 */
 	private String resultProvider = null;
@@ -139,6 +139,15 @@ public class Query extends DataObject {
   	 * Specifies the criteria for automatically resubmitting a query that yielded no results
   	 */
 	private ResubmitFlags resubmitFlags = null;
+	/** <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Specifies how to apply spell correction of the query text when processing the request to the Query Web service
+  	 */
+	private Boolean enableSpellcheck = null;
+	/** <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Contains user context data associated with search settings (best bets, visual best bets, and keyword boosting).
+	 * The keyword management search settings can be restricted to context. A context defines when a search setting should apply, typically targeting a specific group of users.
+  	 */
+	private UserContext userContext = null;
 
 	public Query() {
 	}
@@ -207,6 +216,12 @@ public class Query extends DataObject {
 			}
 			if (childElement.getQName().getLocalPart().equals("ResubmitFlags")) {
 				this.setResubmitFlags(new ResubmitFlags(childElement));
+			}
+			if (childElement.getQName().getLocalPart().equals("EnableSpellcheck")) {
+				this.setEnableSpellcheck(Boolean.valueOf(childElement.getText()));
+			}
+			if (childElement.getQName().getLocalPart().equals("UserContext")) {
+				this.setUserContext(new UserContext(childElement));
 			}
 		}
 	}
@@ -297,9 +312,18 @@ public class Query extends DataObject {
 		// ResubmitFlags
 		if (this.getResubmitFlags() != null)
 			stringWriter.append(this.getResubmitFlags().GetAsXmlString());
-		
-		stringWriter.append("</Query>");
+		// EnableSpellcheck
+		if (this.getEnableSpellcheck() != null)
+		{
+			stringWriter.append("<EnableSpellcheck>");
+			stringWriter.append(String.valueOf(this.getEnableSpellcheck()));
+			stringWriter.append("</EnableSpellcheck>");
+		}		
+		// UserContext
+		if (this.getUserContext() != null)
+			stringWriter.append(this.getUserContext().GetAsXmlString());
 
+		stringWriter.append("</Query>");
 		return stringWriter.toString();
 	}
 
@@ -432,7 +456,7 @@ public class Query extends DataObject {
 	}	
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
 	 * Specifies whether duplicates are removed before the search results are returned by the Query Web service.
 	 * For FAST Search Server 2010 for SharePoint, this element can also be used to collapse hits in the result set by using a group identifier (ID).
 	 * @return
@@ -442,7 +466,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
 	 * Specifies whether duplicates are removed before the search results are returned by the Query Web service.
 	 * For FAST Search Server 2010 for SharePoint, this element can also be used to collapse hits in the result set by using a group identifier (ID). 
 	 * @param rimDuplicates
@@ -452,7 +476,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether special term results are included in the response returned by the Query Web service
 	 * @return
 	 */
@@ -461,7 +485,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether special term results are included in the response returned by the Query Web service
 	 * @param includeSpecialTermResults
 	 */
@@ -470,7 +494,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether pre query suggestions are included in the response from the Query Web service
 	 * @return
 	 */
@@ -479,7 +503,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether pre query suggestions are included in the response from the Query Web service
 	 * @param preQuerySuggestions
 	 */
@@ -488,7 +512,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether parts of the query suggestion that are returned by the Query Web service are highlighted
 	 * @return
 	 */
@@ -497,7 +521,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether parts of the query suggestion that are returned by the Query Web service are highlighted
 	 * @param highlightQuerySuggestions
 	 */
@@ -506,7 +530,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether the first letter in the query suggestion that is returned by the Query Web service appears in uppercase letters
 	 * @return
 	 */
@@ -515,7 +539,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies whether the first letter in the query suggestion that is returned by the Query Web service appears in uppercase letters
 	 * @param capitalizeFirstLetters
 	 */
@@ -524,7 +548,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies the results provider for the Query Web service
 	 * @return
 	 */
@@ -533,7 +557,7 @@ public class Query extends DataObject {
 	}
 
 	/**
-	 * <b>Applies to: Microsoft SharePoint Server 2010</b> search and Microsoft FAST Search Server 2010 for SharePoint
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint</b>
   	 * Specifies the results provider for the Query Web service
 	 * @param resultProvider
 	 */
@@ -558,10 +582,42 @@ public class Query extends DataObject {
 	public void setResubmitFlags(ResubmitFlags resubmitFlags) {
 		this.resubmitFlags = resubmitFlags;
 	}
-	
-	
-	
-	
-	
-	
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Specifies how to apply spell correction of the query text when processing the request to the Query Web service
+	 * @return
+	 */
+	public Boolean getEnableSpellcheck() {
+		return enableSpellcheck;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Specifies how to apply spell correction of the query text when processing the request to the Query Web service
+	 * @param enableSpellcheck
+	 */
+	public void setEnableSpellcheck(Boolean enableSpellcheck) {
+		this.enableSpellcheck = enableSpellcheck;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Contains user context data associated with search settings (best bets, visual best bets, and keyword boosting).
+	 * The keyword management search settings can be restricted to context. A context defines when a search setting should apply, typically targeting a specific group of users.
+	 * @return
+	 */
+	public UserContext getUserContext() {
+		return userContext;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+  	 * Contains user context data associated with search settings (best bets, visual best bets, and keyword boosting).
+	 * The keyword management search settings can be restricted to context. A context defines when a search setting should apply, typically targeting a specific group of users.
+	 * @param userContext
+	 */
+	public void setUserContext(UserContext userContext) {
+		this.userContext = userContext;
+	}	
 }
