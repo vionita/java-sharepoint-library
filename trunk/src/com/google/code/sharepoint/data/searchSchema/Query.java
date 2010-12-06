@@ -153,6 +153,11 @@ public class Query extends DataObject {
 	 * The find similar features enable you to search for documents that are similar to already retrieved query results. The similarity evaluation is based on a statistical measure.
   	 */
 	private FindSimilar findSimilar = null;
+	/** <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains information about the type of query refinement data to return in the result.
+	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
+  	 */
+	private IncludeRefinementResults includeRefinementResults = null;
 
 	public Query() {
 	}
@@ -230,6 +235,9 @@ public class Query extends DataObject {
 			}
 			if (childElement.getQName().getLocalPart().equals("FindSimilar")) {
 				this.setFindSimilar(new FindSimilar(childElement));
+			}
+			if (childElement.getQName().getLocalPart().equals("IncludeRefinementResults")) {
+				this.setIncludeRefinementResults(new IncludeRefinementResults(childElement));
 			}
 		}
 	}
@@ -333,6 +341,9 @@ public class Query extends DataObject {
 		// FindSimilar
 		if (this.getFindSimilar() != null)
 			stringWriter.append(this.getFindSimilar().GetAsXmlString());
+		// IncludeRefinementResults
+		if (this.getIncludeRefinementResults() != null)
+			stringWriter.append(this.getIncludeRefinementResults().GetAsXmlString());
 
 		stringWriter.append("</Query>");
 		return stringWriter.toString();
@@ -651,6 +662,25 @@ public class Query extends DataObject {
 	public void setFindSimilar(FindSimilar findSimilar) {
 		this.findSimilar = findSimilar;
 	}
-	
-	
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains information about the type of query refinement data to return in the result.
+	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
+	 * @return
+	 */
+	public IncludeRefinementResults getIncludeRefinementResults() {
+		return includeRefinementResults;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains information about the type of query refinement data to return in the result.
+	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
+	 * @param includeRefinementResults
+	 */
+	public void setIncludeRefinementResults(
+			IncludeRefinementResults includeRefinementResults) {
+		this.includeRefinementResults = includeRefinementResults;
+	}
 }
