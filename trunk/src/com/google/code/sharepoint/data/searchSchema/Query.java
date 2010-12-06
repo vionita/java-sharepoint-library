@@ -158,6 +158,11 @@ public class Query extends DataObject {
 	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
   	 */
 	private IncludeRefinementResults includeRefinementResults = null;
+	/** <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains the set of query refinement filters used when issuing a refinement query.
+	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
+  	 */
+	private RefinementFilters refinementFilters = null;
 
 	public Query() {
 	}
@@ -238,6 +243,9 @@ public class Query extends DataObject {
 			}
 			if (childElement.getQName().getLocalPart().equals("IncludeRefinementResults")) {
 				this.setIncludeRefinementResults(new IncludeRefinementResults(childElement));
+			}
+			if (childElement.getQName().getLocalPart().equals("RefinementFilters")) {
+				this.setRefinementFilters(new RefinementFilters(childElement));
 			}
 		}
 	}
@@ -344,6 +352,9 @@ public class Query extends DataObject {
 		// IncludeRefinementResults
 		if (this.getIncludeRefinementResults() != null)
 			stringWriter.append(this.getIncludeRefinementResults().GetAsXmlString());
+		// RefinementFilters
+		if (this.getRefinementFilters() != null)
+			stringWriter.append(this.getRefinementFilters().GetAsXmlString());
 
 		stringWriter.append("</Query>");
 		return stringWriter.toString();
@@ -683,4 +694,26 @@ public class Query extends DataObject {
 			IncludeRefinementResults includeRefinementResults) {
 		this.includeRefinementResults = includeRefinementResults;
 	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains the set of query refinement filters used when issuing a refinement query.
+	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
+	 * @return
+	 */
+	public RefinementFilters getRefinementFilters() {
+		return refinementFilters;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains the set of query refinement filters used when issuing a refinement query.
+	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
+	 * @param refinementFilters
+	 */
+	public void setRefinementFilters(RefinementFilters refinementFilters) {
+		this.refinementFilters = refinementFilters;
+	}
+	
+	
 }
