@@ -148,6 +148,11 @@ public class Query extends DataObject {
 	 * The keyword management search settings can be restricted to context. A context defines when a search setting should apply, typically targeting a specific group of users.
   	 */
 	private UserContext userContext = null;
+	/** <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains information about how to search for similar items.
+	 * The find similar features enable you to search for documents that are similar to already retrieved query results. The similarity evaluation is based on a statistical measure.
+  	 */
+	private FindSimilar findSimilar = null;
 
 	public Query() {
 	}
@@ -222,6 +227,9 @@ public class Query extends DataObject {
 			}
 			if (childElement.getQName().getLocalPart().equals("UserContext")) {
 				this.setUserContext(new UserContext(childElement));
+			}
+			if (childElement.getQName().getLocalPart().equals("FindSimilar")) {
+				this.setFindSimilar(new FindSimilar(childElement));
 			}
 		}
 	}
@@ -322,6 +330,9 @@ public class Query extends DataObject {
 		// UserContext
 		if (this.getUserContext() != null)
 			stringWriter.append(this.getUserContext().GetAsXmlString());
+		// FindSimilar
+		if (this.getFindSimilar() != null)
+			stringWriter.append(this.getFindSimilar().GetAsXmlString());
 
 		stringWriter.append("</Query>");
 		return stringWriter.toString();
@@ -619,5 +630,27 @@ public class Query extends DataObject {
 	 */
 	public void setUserContext(UserContext userContext) {
 		this.userContext = userContext;
-	}	
+	}
+
+	/**
+	 *  <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains information about how to search for similar items.
+	 * The find similar features enable you to search for documents that are similar to already retrieved query results. The similarity evaluation is based on a statistical measure.
+	 * @return
+	 */
+	public FindSimilar getFindSimilar() {
+		return findSimilar;
+	}
+
+	/**
+	 *  <b>Applies to: Microsoft FAST Search Server 2010 for SharePoint</b>
+	 * Contains information about how to search for similar items.
+	 * The find similar features enable you to search for documents that are similar to already retrieved query results. The similarity evaluation is based on a statistical measure.
+	 * @param findSimilar
+	 */
+	public void setFindSimilar(FindSimilar findSimilar) {
+		this.findSimilar = findSimilar;
+	}
+	
+	
 }
