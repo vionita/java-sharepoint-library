@@ -163,7 +163,19 @@ public class Query extends DataObject {
 	 * For more information about query refinement, see Query Refinement: http://msdn.microsoft.com/en-us/library/ff394639.aspx
   	 */
 	private RefinementFilters refinementFilters = null;
-
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search</b>
+  	 * Specifies whether noise words in the search query are ignored by the Query Web service.
+  	 */
+	private Boolean ignoreAllNoiseQuery = null;
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint </b>
+  	 * Specifies whether relevant results are included in the response returned by the Query Web service
+  	 */
+	private Boolean includeRelevantResults = null;
+	/** <b>Applies to: Microsoft SharePoint Server 2010 search </b>
+  	 * Specifies whether high-confidence results are included in the response returned by the Query Web service.
+  	 */
+	private Boolean includeHighConfidenceResults = null;	
+	
 	public Query() {
 	}
 
@@ -246,6 +258,12 @@ public class Query extends DataObject {
 			}
 			if (childElement.getQName().getLocalPart().equals("RefinementFilters")) {
 				this.setRefinementFilters(new RefinementFilters(childElement));
+			}
+			if (childElement.getQName().getLocalPart().equals("IncludeRelevantResults")) {
+				this.setIncludeRelevantResults(Boolean.valueOf(childElement.getText()));
+			}
+			if (childElement.getQName().getLocalPart().equals("IncludeHighConfidenceResults")) {
+				this.setIncludeHighConfidenceResults(Boolean.valueOf(childElement.getText()));
 			}
 		}
 	}
@@ -355,6 +373,20 @@ public class Query extends DataObject {
 		// RefinementFilters
 		if (this.getRefinementFilters() != null)
 			stringWriter.append(this.getRefinementFilters().GetAsXmlString());
+		// IncludeRelevantResults
+		if (this.getIncludeRelevantResults() != null)
+		{
+			stringWriter.append("<IncludeRelevantResults>");
+			stringWriter.append(String.valueOf(this.getIncludeRelevantResults()));
+			stringWriter.append("</IncludeRelevantResults>");
+		}
+		// IncludeHighConfidenceResults
+		if (this.getIncludeHighConfidenceResults() != null)
+		{
+			stringWriter.append("<IncludeHighConfidenceResults>");
+			stringWriter.append(String.valueOf(this.getIncludeHighConfidenceResults()));
+			stringWriter.append("</IncludeHighConfidenceResults>");
+		}
 
 		stringWriter.append("</Query>");
 		return stringWriter.toString();
@@ -713,6 +745,60 @@ public class Query extends DataObject {
 	 */
 	public void setRefinementFilters(RefinementFilters refinementFilters) {
 		this.refinementFilters = refinementFilters;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search</b>
+  	 * Specifies whether noise words in the search query are ignored by the Query Web service.
+	 * @return
+	 */
+	public Boolean getIgnoreAllNoiseQuery() {
+		return ignoreAllNoiseQuery;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search</b>
+  	 * Specifies whether noise words in the search query are ignored by the Query Web service.
+	 * @param ignoreAllNoiseQuery
+	 */
+	public void setIgnoreAllNoiseQuery(Boolean ignoreAllNoiseQuery) {
+		this.ignoreAllNoiseQuery = ignoreAllNoiseQuery;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint </b>
+  	 * Specifies whether relevant results are included in the response returned by the Query Web service
+	 * @return
+	 */
+	public Boolean getIncludeRelevantResults() {
+		return includeRelevantResults;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search and Microsoft FAST Search Server 2010 for SharePoint </b>
+  	 * Specifies whether relevant results are included in the response returned by the Query Web service
+	 * @param includeRelevantResults
+	 */
+	public void setIncludeRelevantResults(Boolean includeRelevantResults) {
+		this.includeRelevantResults = includeRelevantResults;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search </b>
+  	 * Specifies whether high-confidence results are included in the response returned by the Query Web service.
+	 * @return
+	 */
+	public Boolean getIncludeHighConfidenceResults() {
+		return includeHighConfidenceResults;
+	}
+
+	/**
+	 * <b>Applies to: Microsoft SharePoint Server 2010 search </b>
+  	 * Specifies whether high-confidence results are included in the response returned by the Query Web service.
+	 * @param includeHighConfidenceResults
+	 */
+	public void setIncludeHighConfidenceResults(Boolean includeHighConfidenceResults) {
+		this.includeHighConfidenceResults = includeHighConfidenceResults;
 	}
 	
 	

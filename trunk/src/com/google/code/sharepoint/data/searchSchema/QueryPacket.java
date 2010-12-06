@@ -36,18 +36,36 @@ import com.google.code.sharepoint.data.Support;
 //---------
 // QUERY
 
-public class QueryPacket extends DataObject {
-		
-	// Identifies the query type (see type Attribute below)
-	private TypeEnum type = TypeEnum.STRING;
-	// Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site.
-	private String language = "xml:lang";
-	// Search query
-	private String searchQuery = null;
+public class QueryPacket extends DataObject {	
+	/**
+	 * Unsigned integer indicating the revision of the schema used in the request.
+	 */
+	private Integer revision = null;
+	/**
+	 * Optional String attribute. The build number for the client making the request.
+	 */
+	private String build = null;
+	/**
+	 * Optional String attribute. Specifies the URL to the XML schema that is used to validate the configuration file. The value for SharePoint Server search is "urn:Microsoft.Search.Query".
+	 */
+	private String xmlns = null;	
+	/**
+	 *  query
+	 */
+	private Query query = null;
 
+	/**
+	 * Contains all the elements for the search query request.
+	 */
 	public QueryPacket() {
 	}
 
+	/**
+	 * Contains all the elements for the search query request.
+	 * @param xmlString
+	 * @throws XMLStreamException
+	 * @throws ParseException
+	 */
 	public QueryPacket(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
@@ -58,92 +76,135 @@ public class QueryPacket extends DataObject {
 		}
 	}
 
-	public QueryPacket(OMElement xmlElement) throws ParseException {
+	/**
+	 * Contains all the elements for the search query request.
+	 * @param xmlElement
+	 * @throws ParseException
+	 * @throws XMLStreamException 
+	 */
+	public QueryPacket(OMElement xmlElement) throws ParseException, XMLStreamException {
 		Parse(xmlElement);
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void Parse(OMElement xmlElement) throws ParseException, XMLStreamException {
 		String tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
-				"type"));
+				"revision"));
 		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-			this.setType(TypeEnum.valueOf(tempAttributeValue));
+			this.setRevision(Integer.valueOf(tempAttributeValue));
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
-				"language"));
+				"build"));
 		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-			this.setLanguage(String.valueOf(tempAttributeValue));
+			this.setBuild(String.valueOf(tempAttributeValue));
 		tempAttributeValue = null;
 		
-		this.setSearchQuery(xmlElement.getText());
+		tempAttributeValue = xmlElement.getAttributeValue(new QName(
+			"xmlns"));
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+			this.setXmlns(String.valueOf(tempAttributeValue));
+		tempAttributeValue = null;
+		
+		Iterator children = xmlElement.getChildElements();
+		while (children.hasNext()) {
+			OMElement childElement = (OMElement) children.next();
+			if (childElement.getQName().getLocalPart().equals("Query")) {
+				this.setQuery(new Query(childElement.getText()));
+			}
+		}
 	}
 
 	@Override
 	public String GetAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
-		stringWriter.append("<QueryText");
+		stringWriter.append("<QueryPacket");		
 		
-		if ((this.getLanguage() != null) && (this.getLanguage().length() > 0))
-			stringWriter.append("language=" + this.getLanguage());
+		if (this.getRevision() != null)
+			stringWriter.append("revision=" + String.valueOf(this.getRevision()));
 		
-		if (this.getType() != null)
-			stringWriter.append("type=" + String.valueOf(this.getType()));
+		if ((this.getBuild() != null) && (this.getBuild().length() > 0))
+			stringWriter.append("build=" + this.getBuild());
+		
+		if ((this.getXmlns() != null) && (this.getXmlns().length() > 0))
+			stringWriter.append("xmlns=" + this.getXmlns());	
 
 		stringWriter.append(">");
-		stringWriter.append(this.getSearchQuery());
-		stringWriter.append("</QueryText>");
+		
+		// Query
+		if (this.getQuery() != null)
+			stringWriter.append(this.getQuery().GetAsXmlString());
+			
+		stringWriter.append("</QueryPacket>");
 
 		return stringWriter.toString();
 	}
 
 	/**
-	 * Identifies the query type (see type Attribute below)
+	 * Unsigned integer indicating the revision of the schema used in the request. 
 	 * @return
 	 */
-	public TypeEnum getType() {
-		return type;
+	public Integer getRevision() {
+		return revision;
 	}
 
 	/**
-	 * Identifies the query type (see type Attribute below)
-	 * @param type
+	 * Unsigned integer indicating the revision of the schema used in the request.
+	 * @param revision
 	 */
-	public void setType(TypeEnum type) {
-		this.type = type;
+	public void setRevision(Integer revision) {
+		this.revision = revision;
 	}
 
 	/**
-	 * Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site. Default is "xml:lang"
+	 * Optional String attribute. The build number for the client making the request.
 	 * @return
 	 */
-	public String getLanguage() {
-		return language;
+	public String getBuild() {
+		return build;
 	}
 
 	/**
-	 * Identifies the language of the keyword search. Value type is xml:lang. If specified, this is interpreted by Enterprise Search as the query locale. If not specified, the default value is the language of the site. Default is "xml:lang"
-	 * @param language
+	 * Optional String attribute. The build number for the client making the request.
+	 * @param build
 	 */
-	public void setLanguage(String language) {
-		this.language = language;
+	public void setBuild(String build) {
+		this.build = build;
 	}
 
 	/**
-	 * Search query
+	 * Optional String attribute. Specifies the URL to the XML schema that is used to validate the configuration file. The value for SharePoint Server search is "urn:Microsoft.Search.Query".
 	 * @return
 	 */
-	public String getSearchQuery() {
-		return searchQuery;
+	public String getXmlns() {
+		return xmlns;
 	}
 
 	/**
-	 * Search query
-	 * @param searchQuery
+	 * Optional String attribute. Specifies the URL to the XML schema that is used to validate the configuration file. The value for SharePoint Server search is "urn:Microsoft.Search.Query".
+	 * @param xmlns
 	 */
-	public void setSearchQuery(String searchQuery) {
-		this.searchQuery = searchQuery;
+	public void setXmlns(String xmlns) {
+		this.xmlns = xmlns;
 	}
+
+	/**
+	 * Query
+	 * @return
+	 */
+	public Query getQuery() {
+		return query;
+	}
+
+	/**
+	 * Query
+	 * @param query
+	 */
+	public void setQuery(Query query) {
+		this.query = query;
+	}
+
+	
 }
