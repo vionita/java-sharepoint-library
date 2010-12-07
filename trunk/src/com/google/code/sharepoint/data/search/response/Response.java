@@ -4,14 +4,12 @@ import java.io.StringWriter;
 import java.text.ParseException;
 import java.util.Iterator;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 
 import com.google.code.sharepoint.data.DataObject;
 import com.google.code.sharepoint.data.Support;
-import com.google.code.sharepoint.data.search.request.Range;
 
 //<Response>
 //</Response>
