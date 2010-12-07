@@ -8,10 +8,15 @@ import java.io.IOException;
 import java.net.URL;
 import java.rmi.RemoteException;
 import java.security.GeneralSecurityException;
+import java.text.ParseException;
+
+import javax.xml.stream.XMLStreamException;
 
 import com.google.code.sharepoint.data.SpListItems;
 import com.google.code.sharepoint.data.Support;
-import com.google.code.sharepoint.data.searchSchema.QueryText;
+import com.google.code.sharepoint.data.search.request.QueryPacket;
+import com.google.code.sharepoint.data.search.request.QueryText;
+import com.google.code.sharepoint.data.search.response.ResponsePacket;
 import com.google.code.sharepoint.soap.QueryServiceStub;
 import com.google.code.sharepoint.soap.ListsStub.GetListItemsResult_type0;
 import com.google.code.sharepoint.soap.ListsStub.QueryOptions_type0;
@@ -57,17 +62,23 @@ public class SearchWS extends BaseWebService {
         InitializeWebService(webServiceStub);
     }
 
-    public String Query(QueryText queryText) throws RemoteException {
+    public ResponsePacket Query(QueryPacket queryPacket) throws RemoteException, XMLStreamException, ParseException {
         String result = null;    
         
-        String query = "<QueryPacket xmlns='urn:Microsoft.Search.Query'>" +
-  "<Query>" +
-    "<Context>" +
-      "<QueryText language='en-US' type='STRING'>SharePoint</QueryText>" +
-    "</Context>" +
-  "</Query>" +
-"</QueryPacket>";
-        result = webServiceStub.query(query);
-        return result;
+//        String query = "<QueryPacket xmlns='urn:Microsoft.Search.Query'>" +
+//  "<Query>" +
+//    "<Context>" +
+//      "<QueryText language='en-US' type='STRING'>SharePoint</QueryText>" +
+//    "</Context>" +
+//  "</Query>" +
+//"</QueryPacket>";
+        result = webServiceStub.query(queryPacket.GetAsXmlString());
+        if (result != null)
+        {
+        	ResponsePacket responsePacket = new ResponsePacket(result);
+        	return responsePacket;
+        }
+        
+        return null;
     }
 }
