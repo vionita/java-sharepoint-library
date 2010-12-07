@@ -112,7 +112,7 @@ public class QueryPacket extends DataObject {
 		while (children.hasNext()) {
 			OMElement childElement = (OMElement) children.next();
 			if (childElement.getQName().getLocalPart().equals("Query")) {
-				this.setQuery(new Query(childElement.getText()));
+				this.setQuery(new Query(childElement));
 			}
 		}
 	}

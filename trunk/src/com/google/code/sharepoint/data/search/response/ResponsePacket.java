@@ -69,7 +69,7 @@ public class ResponsePacket extends DataObject {
 		while (children.hasNext()) {
 			OMElement childElement = (OMElement) children.next();
 			if (childElement.getQName().getLocalPart().equals("Response")) {
-				this.setResponse(new Response(childElement.getText()));
+				this.setResponse(new Response(childElement));
 			}
 		}
 	}
