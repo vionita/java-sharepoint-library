@@ -1,10 +1,17 @@
 package com.google.code.sharepoint;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.naming.NoInitialContextException;
+import javax.security.auth.login.LoginException;
 
 import org.apache.axis2.addressing.EndpointReference;
 import org.apache.axis2.client.Options;
@@ -195,6 +202,36 @@ public class BaseWebService {
 		authenticator.setHost(this.webServiceURL.getHost());
 		authenticator.setPort(this.webServiceURL.getPort());
 		return authenticator;
+	}
+	
+	/**
+	 * PingOnServer
+	 * @return
+	 * @throws NoInitialContextException
+	 * @throws LoginException
+	 * @throws IOException
+	 */
+	public boolean PingOnServer() throws NoInitialContextException,
+			LoginException, IOException {
+
+		logger.trace("Method PingOnServer() started");
+		URLConnection connection = this.getWebServiceURL().openConnection();
+		logger.trace("URLConnection initialized");
+		connection.setDoInput(true);
+		InputStream inStream = connection.getInputStream();
+		logger.trace("InputStream initialized");
+		BufferedReader input = new BufferedReader(new InputStreamReader(
+				inStream));
+		logger.trace("Data received from server");
+		String receivedText = "";
+		String line = null;
+		while ((line = input.readLine()) != null) { // while loop begins here
+			receivedText += line;
+		} // end while		
+		logger.trace("Received HTML:");
+		logger.trace(receivedText);			
+		logger.trace("Method PingOnServer finished");
+		return true;
 	}
 
 	/**
