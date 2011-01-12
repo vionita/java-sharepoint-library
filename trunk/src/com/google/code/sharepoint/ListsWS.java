@@ -102,8 +102,12 @@ public class ListsWS extends BaseWebService {
 		SpListItems listItems = null;
 
 		// Create query Element
-		Query_type0 queryWs = new Query_type0();
-		queryWs.setExtraElement(Support.StringToOmElement(queryCaml));
+		Query_type0 queryWs = null;
+		if ((queryCaml != null) && (queryCaml.length() > 0))
+		{
+			queryWs = new Query_type0();
+			queryWs.setExtraElement(Support.StringToOmElement(queryCaml));
+		}
 		
 		// Create view fields element
 		ViewFields_type0 viewFieldsWs = new ViewFields_type0();
