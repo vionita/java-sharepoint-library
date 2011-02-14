@@ -52,19 +52,19 @@ public class TrimDuplicates extends DataObject {
 	public TrimDuplicates(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
 	public TrimDuplicates(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		String tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
@@ -89,7 +89,7 @@ public class TrimDuplicates extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<TrimDuplicates ");
 

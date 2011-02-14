@@ -42,7 +42,7 @@ public class ListsWS extends BaseWebService {
 		super(domain, userName, password, webServiceURL, authenticationType);
 		
 		webServiceStub = new ListsStub();
-		InitializeWebService(webServiceStub);
+		initializeWebService(webServiceStub);
 	}
 
 	public ListsWS(String domain, String userName, String password,
@@ -52,7 +52,7 @@ public class ListsWS extends BaseWebService {
 				httpProxy);
 		
 		webServiceStub = new ListsStub();
-		InitializeWebService(webServiceStub);
+		initializeWebService(webServiceStub);
 	}
 
 	public ListsWS(String domain, String userName, String password,
@@ -62,10 +62,10 @@ public class ListsWS extends BaseWebService {
 				httpProxy, trustAllSSLs);
 		
 		webServiceStub = new ListsStub();
-		InitializeWebService(webServiceStub);
+		initializeWebService(webServiceStub);
 	}
 	
-	public SpList GetList(String listName) throws RemoteException
+	public SpList getList(String listName) throws RemoteException
 	{
 		SpList list = null;
 		
@@ -78,7 +78,7 @@ public class ListsWS extends BaseWebService {
 		return list;
 	}
 	
-	public List<SpList>  GetListCollection() throws RemoteException
+	public List<SpList>  getListCollection() throws RemoteException
 	{
 		List<SpList> listCollection = new ArrayList<SpList>();
 		
@@ -95,7 +95,7 @@ public class ListsWS extends BaseWebService {
 		return listCollection;
 	}
 	
-	public SpListItems GetListItems(String listID, String viewID, String queryCaml,
+	public SpListItems getListItems(String listID, String viewID, String queryCaml,
 			SpViewField viewFields, int itemCount, SpQueryOptions queryOptions,
 			String webID) throws XMLStreamException, RemoteException { 		
 
@@ -106,20 +106,20 @@ public class ListsWS extends BaseWebService {
 		if ((queryCaml != null) && (queryCaml.length() > 0))
 		{
 			queryWs = new Query_type0();
-			queryWs.setExtraElement(Support.StringToOmElement(queryCaml));
+			queryWs.setExtraElement(Support.stringToOmElement(queryCaml));
 		}
 		
 		// Create view fields element
 		ViewFields_type0 viewFieldsWs = new ViewFields_type0();
-		viewFieldsWs.setExtraElement(Support.StringToOmElement(viewFields.GetAsXmlString()));
+		viewFieldsWs.setExtraElement(Support.stringToOmElement(viewFields.getAsXmlString()));
 		
 		// Create query options  element
 		QueryOptions_type0 queryOptionsWs = new QueryOptions_type0();
-		queryOptionsWs.setExtraElement(Support.StringToOmElement(queryOptions.GetAsXmlString()));
+		queryOptionsWs.setExtraElement(Support.stringToOmElement(queryOptions.getAsXmlString()));
 		
 		// Call web service
 		GetListItemsResult_type0 resutl2 = webServiceStub.getListItems(listID, viewID, queryWs, viewFieldsWs, String.valueOf(itemCount), queryOptionsWs, webID);		
-		System.out.println(Support.OmElementToString(resutl2.getExtraElement()));
+		System.out.println(Support.omElementToString(resutl2.getExtraElement()));
 		listItems = new SpListItems(resutl2.getExtraElement());
 		
 		return listItems;

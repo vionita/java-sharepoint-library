@@ -54,19 +54,19 @@ public class Response extends DataObject {
 	public Response(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
 	public Response(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		String tempAttributeValue = null;
 		Iterator children = xmlElement.getChildElements();
 		while (children.hasNext()) {
@@ -96,7 +96,7 @@ public class Response extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<Response>");
 		
@@ -109,7 +109,7 @@ public class Response extends DataObject {
 		}				
 		// Range
 		if (this.getRange() != null)
-			stringWriter.append(this.getRange().GetAsXmlString());
+			stringWriter.append(this.getRange().getAsXmlString());
 		// Copyright
 		if ((this.getCopyright() != null) && (this.getCopyright().length() > 0))
 		{

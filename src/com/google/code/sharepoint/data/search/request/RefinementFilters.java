@@ -51,10 +51,10 @@ public class RefinementFilters extends DataObject {
 	 */
 	public RefinementFilters(String xmlString) throws XMLStreamException, ParseException { 
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
@@ -66,11 +66,11 @@ public class RefinementFilters extends DataObject {
 	 * @throws ParseException
 	 */
 	public RefinementFilters(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}	
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {		
+	public void parse(OMElement xmlElement) throws ParseException {		
 		List<String> refinementFilters = new ArrayList<String>();
 		
 		Iterator children = xmlElement.getChildElements();
@@ -85,7 +85,7 @@ public class RefinementFilters extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<RefinementFilters>");
 		for (String refinementFilter : this.getRefinementFilterCollection())

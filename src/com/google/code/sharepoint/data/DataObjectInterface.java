@@ -14,6 +14,6 @@ import org.apache.axiom.om.OMElement;
  *
  */
 public interface DataObjectInterface {				
-	public void Parse(OMElement xmlElement) throws ParseException, XMLStreamException;	
-	public String GetAsXmlString();
+	public void parse(OMElement xmlElement) throws ParseException, XMLStreamException;	
+	public String getAsXmlString();
 }

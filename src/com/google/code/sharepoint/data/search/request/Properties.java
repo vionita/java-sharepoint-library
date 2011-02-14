@@ -36,19 +36,19 @@ public class Properties extends DataObject {
 
 	public Properties(String xmlString) throws XMLStreamException, ParseException { 
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
 	public Properties(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}	
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {		
+	public void parse(OMElement xmlElement) throws ParseException {		
 		List<Property> properties = new ArrayList<Property>();
 		
 		Iterator children = xmlElement.getChildElements();
@@ -63,12 +63,12 @@ public class Properties extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<Properties>");
 		for (Property property : this.getProperyCollection())
 		{
-			stringWriter.append(property.GetAsXmlString());
+			stringWriter.append(property.getAsXmlString());
 		}
 		stringWriter.append("</Properties>");
 		return stringWriter.toString();

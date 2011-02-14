@@ -10,13 +10,13 @@ import com.google.code.sharepoint.data.Support;
 
 public abstract class DataObject implements DataObjectInterface {
 	
-	public void Parse(String xmlString) throws ParseException, XMLStreamException {
-		Parse(Support.StringToOmElement(xmlString));
+	public void parse(String xmlString) throws ParseException, XMLStreamException {
+		parse(Support.stringToOmElement(xmlString));
 		
 	}
 	
-	public OMElement GetAsOMElement() throws XMLStreamException {		
-		return Support.StringToOmElement(GetAsXmlString());
+	public OMElement getAsOMElement() throws XMLStreamException {		
+		return Support.stringToOmElement(getAsXmlString());
 	}
 
 }

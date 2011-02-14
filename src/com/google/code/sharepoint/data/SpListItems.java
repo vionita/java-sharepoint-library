@@ -33,11 +33,11 @@ public class SpListItems extends DataObject {
 
 	public SpListItems(String xmlString) throws XMLStreamException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
 			try {
-				Parse(xmlElement);
+				parse(xmlElement);
 			} catch (ParseException ex) {
 				Logger.getLogger(SpList.class.getName()).log(Level.SEVERE,
 						null, ex);
@@ -47,7 +47,7 @@ public class SpListItems extends DataObject {
 
 	public SpListItems(OMElement xmlElement) throws XMLStreamException {
 		try {
-			Parse(xmlElement);
+			parse(xmlElement);
 		} catch (ParseException ex) {
 			Logger.getLogger(SpList.class.getName())
 					.log(Level.SEVERE, null, ex);
@@ -62,7 +62,7 @@ public class SpListItems extends DataObject {
 	 * .om.OMElement)
 	 */
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException,
+	public void parse(OMElement xmlElement) throws ParseException,
 			XMLStreamException {
 		Iterator children = xmlElement.getChildElements();
 		listItemCollection = new ArrayList<SpListItem>();
@@ -93,7 +93,7 @@ public class SpListItems extends DataObject {
 	 * @see com.google.code.sharepoint.data.DataObjectInterface#GetAsXmlString()
 	 */
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		
 		if (this.getListItemCollection().size() > 0) {		
@@ -102,7 +102,7 @@ public class SpListItems extends DataObject {
 			stringWriter.append("<data");
 			stringWriter.append("ItemCount=\"" + String.valueOf(this.getListItemCollection().size() + "\">"));
 			for (SpListItem listItem : this.getListItemCollection())
-				stringWriter.append(listItem.GetAsXmlString());
+				stringWriter.append(listItem.getAsXmlString());
 			stringWriter.append("</data>");			
 			stringWriter.append("</listitems>");
 		}

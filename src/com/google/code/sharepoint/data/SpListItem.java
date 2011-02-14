@@ -24,11 +24,11 @@ public class SpListItem extends DataObject {
 
 	public SpListItem(String xmlString) throws XMLStreamException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
 			try {
-				Parse(xmlElement);
+				parse(xmlElement);
 			} catch (ParseException ex) {
 				Logger.getLogger(SpList.class.getName()).log(Level.SEVERE,
 						null, ex);
@@ -38,7 +38,7 @@ public class SpListItem extends DataObject {
 
 	public SpListItem(OMElement xmlElement) {
 		try {
-			Parse(xmlElement);
+			parse(xmlElement);
 		} catch (ParseException ex) {
 			Logger.getLogger(SpList.class.getName())
 					.log(Level.SEVERE, null, ex);
@@ -46,7 +46,7 @@ public class SpListItem extends DataObject {
 	}	
 	
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {			
+	public void parse(OMElement xmlElement) throws ParseException {			
 		Iterator children = xmlElement.getAllAttributes();
 		fieldValues = new Hashtable();
 
@@ -58,7 +58,7 @@ public class SpListItem extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		
 		if (this.getFieldValues().size() > 0) {		

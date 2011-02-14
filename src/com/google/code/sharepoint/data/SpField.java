@@ -280,7 +280,7 @@ public class SpField extends DataObject {
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd hh:MM:ss");
 		String tempAttributeValue = null;
 
@@ -944,7 +944,7 @@ public class SpField extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<Field ");
 		if (getAggregation() != null)

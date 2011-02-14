@@ -111,16 +111,16 @@ public class BaseWebService {
 		this.setTrustAllSSLs(trustAllSSLs);
 	}
 
-	protected void InitializeWebService(Stub webServiceStub)
+	protected void initializeWebService(Stub webServiceStub)
 			throws GeneralSecurityException, IOException {
 		// Set authenticator
 		Options options = webServiceStub._getServiceClient().getOptions();
 		if (this.authenticationType == AuthenticationTypeEnum.basic)
 			options.setProperty(HTTPConstants.AUTHENTICATE,
-					GetBasicAuthenticator());
+					getBasicAuthenticator());
 		else if (this.authenticationType == AuthenticationTypeEnum.ntlm)
 			options.setProperty(HTTPConstants.AUTHENTICATE,
-					GetNtlmAuthenticator());
+					getNtlmAuthenticator());
 
 		// Set httpProxy
 		if (this.httpProxy != null) {
@@ -171,7 +171,7 @@ public class BaseWebService {
 	 * 
 	 * @return
 	 */
-	private HttpTransportProperties.Authenticator GetNtlmAuthenticator() {
+	private HttpTransportProperties.Authenticator getNtlmAuthenticator() {
 		// NTLM Authentication
 		List<String> authScheme = new ArrayList<String>();
 		authScheme.add(HttpTransportProperties.Authenticator.NTLM);
@@ -190,7 +190,7 @@ public class BaseWebService {
 	 * 
 	 * @return
 	 */
-	private HttpTransportProperties.Authenticator GetBasicAuthenticator() {
+	private HttpTransportProperties.Authenticator getBasicAuthenticator() {
 		// Base Authentication
 		HttpTransportProperties.Authenticator authenticator = new HttpTransportProperties.Authenticator();
 		List<String> authScheme = new ArrayList<String>();

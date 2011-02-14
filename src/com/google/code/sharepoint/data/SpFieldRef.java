@@ -88,19 +88,19 @@ public class SpFieldRef extends DataObject {
 
 	public SpFieldRef(String xmlString) throws XMLStreamException, ParseException { 
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {		
-			Parse(xmlElement);			
+			parse(xmlElement);			
 		}
 	}
 
 	public SpFieldRef(OMElement xmlElement) throws ParseException { 
-		Parse(xmlElement);
+		parse(xmlElement);
 	}
 		
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd hh:MM:ss");
 		String tempAttributeValue = null;
 
@@ -250,7 +250,7 @@ public class SpFieldRef extends DataObject {
 		tempAttributeValue = null;
 	}
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<FieldRef ");
 		if (getAggregation() != null)
