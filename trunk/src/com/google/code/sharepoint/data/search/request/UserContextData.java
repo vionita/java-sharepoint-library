@@ -51,10 +51,10 @@ public class UserContextData extends DataObject {
 	public UserContextData(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
@@ -66,11 +66,11 @@ public class UserContextData extends DataObject {
 	 * @throws ParseException
 	 */
 	public UserContextData(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		String tempAttributeValue = null;
 		
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
@@ -83,7 +83,7 @@ public class UserContextData extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		if ((this.getValue() != null) && (this.getValue().length() > 0))
 		{

@@ -24,7 +24,7 @@ import org.apache.axiom.om.util.AXIOMUtil;
 import org.xml.sax.SAXException;
 
 public class Support {
-	public static Object OmElementToObject(OMElement omElement,
+	public static Object omElementToObject(OMElement omElement,
 			Class<?> objectClass) throws XMLStreamException,
 			FactoryConfigurationError, JAXBException {
 		// <List xmlns="http://schemas.microsoft.com/sharepoint/soap/"
@@ -52,14 +52,14 @@ public class Support {
 		// Ordered="False" ShowUser="True" EnableMinorVersion="False"
 		// RequireCheckout="False"></List>
 
-		String xmlString = OmElementToString(omElement);
+		String xmlString = omElementToString(omElement);
 		return readXml(xmlString, objectClass);
 	}
 
-	public static OMElement ObjectToOmElement(Object object)
+	public static OMElement objectToOmElement(Object object)
 			throws JAXBException, XMLStreamException {
-		String xmlString = ObjectToXml(object);
-		return StringToOmElement(xmlString);
+		String xmlString = objectToXml(object);
+		return stringToOmElement(xmlString);
 	}
 
 	/**
@@ -69,7 +69,7 @@ public class Support {
 	 * @return
 	 * @throws JAXBException
 	 */
-	public static String ObjectToXml(Object objectItem) throws JAXBException {
+	public static String objectToXml(Object objectItem) throws JAXBException {
 		JAXBContext context = JAXBContext.newInstance(objectItem.getClass());
 		Marshaller marshaller = context.createMarshaller();
 		StringWriter sw = new StringWriter();
@@ -87,7 +87,7 @@ public class Support {
 	 * @return
 	 * @throws JAXBException
 	 */
-	private static Object XmlToObject(String xmlString, Class<?> objectClass)
+	private static Object xmlToObject(String xmlString, Class<?> objectClass)
 			throws JAXBException {
 		ByteArrayInputStream xmlContentBytes = new ByteArrayInputStream(
 				xmlString.getBytes());
@@ -127,7 +127,7 @@ public class Support {
 	 * @throws JAXBException
 	 * @throws SAXException
 	 */
-	private static Object XmlToObject(String xmlString, Class<?> objectClass,
+	private static Object xmlToObject(String xmlString, Class<?> objectClass,
 			String pathToXsdFile) throws JAXBException, SAXException {
 		ByteArrayInputStream xmlContentBytes = new ByteArrayInputStream(
 				xmlString.getBytes());
@@ -151,7 +151,7 @@ public class Support {
 	 * @throws XMLStreamException
 	 * @throws FactoryConfigurationError
 	 */
-	public static String OmElementToString(OMElement omElement)
+	public static String omElementToString(OMElement omElement)
 			throws XMLStreamException, FactoryConfigurationError {
 		StringWriter stringWriter = null;
 		String xmlString = null;
@@ -172,7 +172,7 @@ public class Support {
 	 * @return
 	 * @throws XMLStreamException
 	 */
-	public static OMElement StringToOmElement(String xmlString)
+	public static OMElement stringToOmElement(String xmlString)
 			throws XMLStreamException {
 		OMElement omElement = AXIOMUtil.stringToOM(xmlString);
 		return omElement;

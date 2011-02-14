@@ -115,11 +115,11 @@ public final class SpList extends DataObject {
 
 	public SpList(String xmlString) throws XMLStreamException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
 			try {
-				Parse(xmlElement);
+				parse(xmlElement);
 			} catch (ParseException ex) {
 				Logger.getLogger(SpList.class.getName()).log(Level.SEVERE,
 						null, ex);
@@ -129,7 +129,7 @@ public final class SpList extends DataObject {
 
 	public SpList(OMElement xmlElement) {
 		try {
-			Parse(xmlElement);
+			parse(xmlElement);
 		} catch (ParseException ex) {
 			Logger.getLogger(SpList.class.getName())
 					.log(Level.SEVERE, null, ex);
@@ -137,7 +137,7 @@ public final class SpList extends DataObject {
 	}	
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd hh:MM:ss");
 		String tempAttributeValue = null;
 		
@@ -452,7 +452,7 @@ public final class SpList extends DataObject {
 	}	
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 
 		// TODO: getAsXmlString
 

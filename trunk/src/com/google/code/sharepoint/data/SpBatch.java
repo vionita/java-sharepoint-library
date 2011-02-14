@@ -156,14 +156,14 @@ public class SpBatch extends DataObject {
 
 	public SpBatch(String xmlString) throws XMLStreamException, ParseException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null)
-			Parse(xmlElement);
+			parse(xmlElement);
 	}
 
 	public SpBatch(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}
 
 	/**
@@ -176,7 +176,7 @@ public class SpBatch extends DataObject {
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd hh:MM:ss");
 		String tempAttributeValue = null;
 
@@ -247,7 +247,7 @@ public class SpBatch extends DataObject {
 	 * @return
 	 */
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		String xmlString = "<Batch ";
 
 		if (getListVersion() != null)
@@ -271,7 +271,7 @@ public class SpBatch extends DataObject {
 		xmlString += ">";
 
 		for (SpMethod method : this.getMethods()) {
-			xmlString += method.GetAsXmlString();
+			xmlString += method.getAsXmlString();
 		}
 		xmlString += "</Batch>";
 

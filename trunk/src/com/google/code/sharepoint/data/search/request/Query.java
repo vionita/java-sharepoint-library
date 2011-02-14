@@ -182,19 +182,19 @@ public class Query extends DataObject {
 	public Query(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
 	public Query(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		String tempAttributeValue = null;
 		Iterator children = xmlElement.getChildElements();
 		while (children.hasNext()) {
@@ -269,7 +269,7 @@ public class Query extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<Query>");
 		
@@ -282,16 +282,16 @@ public class Query extends DataObject {
 		}		
 		// Context
 		if (this.getContext() != null)
-			stringWriter.append(this.getContext().GetAsXmlString());		
+			stringWriter.append(this.getContext().getAsXmlString());		
 		// Range
 		if (this.getRange() != null)
-			stringWriter.append(this.getRange().GetAsXmlString());
+			stringWriter.append(this.getRange().getAsXmlString());
 		// Properties
 		if (this.getProperties() != null)
-			stringWriter.append(this.getProperties().GetAsXmlString());
+			stringWriter.append(this.getProperties().getAsXmlString());
 		// SortByProperties
 		if (this.getSortByProperties() != null)
-			stringWriter.append(this.getSortByProperties().GetAsXmlString());
+			stringWriter.append(this.getSortByProperties().getAsXmlString());
 		// ImplicitAndBehavior
 		if (this.getImplicitAndBehavior() != null)
 		{
@@ -315,7 +315,7 @@ public class Query extends DataObject {
 		}
 		// TrimDuplicates
 		if (this.getTrimDuplicates() != null)
-			stringWriter.append(this.getTrimDuplicates().GetAsXmlString());
+			stringWriter.append(this.getTrimDuplicates().getAsXmlString());
 		// IncludeSpecialTermResults
 		if (this.getIncludeSpecialTermResults() != null)
 		{
@@ -353,7 +353,7 @@ public class Query extends DataObject {
 		}
 		// ResubmitFlags
 		if (this.getResubmitFlags() != null)
-			stringWriter.append(this.getResubmitFlags().GetAsXmlString());
+			stringWriter.append(this.getResubmitFlags().getAsXmlString());
 		// EnableSpellcheck
 		if (this.getEnableSpellcheck() != null)
 		{
@@ -363,16 +363,16 @@ public class Query extends DataObject {
 		}		
 		// UserContext
 		if (this.getUserContext() != null)
-			stringWriter.append(this.getUserContext().GetAsXmlString());
+			stringWriter.append(this.getUserContext().getAsXmlString());
 		// FindSimilar
 		if (this.getFindSimilar() != null)
-			stringWriter.append(this.getFindSimilar().GetAsXmlString());
+			stringWriter.append(this.getFindSimilar().getAsXmlString());
 		// IncludeRefinementResults
 		if (this.getIncludeRefinementResults() != null)
-			stringWriter.append(this.getIncludeRefinementResults().GetAsXmlString());
+			stringWriter.append(this.getIncludeRefinementResults().getAsXmlString());
 		// RefinementFilters
 		if (this.getRefinementFilters() != null)
-			stringWriter.append(this.getRefinementFilters().GetAsXmlString());
+			stringWriter.append(this.getRefinementFilters().getAsXmlString());
 		// IncludeRelevantResults
 		if (this.getIncludeRelevantResults() != null)
 		{

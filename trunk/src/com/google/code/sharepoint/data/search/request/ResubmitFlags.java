@@ -53,10 +53,10 @@ public class ResubmitFlags extends DataObject {
 	 */
 	public ResubmitFlags(String xmlString) throws XMLStreamException, ParseException { 
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
@@ -67,11 +67,11 @@ public class ResubmitFlags extends DataObject {
 	 * @throws ParseException
 	 */
 	public ResubmitFlags(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}	
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {		
+	public void parse(OMElement xmlElement) throws ParseException {		
 		List<ResubmitFlag> resubmitFlags = new ArrayList<ResubmitFlag>();
 		
 		Iterator children = xmlElement.getChildElements();
@@ -86,12 +86,12 @@ public class ResubmitFlags extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<ResubmitFlags>");
 		for (ResubmitFlag resubmitFlag : this.getResubmitFlags())
 		{
-			stringWriter.append(resubmitFlag.GetAsXmlString());
+			stringWriter.append(resubmitFlag.getAsXmlString());
 		}
 		stringWriter.append("</ResubmitFlags>");
 		return stringWriter.toString();

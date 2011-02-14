@@ -35,19 +35,19 @@ public class SpRegionalSettings extends DataObject{
 
 	public SpRegionalSettings(String xmlString) throws XMLStreamException, ParseException { 
 		 OMElement xmlElement = null;
-		 xmlElement = Support.StringToOmElement(xmlString);
+		 xmlElement = Support.stringToOmElement(xmlString);
 		
 		 if (xmlElement != null) {		
-		 Parse(xmlElement);
+		 parse(xmlElement);
 		 }
 	}
 
 	public SpRegionalSettings(OMElement xmlElement) throws ParseException {
-		 Parse(xmlElement);
+		 parse(xmlElement);
 	}
 	
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		Iterator children = xmlElement.getChildElements();
 		while (children.hasNext()) {			
 			OMElement childElement = (OMElement) children.next();
@@ -89,7 +89,7 @@ public class SpRegionalSettings extends DataObject{
 		}
 	}
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<RegionalSettings>");
 		

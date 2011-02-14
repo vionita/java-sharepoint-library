@@ -27,19 +27,19 @@ public class SpFields extends DataObject {
 
 	public SpFields(String xmlString) throws XMLStreamException, ParseException { 
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
 	public SpFields(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}	
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd hh:MM:ss");
 		String tempAttributeValue = null;
 
@@ -57,12 +57,12 @@ public class SpFields extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<Fields>");
 		for (SpField field : this.getFieldCollection())
 		{
-			stringWriter.append(field.GetAsXmlString());
+			stringWriter.append(field.getAsXmlString());
 		}
 		stringWriter.append("</Fields>");
 		return stringWriter.toString();

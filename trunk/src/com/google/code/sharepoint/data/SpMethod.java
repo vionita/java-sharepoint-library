@@ -59,19 +59,19 @@ public class SpMethod extends DataObject {
 
 	public SpMethod(String xmlString) throws XMLStreamException, ParseException {		
 		 OMElement xmlElement = null;
-		 xmlElement = Support.StringToOmElement(xmlString);
+		 xmlElement = Support.stringToOmElement(xmlString);
 		
 		 if (xmlElement != null) {		 
-			 Parse(xmlElement);
+			 parse(xmlElement);
 		 }
 	}
 
 	public SpMethod(OMElement xmlElement) throws ParseException {
-		 Parse(xmlElement);
+		 parse(xmlElement);
 	}		      
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd hh:MM:ss");
 		String tempAttributeValue = null;
 
@@ -94,7 +94,7 @@ public class SpMethod extends DataObject {
      * @return
      */
 	@Override
-    public String GetAsXmlString()
+    public String getAsXmlString()
     {
         String xmlString = "<Method ";
         if (getId() != null)

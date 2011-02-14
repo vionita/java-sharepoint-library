@@ -39,7 +39,7 @@ public class SearchWS extends BaseWebService {
         super(domain, userName, password, webServiceURL, authenticationType);
 
         webServiceStub = new QueryServiceStub();
-        InitializeWebService(webServiceStub);
+        initializeWebService(webServiceStub);
     }
 
     public SearchWS(String domain, String userName, String password,
@@ -49,7 +49,7 @@ public class SearchWS extends BaseWebService {
                 httpProxy);
 
         webServiceStub = new QueryServiceStub();
-        InitializeWebService(webServiceStub);
+        initializeWebService(webServiceStub);
     }
 
     public SearchWS(String domain, String userName, String password,
@@ -59,10 +59,10 @@ public class SearchWS extends BaseWebService {
                 httpProxy, trustAllSSLs);
 
         webServiceStub = new QueryServiceStub();
-        InitializeWebService(webServiceStub);
+        initializeWebService(webServiceStub);
     }
 
-    public ResponsePacket Query(QueryPacket queryPacket) throws RemoteException, XMLStreamException, ParseException {
+    public ResponsePacket query(QueryPacket queryPacket) throws RemoteException, XMLStreamException, ParseException {
         String result = null;    
         
 //        String query = "<QueryPacket xmlns='urn:Microsoft.Search.Query'>" +
@@ -72,7 +72,7 @@ public class SearchWS extends BaseWebService {
 //    "</Context>" +
 //  "</Query>" +
 //"</QueryPacket>";
-        result = webServiceStub.query(queryPacket.GetAsXmlString());
+        result = webServiceStub.query(queryPacket.getAsXmlString());
         if (result != null)
         {
         	ResponsePacket responsePacket = new ResponsePacket(result);

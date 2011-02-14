@@ -50,10 +50,10 @@ public class IncludeRefinementResults extends DataObject {
 	public IncludeRefinementResults(String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
-		xmlElement = Support.StringToOmElement(xmlString);
+		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
-			Parse(xmlElement);
+			parse(xmlElement);
 		}
 	}
 
@@ -65,11 +65,11 @@ public class IncludeRefinementResults extends DataObject {
 	 * @throws ParseException
 	 */
 	public IncludeRefinementResults(OMElement xmlElement) throws ParseException {
-		Parse(xmlElement);
+		parse(xmlElement);
 	}
 
 	@Override
-	public void Parse(OMElement xmlElement) throws ParseException {
+	public void parse(OMElement xmlElement) throws ParseException {
 		Iterator children = xmlElement.getChildElements();
 		while (children.hasNext()) {
 			OMElement childElement = (OMElement) children.next();
@@ -85,11 +85,11 @@ public class IncludeRefinementResults extends DataObject {
 	}
 
 	@Override
-	public String GetAsXmlString() {
+	public String getAsXmlString() {
 		StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<IncludeRefinementResults>");
 		if (this.getRefiners() != null)
-			stringWriter.append(this.getRefiners().GetAsXmlString());
+			stringWriter.append(this.getRefiners().getAsXmlString());
 		if (this.getMaxShallowRefinementHits() != null)
 		{
 			stringWriter.append("<MaxShallowRefinementHits>");
