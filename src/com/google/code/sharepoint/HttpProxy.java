@@ -12,46 +12,50 @@ public class HttpProxy {
 	private String domain = null;
 	private String userName = null;
 	private String password = null;
-	private URL httpProxyURL = null;
+	private String proxyHost = null;
+	private int proxyPort = 0;
 
 	/**
 	 * Constructor
 	 * @param httpProxyURL
 	 */
-	public HttpProxy(URL httpProxyURL) {
-		this.httpProxyURL = httpProxyURL;
+	public HttpProxy() {
 	}
 	
 	/**
-	 * Constructor
-	 * @param httpProxyURL
-	 * @param domain
-	 * @param userName
-	 * @param password
-	 */
-	public HttpProxy(URL httpProxyURL, String domain, String userName,
-			String password) {
-		this.httpProxyURL = httpProxyURL;
-		this.domain = domain;
-		this.userName = userName;
-		this.password = password;
-	}
-
-	/**
-	 * Sets http proxy URL
-	 * @param httpProxyURL
-	 */
-	public void setHttpProxyURL(URL httpProxyURL) {
-		this.httpProxyURL = httpProxyURL;
-	}
-
-	/**
-	 * Gets http proxy URL
+	 * Gets proxy host
 	 * @return
 	 */
-	public URL getHttpProxyURL() {
-		return httpProxyURL;
+	public String getProxyHost() {
+		return proxyHost;
 	}
+
+
+	/**
+	 * Sets proxy hosts
+	 * @param proxyHost
+	 */
+	public void setProxyHost(String proxyHost) {
+		this.proxyHost = proxyHost;
+	}
+
+
+	/**
+	 * Gets proxy port
+	 * @return
+	 */
+	public int getProxyPort() {
+		return proxyPort;
+	}
+
+	/**
+	 * Sets proxy port
+	 * @param proxyPort
+	 */
+	public void setProxyPort(int proxyPort) {
+		this.proxyPort = proxyPort;
+	}
+
 
 	/**
 	 * Sets http proxy login domain
