@@ -126,10 +126,8 @@ public class BaseWebService {
 		if (this.httpProxy != null) {
 			// Proxy
 			HttpTransportProperties.ProxyProperties proxyProperties = new HttpTransportProperties.ProxyProperties();
-			proxyProperties.setProxyName(this.httpProxy.getHttpProxyURL()
-					.getHost());
-			proxyProperties.setProxyPort(this.httpProxy.getHttpProxyURL()
-					.getPort());
+			proxyProperties.setProxyName(this.httpProxy.getProxyHost());
+			proxyProperties.setProxyPort(this.httpProxy.getProxyPort());
 			// Proxy authentication
 			if (this.httpProxy.getDomain() != null)
 				proxyProperties.setUserName(this.httpProxy.getDomain());
