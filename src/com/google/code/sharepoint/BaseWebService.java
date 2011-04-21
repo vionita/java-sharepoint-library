@@ -115,12 +115,18 @@ public class BaseWebService {
 			throws GeneralSecurityException, IOException {
 		// Set authenticator
 		Options options = webServiceStub._getServiceClient().getOptions();
+		
 		if (this.authenticationType == AuthenticationTypeEnum.basic)
+		{
 			options.setProperty(HTTPConstants.AUTHENTICATE,
 					getBasicAuthenticator());
+		}
 		else if (this.authenticationType == AuthenticationTypeEnum.ntlm)
-			options.setProperty(HTTPConstants.AUTHENTICATE,
-					getNtlmAuthenticator());
+		{
+//			options.setProperty(HTTPConstants.AUTHENTICATE,
+//					getNtlmAuthenticator());
+			NtlmJcifsCredentials.register(this.userName, this.password, this.domain);
+		}
 
 		// Set httpProxy
 		if (this.httpProxy != null) {
@@ -137,6 +143,8 @@ public class BaseWebService {
 			}
 			options.setProperty(HTTPConstants.PROXY, proxyProperties);
 		}
+		// HTTP 1.0 protocol
+		options.setProperty (HTTPConstants.HTTP_PROTOCOL_VERSION, HTTPConstants.HEADER_PROTOCOL_10);
 
 		// Set web service URL
 		options.setTo(new EndpointReference(getWebServiceURL().toString()));
@@ -171,16 +179,29 @@ public class BaseWebService {
 	 */
 	private HttpTransportProperties.Authenticator getNtlmAuthenticator() {
 		// NTLM Authentication
+//		OLD version
+//		List<String> authScheme = new ArrayList<String>();
+//		authScheme.add(HttpTransportProperties.Authenticator.NTLM);
+//		HttpTransportProperties.Authenticator authenticator = new HttpTransportProperties.Authenticator();
+//		authenticator.setAuthSchemes(authScheme);
+//		authenticator.setDomain(this.domain);
+//		authenticator.setUsername(this.userName);
+//		authenticator.setPassword(this.password);
+//		authenticator.setHost(this.webServiceURL.getHost());
+//		authenticator.setPort(this.webServiceURL.getPort());
+//		return authenticator;
+		
+		
+		HttpTransportProperties.Authenticator ntlmAuthentication = new HttpTransportProperties.Authenticator();
 		List<String> authScheme = new ArrayList<String>();
 		authScheme.add(HttpTransportProperties.Authenticator.NTLM);
-		HttpTransportProperties.Authenticator authenticator = new HttpTransportProperties.Authenticator();
-		authenticator.setAuthSchemes(authScheme);
-		authenticator.setDomain(this.domain);
-		authenticator.setUsername(this.userName);
-		authenticator.setPassword(this.password);
-		authenticator.setHost(this.webServiceURL.getHost());
-		authenticator.setPort(this.webServiceURL.getPort());
-		return authenticator;
+		ntlmAuthentication.setAuthSchemes(authScheme);
+		ntlmAuthentication.setUsername(this.userName);
+		ntlmAuthentication.setPassword(this.password);
+		ntlmAuthentication.setHost(this.webServiceURL.getHost());
+		ntlmAuthentication.setPort(this.webServiceURL.getPort());
+		ntlmAuthentication.setRealm(this.domain);
+		return ntlmAuthentication;		
 	}
 
 	/**
