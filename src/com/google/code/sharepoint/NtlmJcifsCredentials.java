@@ -1,6 +1,9 @@
 package com.google.code.sharepoint;
 
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import org.apache.commons.httpclient.Credentials;
 import org.apache.commons.httpclient.NTCredentials;
 import org.apache.commons.httpclient.auth.AuthPolicy;
@@ -26,7 +29,14 @@ public class NtlmJcifsCredentials
     }
     public static void register(String username, String password, String userDomain)
     {
-        final String computername = System.getenv("COMPUTERNAME");
+        //final String computername = System.getenv("COMPUTERNAME");
+    	String computername = "";
+		try {
+			computername = InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         register(username, password, computername, userDomain);
     }
 
