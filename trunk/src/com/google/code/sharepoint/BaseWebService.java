@@ -155,15 +155,21 @@ public class BaseWebService {
 			// This code must not be used in production environment
 			// because it ignores any certificates but
 			// it is convenient to have for testing purposes
+						
 			org.apache.commons.httpclient.protocol.Protocol
 					.unregisterProtocol("https");
+			
+			int port = this.webServiceURL.getPort();
+			if (this.webServiceURL.getPort() < 0)
+				port = 443; // default https port
+				
 			org.apache.commons.httpclient.protocol.Protocol
 					.registerProtocol(
 							"https",
 							new Protocol(
 									"https",
 									new org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory(),
-									this.webServiceURL.getPort()));
+									port));
 			System.out
 					.print("WARNING: SSL CERTIFICATE CONFIGURATION IS TURNED OFF!");
 		}
@@ -280,7 +286,10 @@ public class BaseWebService {
 	 */
 	public void setPassword(String password) {
 		this.password = password;
-		logger.info("password.length()=" + this.password.length());
+		if (password != null)
+			logger.info("password.length()=" + this.password.length());
+		else
+			logger.info("password = NULL");
 	}
 
 	/**
