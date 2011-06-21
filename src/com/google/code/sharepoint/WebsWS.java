@@ -67,9 +67,9 @@ public class WebsWS extends BaseWebService {
 		initializeWebService(webServiceStub);
 	}
 		
-	public void  getWebCollection() throws RemoteException
+	public List<SpWeb> getWebCollection() throws RemoteException
 	{
-		//List<SpList> listCollection = new ArrayList<SpList>();
+		List<SpWeb> listCollection = new ArrayList<SpWeb>();
 		
 		// GetWebCollection
 		GetWebCollectionResult_type0 result = webServiceStub.getWebCollection();
@@ -77,10 +77,10 @@ public class WebsWS extends BaseWebService {
 		Iterator children = result.getExtraElement().getChildElements();
 		while (children.hasNext()) {
 			OMElement element = (OMElement) children.next();			
-//			SpList newList = new SpList(element);
-//            listCollection.add(newList);			
+			SpWeb newWeb = new SpWeb(element);
+            listCollection.add(newWeb);
 		}
 		
-//		return listCollection;
+		return listCollection;
 	}	
 }
