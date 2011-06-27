@@ -281,7 +281,7 @@ public class SpField extends DataObject {
 
 	@Override
 	public void parse(OMElement xmlElement) throws ParseException {
-		DateFormat dateFormatter = new SimpleDateFormat("yyyymmdd hh:MM:ss");
+		DateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd hh:mm:ss");
 		String tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
