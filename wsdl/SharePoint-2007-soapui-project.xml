@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project name="SharePoint 2007" resourceRoot="" soapui-version="4.0.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="QueryServiceSoap12" type="wsdl" bindingName="{http://microsoft.com/webservices/SharePoint/QueryService}QueryServiceSoap12" soapVersion="1_2" anonymous="optional" definition="file:/C:/Users/vkorecky/workspace/GIA-GordicInternalApplication/SharePointLibrary/wsdl/spsearch.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:Microsoft.Search/Query" name="Query" bindingOperationName="Query" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:urn="urn:Microsoft.Search">
+   <soap:Header/>
+   <soap:Body>
+      <urn:Query>
+         <urn:queryXml>GORDIC</urn:queryXml>
+      </urn:Query>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:credentials><con:username>vkorecky</con:username><con:password>heslo123</con:password><con:domain>GORDIC</con:domain></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://microsoft.com/webservices/SharePoint/QueryService/QueryServiceSoap/QueryRequest"/><con:wsrmConfig version="1.2"/></con:call></con:operation><con:operation isOneWay="false" action="http://microsoft.com/webservices/SharePoint/QueryService/QueryEx" name="QueryEx" bindingOperationName="QueryEx" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:quer="http://microsoft.com/webservices/SharePoint/QueryService">
+   <soap:Header/>
+   <soap:Body>
+      <quer:QueryEx>
+         <!--Optional:-->
+         <quer:queryXml>?</quer:queryXml>
+      </quer:QueryEx>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://microsoft.com/webservices/SharePoint/QueryService/QueryServiceSoap/QueryExRequest"/></con:call></con:operation><con:operation isOneWay="false" action="urn:Microsoft.Search/Registration" name="Registration" bindingOperationName="Registration" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:urn="urn:Microsoft.Search">
+   <soap:Header/>
+   <soap:Body>
+      <urn:Registration>
+         <!--Optional:-->
+         <urn:registrationXml>?</urn:registrationXml>
+      </urn:Registration>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://microsoft.com/webservices/SharePoint/QueryService/QueryServiceSoap/RegistrationRequest"/></con:call></con:operation><con:operation isOneWay="false" action="urn:Microsoft.Search/Status" name="Status" bindingOperationName="Status" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:urn="urn:Microsoft.Search">
+   <soap:Header/>
+   <soap:Body>
+      <urn:Status/>
+   </soap:Body>
+</soap:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://microsoft.com/webservices/SharePoint/QueryService/QueryServiceSoap/StatusRequest"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="QueryServiceSoap" type="wsdl" bindingName="{http://microsoft.com/webservices/SharePoint/QueryService}QueryServiceSoap" soapVersion="1_1" anonymous="optional" definition="file:/C:/Users/vkorecky/workspace/GIA-GordicInternalApplication/SharePointLibrary/wsdl/spsearch.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/C:/Users/vkorecky/workspace/GIA-GordicInternalApplication/SharePointLibrary/wsdl/spsearch.wsdl"><con:part><con:url>file:/C:/Users/vkorecky/workspace/GIA-GordicInternalApplication/SharePointLibrary/wsdl/spsearch.wsdl</con:url><con:content><![CDATA[<wsdl:definitions targetNamespace="http://microsoft.com/webservices/SharePoint/QueryService" xmlns:s0="urn:Microsoft.Search" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://microsoft.com/webservices/SharePoint/QueryService" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation>Microsoft Windows SharePoint Server 3.0 Search Query Web Service</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="urn:Microsoft.Search">
+      <s:element name="Query">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="queryXml" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Registration">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="registrationXml" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="RegistrationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="RegistrationResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Status">
+        <s:complexType/>
+      </s:element>
+      <s:element name="StatusResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="StatusResult" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/webservices/SharePoint/QueryService">
+      <s:element name="QueryEx">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="queryXml" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="QueryExResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="QueryExResult">
+              <s:complexType>
+                <s:sequence>
+                  <s:any/>
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="QuerySoapIn">
+    <wsdl:part name="parameters" element="s0:Query"/>
+  </wsdl:message>
+  <wsdl:message name="QuerySoapOut">
+    <wsdl:part name="parameters" element="s0:QueryResponse"/>
+  </wsdl:message>
+  <wsdl:message name="QueryExSoapIn">
+    <wsdl:part name="parameters" element="tns:QueryEx"/>
+  </wsdl:message>
+  <wsdl:message name="QueryExSoapOut">
+    <wsdl:part name="parameters" element="tns:QueryExResponse"/>
+  </wsdl:message>
+  <wsdl:message name="RegistrationSoapIn">
+    <wsdl:part name="parameters" element="s0:Registration"/>
+  </wsdl:message>
+  <wsdl:message name="RegistrationSoapOut">
+    <wsdl:part name="parameters" element="s0:RegistrationResponse"/>
+  </wsdl:message>
+  <wsdl:message name="StatusSoapIn">
+    <wsdl:part name="parameters" element="s0:Status"/>
+  </wsdl:message>
+  <wsdl:message name="StatusSoapOut">
+    <wsdl:part name="parameters" element="s0:StatusResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="QueryServiceSoap">
+    <wsdl:operation name="Query">
+      <wsdl:input message="tns:QuerySoapIn"/>
+      <wsdl:output message="tns:QuerySoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="QueryEx">
+      <wsdl:input message="tns:QueryExSoapIn"/>
+      <wsdl:output message="tns:QueryExSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="Registration">
+      <wsdl:input message="tns:RegistrationSoapIn"/>
+      <wsdl:output message="tns:RegistrationSoapOut"/>
+    </wsdl:operation>
+    <wsdl:operation name="Status">
+      <wsdl:input message="tns:StatusSoapIn"/>
+      <wsdl:output message="tns:StatusSoapOut"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="QueryServiceSoap" type="tns:QueryServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Query">
+      <soap:operation soapAction="urn:Microsoft.Search/Query" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryEx">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePoint/QueryService/QueryEx" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Registration">
+      <soap:operation soapAction="urn:Microsoft.Search/Registration" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Status">
+      <soap:operation soapAction="urn:Microsoft.Search/Status" style="document"/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="QueryServiceSoap12" type="tns:QueryServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="Query">
+      <soap12:operation soapAction="urn:Microsoft.Search/Query" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="QueryEx">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePoint/QueryService/QueryEx" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Registration">
+      <soap12:operation soapAction="urn:Microsoft.Search/Registration" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Status">
+      <soap12:operation soapAction="urn:Microsoft.Search/Status" style="document"/>
+      <wsdl:input>
+        <soap12:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="QueryService">
+    <wsdl:documentation>Microsoft Windows SharePoint Server 3.0 Search Query Web Service</wsdl:documentation>
+    <wsdl:port name="QueryServiceSoap" binding="tns:QueryServiceSoap">
+      <soap:address location="http://barbie/_vti_bin/spsearch.asmx"/>
+    </wsdl:port>
+    <wsdl:port name="QueryServiceSoap12" binding="tns:QueryServiceSoap12">
+      <soap12:address location="http://barbie/_vti_bin/spsearch.asmx"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint></con:endpoints><con:operation isOneWay="false" action="urn:Microsoft.Search/Query" name="Query" bindingOperationName="Query" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:Microsoft.Search">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Query>
+         <!--Optional:-->
+         <urn:queryXml>?</urn:queryXml>
+      </urn:Query>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:Microsoft.Search/Query"/></con:call></con:operation><con:operation isOneWay="false" action="http://microsoft.com/webservices/SharePoint/QueryService/QueryEx" name="QueryEx" bindingOperationName="QueryEx" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:quer="http://microsoft.com/webservices/SharePoint/QueryService">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <quer:QueryEx>
+         <!--Optional:-->
+         <quer:queryXml>?</quer:queryXml>
+      </quer:QueryEx>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://microsoft.com/webservices/SharePoint/QueryService/QueryEx"/></con:call></con:operation><con:operation isOneWay="false" action="urn:Microsoft.Search/Registration" name="Registration" bindingOperationName="Registration" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:Microsoft.Search">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Registration>
+         <!--Optional:-->
+         <urn:registrationXml>?</urn:registrationXml>
+      </urn:Registration>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:Microsoft.Search/Registration"/></con:call></con:operation><con:operation isOneWay="false" action="urn:Microsoft.Search/Status" name="Status" bindingOperationName="Status" type="Request-Response" inputName="" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>http://barbie/_vti_bin/spsearch.asmx</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:Microsoft.Search">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <urn:Status/>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:Microsoft.Search/Status"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:sensitiveInformation/></con:soapui-project>
