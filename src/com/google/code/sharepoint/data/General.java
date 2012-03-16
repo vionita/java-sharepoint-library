@@ -208,7 +208,8 @@ public class General {
 	}
 
 	enum StorageTZEnum {
-		UTC, Abstract
+		// TODO have to understand the case TRUE
+		UTC, Abstract, TRUE;
 	}	
 	
 	enum ShowFieldEnum{

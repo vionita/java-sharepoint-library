@@ -9,13 +9,20 @@ import java.io.StringWriter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
+import org.apache.axiom.om.util.AXIOMUtil;
 
-import com.google.code.sharepoint.data.General.*;
+import com.google.code.sharepoint.data.General.AggregationEnum;
+import com.google.code.sharepoint.data.General.NegativeFormatEnum;
+import com.google.code.sharepoint.data.General.ShowFieldEnum;
+import com.google.code.sharepoint.data.General.SpBaseTypeEnum;
+import com.google.code.sharepoint.data.General.StorageTZEnum;
 
 /**
  * 
@@ -223,6 +230,7 @@ public class SpField extends DataObject {
 	private Boolean showAlways = null;
 	private String listItemMenuAllowed = null;
 	private ShowFieldEnum showField = null;
+	private String internalShowField = null;
 	private Boolean showInDisplayForm = null;
 	private Boolean showInEditForm = null;
 	private Boolean showInFileDlg = null;
@@ -254,931 +262,1161 @@ public class SpField extends DataObject {
 	public SpField() {
 	}
 
-	public SpField(String xmlString) throws XMLStreamException {
-		// TODO:
-		// OMElement xmlElement = null;
-		// xmlElement = AXIOMUtil.stringToOM(xmlString);
-		//
-		// if (xmlElement != null) {
-		// try {
-		// Parse(xmlElement);
-		// } catch (ParseException ex) {
-		// Logger.getLogger(SpList.class.getName()).log(Level.SEVERE,
-		// null, ex);
-		// }
-		// }
+	public SpField(final String xmlString) throws XMLStreamException {
+		 final OMElement xmlElement = AXIOMUtil.stringToOM(xmlString);
+		 if (xmlElement != null) {
+			 try {
+				 parse(xmlElement);
+			 } catch (final ParseException ex) {
+				 Logger.getLogger(SpList.class.getName()).log(Level.SEVERE, null, ex);
+			 }
+		 }
 	}
 
-	public SpField(OMElement xmlElement) {
-		// TODO:
-		// try {
-		// Parse(xmlElement);
-		// } catch (ParseException ex) {
-		// Logger.getLogger(SpList.class.getName())
-		// .log(Level.SEVERE, null, ex);
-		// }
+	public SpField(final OMElement xmlElement) {
+		 try {
+			 parse(xmlElement);
+		 } catch (final ParseException ex) {
+			 Logger.getLogger(SpList.class.getName()).log(Level.SEVERE, null, ex);
+		 }
 	}
 
 	@Override
-	public void parse(OMElement xmlElement) throws ParseException {
-		DateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd hh:mm:ss");
+	public void parse(final OMElement xmlElement) throws ParseException {
+		final DateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd hh:mm:ss");
 		String tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"Aggregation"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setAggregation(AggregationEnum.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"AllowDeletion"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setAllowDeletion(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"AllowHyperlink"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setAllowHyperlink(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"AllowMultiVote"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setAllowMultiVote(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"AppendOnly"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setAppendOnly(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"AuthoringInfo"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setAuthoringInfo(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("BaseType"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setBaseType(SpBaseTypeEnum.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"AppendOnly"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setAppendOnly(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("CalType"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setCalType(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"CanToggleHidden"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setCanToggleHidden(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("ClassInfo"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setClassInfo(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("ColName"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setColName(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("ColName2"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setColName2(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Commas"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setCommas(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"Customization"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setCustomization(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("Decimals"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDecimals(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"Description"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDescription(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Dir"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDir(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("Direction"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDirection(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"DisplaceOnUpgrade"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDisplaceOnUpgrade(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"DisplayImage"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDisplayImage(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"DisplayName"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDisplayName(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"DisplayNameSrcField"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDisplayNameSrcField(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"DisplaySize"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDisplaySize(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Div"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setDiv(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"EnableLookup"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setEnableLookup(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"EnforceUniqueValues"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setEnforceUniqueValues(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ExceptionImage"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setExceptionImage(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("FieldRef"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setFieldRef(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"FillInChoice"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setFillInChoice(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"Filterable"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setFilterable(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"FilterableNoRecurrence"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setFilterableNoRecurrence(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ForcePromoteDemote"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setForcePromoteDemote(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ForcedDisplay"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setForcedDisplay(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Format"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setFormat(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"FromBaseType"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setFromBaseType(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"HeaderImage"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setHeaderImage(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Height"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setHeight(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Hidden"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setHidden(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"HTMLEncode"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setHtmlEncode(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("ID"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setID(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Id"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setId(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("IMEMode"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setiMEMode(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Indexed"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setIndexed(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"IsolateStyles"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setIsolateStyles(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"IsRelationship"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setIsRelationship(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"JoinColName"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setJoinColName(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"JoinRowOrdinal"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setJoinRowOrdinal(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("JoinType"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setJoinType(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("LCID"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setLCID(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"LinkToItem"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setLinkToItem(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"LinkToItemAllowed"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setLinkToItemAllowed(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("List"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setList(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ListItemMenu"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setListItemMenu(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ListItemMenuAllowed"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setListItemMenuAllowed(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Max"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setMax(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("MaxLength"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setMaxLength(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Min"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setMin(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Mult"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setMult(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Name"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setName(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"NegativeFormat"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setNegativeFormat(NegativeFormatEnum
 					.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Node"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setNode(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"NoEditFormBreak"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setNoEditFormBreak(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("NumLines"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setNumLines(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"Percentage"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setPercentage(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"PIAttribute"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setPiAttribute(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("PITarget"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setPiTarget(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"PrimaryPIAttribute"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setPrimaryPIAttribute(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"PrimaryPITarget"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setPrimaryPITarget(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("PrependId"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setPrependId(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("ReadOnly"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setReadOnly(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ReadOnlyEnforced"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setReadOnlyEnforced(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"RelationshipDeleteBehavior"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setRelationshipDeleteBehavior(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"RenderXMLUsingPattern"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setRenderXMLUsingPattern(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("Required"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setRequired(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"RestrictedMode"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setRestrictedMode(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ResultType"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setResultType(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("RichText"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setRichText(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"RichTextMode"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setRichTextMode(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"RowOrdinal"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setRowOrdinal(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Sealed"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setSealed(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"SeparateLine"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setSeparateLine(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("SetAs"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setSetAs(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowAddressBookButton"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowAddressBookButton(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowAlways"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowAlways(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("ShowField"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-			this.setShowField(ShowFieldEnum.valueOf(tempAttributeValue));
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)){
+			if(isInternalShowField(tempAttributeValue)){
+				this.setInternalShowField(tempAttributeValue);
+			} else {
+				this.setShowField(ShowFieldEnum.valueOf(tempAttributeValue));
+			}
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowInDisplayForm"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowInDisplayForm(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowInEditForm"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowInEditForm(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowInFileDlg"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowInFileDlg(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowInListSettings"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowInListSettings(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowInNewForm"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowInNewForm(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowInVersionHistory"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowInVersionHistory(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"ShowInViewForms"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setShowInViewForms(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("Sortable"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setSortable(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("SourceID"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setSourceID(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"StaticName"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setStaticName(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("StorageTZ"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setStorageTZ(StorageTZEnum.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("StripWS"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setStripWS(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"SuppressNameDisplay"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setSuppressNameDisplay(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("TextOnly"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setTextOnly(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Title"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setTitle(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Type"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setType(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("UniqueId"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setUniqueId(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"UnlimitedLengthInDocumentLibrary"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setUnlimitedLengthInDocumentLibrary(Boolean
 					.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("URLEncode"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setUrlEncode(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"URLEncodeAsUrl"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setUrlEncodeAsUrl(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"UserSelectionMode"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setUserSelectionMode(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"UserSelectionScope"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setUserSelectionScope(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Version"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setVersion(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement
 				.getAttributeValue(new QName("Viewable"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setViewable(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("WebId"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setWebId(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("Width"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setWidth(Integer.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName(
 				"WikiLinking"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setWikiLinking(Boolean.valueOf(tempAttributeValue));
+		}
 		tempAttributeValue = null;
 
 		tempAttributeValue = xmlElement.getAttributeValue(new QName("XName"));
-		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+		if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0)) {
 			this.setxName(tempAttributeValue);
+		}
 		tempAttributeValue = null;
 	}
 
 	@Override
 	public String getAsXmlString() {
-		StringWriter stringWriter = new StringWriter();
+		final StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<Field ");
-		if (getAggregation() != null)
-		stringWriter.append("Aggregation=\"" + String.valueOf(getAggregation()) + "\" ");
-		if (getAllowDeletion() != null)
-		stringWriter.append("AllowDeletion=\"" + String.valueOf(getAllowDeletion()) + "\" ");
-		if (getAllowHyperlink() != null)
-		stringWriter.append("AllowHyperlink=\"" + String.valueOf(getAllowHyperlink()) + "\" ");
-		if (getAllowMultiVote() != null)
-		stringWriter.append("AllowMultiVote=\"" + String.valueOf(getAllowMultiVote()) + "\" ");
-		if (getAppendOnly() != null)
-		stringWriter.append("AppendOnly=\"" + String.valueOf(getAppendOnly()) + "\" ");
-		if (getAuthoringInfo() != null)
-		stringWriter.append("AuthoringInfo=\"" + String.valueOf(getAuthoringInfo()) + "\" ");
-		if (getBaseType() != null)
-		stringWriter.append("BaseType=\"" + String.valueOf(getBaseType()) + "\" ");
-		if (getCalType() != null)
-		stringWriter.append("CalType=\"" + String.valueOf(getCalType()) + "\" ");
-		if (getCanToggleHidden() != null)
-		stringWriter.append("CanToggleHidden=\"" + String.valueOf(getCanToggleHidden()) + "\" ");
-		if (getClassInfo() != null)
-		stringWriter.append("ClassInfo=\"" + String.valueOf(getClassInfo()) + "\" ");
-		if (getColName() != null)
-		stringWriter.append("ColName=\"" + String.valueOf(getColName()) + "\" ");
-		if (getColName2() != null)
-		stringWriter.append("ColName2=\"" + String.valueOf(getColName2()) + "\" ");
-		if (getCommas() != null)
-		stringWriter.append("Commas=\"" + String.valueOf(getCommas()) + "\" ");
-		if (getCustomization() != null)
-		stringWriter.append("Customization=\"" + String.valueOf(getCustomization()) + "\" ");
-		if (getDecimals() != null)
-		stringWriter.append("Decimals=\"" + String.valueOf(getDecimals()) + "\" ");
-		if (getDescription() != null)
-		stringWriter.append("Description=\"" + String.valueOf(getDescription()) + "\" ");
-		if (getDir() != null)
-		stringWriter.append("Dir=\"" + String.valueOf(getDir()) + "\" ");
-		if (getDirection() != null)
-		stringWriter.append("Direction=\"" + String.valueOf(getDirection()) + "\" ");
-		if (getDisplaceOnUpgrade() != null)
-		stringWriter.append("DisplaceOnUpgrade=\"" + String.valueOf(getDisplaceOnUpgrade()) + "\" ");
-		if (getDisplayImage() != null)
-		stringWriter.append("DisplayImage=\"" + String.valueOf(getDisplayImage()) + "\" ");
-		if (getDisplayName() != null)
-		stringWriter.append("DisplayName=\"" + String.valueOf(getDisplayName()) + "\" ");
-		if (getDisplayNameSrcField() != null)
-		stringWriter.append("DisplayNameSrcField=\"" + String.valueOf(getDisplayNameSrcField()) + "\" ");
-		if (getDisplaySize() != null)
-		stringWriter.append("DisplaySize=\"" + String.valueOf(getDisplaySize()) + "\" ");
-		if (getDiv() != null)
-		stringWriter.append("Div=\"" + String.valueOf(getDiv()) + "\" ");
-		if (getEnableLookup() != null)
-		stringWriter.append("EnableLookup\"" + String.valueOf(getEnableLookup()) + "\" ");
-		if (getEnforceUniqueValues() != null)
-		stringWriter.append("EnforceUniqueValues=\"" + String.valueOf(getEnforceUniqueValues()) + "\" ");
-		if (getExceptionImage() != null)
-		stringWriter.append("ExceptionImage=\"" + String.valueOf(getExceptionImage()) + "\" ");
-		if (getFieldRef() != null)
-		stringWriter.append("FieldRef=\"" + String.valueOf(getFieldRef()) + "\" ");
-		if (getFillInChoice() != null)
-		stringWriter.append("FillInChoice=\"" + String.valueOf(getFillInChoice()) + "\" ");
-		if (getFilterable() != null)
-		stringWriter.append("Filterable=\"" + String.valueOf(getFilterable()) + "\" ");
-		if (getFilterableNoRecurrence() != null)
-		stringWriter.append("FilterableNoRecurrence=\"" + String.valueOf(getFilterableNoRecurrence()) + "\" ");
-		if (getForcedDisplay() != null)
-		stringWriter.append("ForcedDisplay=\"" + String.valueOf(getForcedDisplay()) + "\" ");
-		if (getForcePromoteDemote() != null)
-		stringWriter.append("ForcePromoteDemote=\"" + String.valueOf(getForcePromoteDemote()) + "\" ");
-		if (getFormat() != null)
-		stringWriter.append("Format=\"" + String.valueOf(getFormat()) + "\" ");
-		if (getFromBaseType() != null)
-		stringWriter.append("FromBaseType=\"" + String.valueOf(getFromBaseType()) + "\" ");
-		if (getGroup() != null)
-		stringWriter.append("Group=\"" + String.valueOf(getGroup()) + "\" ");
-		if (getHeaderImage() != null)
-		stringWriter.append("HeaderImage=\"" + String.valueOf(getHeaderImage()) + "\" ");
-		if (getHeight() != null)
-		stringWriter.append("Height=\"" + String.valueOf(getHeight()) + "\" ");
-		if (getHidden() != null)
-		stringWriter.append("Hidden=\"" + String.valueOf(getHidden()) + "\" ");
-		if (getHtmlEncode() != null)
-		stringWriter.append("HTMLEncode=\"" + String.valueOf(getHtmlEncode()) + "\" ");
-		if (getID() != null)
-		stringWriter.append("ID=\"" + String.valueOf(getID()) + "\" ");
-		if (getId() != null)
-		stringWriter.append("Id=\"" + String.valueOf(getId()) + "\" ");
-		if (getiMEMode() != null)
-		stringWriter.append("IMEMode=\"" + String.valueOf(getiMEMode()) + "\" ");
-		if (getIndexed() != null)
-		stringWriter.append("Indexed=\"" + String.valueOf(getIndexed()) + "\" ");
-		if (getIsolateStyles() != null)
-		stringWriter.append("IsolateStyles=\"" + String.valueOf(getIsolateStyles()) + "\" ");
-		if (getIsRelationship() != null)
-		stringWriter.append("IsRelationship=\"" + String.valueOf(getIsRelationship()) + "\" ");
-		if (getJoinColName() != null)
-		stringWriter.append("JoinColName=\"" + String.valueOf(getJoinColName()) + "\" ");
-		if (getJoinRowOrdinal() != null)
-		stringWriter.append("JoinRowOrdinal=\"" + String.valueOf(getJoinRowOrdinal()) + "\" ");
-		if (getJoinType() != null)
-		stringWriter.append("JoinType=\"" + String.valueOf(getJoinType()) + "\" ");
-		if (getLCID() != null)
-		stringWriter.append("LCID=\"" + String.valueOf(getLCID()) + "\" ");
-		if (getLinkToItem() != null)
-		stringWriter.append("LinkToItem=\"" + String.valueOf(getLinkToItem()) + "\" ");
-		if (getLinkToItemAllowed() != null)
-		stringWriter.append("LinkToItemAllowed=\"" + String.valueOf(getLinkToItemAllowed()) + "\" ");
-		if (getList() != null)
-		stringWriter.append("List=\"" + String.valueOf(getList()) + "\" ");
-		if (getListItemMenu() != null)
-		stringWriter.append("ListItemMenu=\"" + String.valueOf(getListItemMenu()) + "\" ");
-		if (getListItemMenuAllowed() != null)
-		stringWriter.append("ListItemMenuAllowed=\"" + String.valueOf(getListItemMenuAllowed()) + "\" ");
-		if (getMax() != null)
-		stringWriter.append("Max=\"" + String.valueOf(getMax()) + "\" ");
-		if (getMaxLength() != null)
-		stringWriter.append("MaxLength=\"" + String.valueOf(getMaxLength()) + "\" ");
-		if (getMin() != null)
-		stringWriter.append("Min=\"" + String.valueOf(getMin()) + "\" ");
-		if (getMult() != null)
-		stringWriter.append("Mult=\"" + String.valueOf(getMult()) + "\" ");
-		if (getName() != null)
-		stringWriter.append("Name=\"" + String.valueOf(getName()) + "\" ");
-		if (getNegativeFormat() != null)
-		stringWriter.append("NegativeFormat=\"" + String.valueOf(getNegativeFormat()) + "\" ");
-		if (getNode() != null)
-		stringWriter.append("Node=\"" + String.valueOf(getNode()) + "\" ");
-		if (getNoEditFormBreak() != null)
-		stringWriter.append("NoEditFormBreak=\"" + String.valueOf(getNoEditFormBreak()) + "\" ");
-		if (getNumLines() != null)
-		stringWriter.append("NumLines=\"" + String.valueOf(getNumLines()) + "\" ");
-		if (getPercentage() != null)
-		stringWriter.append("Percentage=\"" + String.valueOf(getPercentage()) + "\" ");
-		if (getPiAttribute() != null)
-		stringWriter.append("PIAttribute=\"" + String.valueOf(getPiAttribute()) + "\" ");
-		if (getPiTarget() != null)
-		stringWriter.append("PITarget=\"" + String.valueOf(getPiTarget()) + "\" ");
-		if (getPrependId() != null)
-		stringWriter.append("PrependId=\"" + String.valueOf(getPrependId()) + "\" ");
-		if (getPresence() != null)
-		stringWriter.append("Presence=\"" + String.valueOf(getPresence()) + "\" ");
-		if (getPrimaryKey() != null)
-		stringWriter.append("PrimaryKey=\"" + String.valueOf(getPrimaryKey()) + "\" ");
-		if (getPrimaryPIAttribute() != null)
-		stringWriter.append("PrimaryPIAttribute=\"" + String.valueOf(getPrimaryPIAttribute()) + "\" ");
-		if (getPrimaryPITarget() != null)
-		stringWriter.append("PrimaryPITarget=\"" + String.valueOf(getPrimaryPITarget()) + "\" ");
-		if (getReadOnly() != null)
-		stringWriter.append("ReadOnly=\"" + String.valueOf(getReadOnly()) + "\" ");
-		if (getReadOnlyEnforced() != null)
-		stringWriter.append("ReadOnlyEnforced=\"" + String.valueOf(getReadOnlyEnforced()) + "\" ");
-		if (getRelationshipDeleteBehavior() != null)
-		stringWriter.append("RelationshipDeleteBehavior=\"" + String.valueOf(getRelationshipDeleteBehavior()) + "\" ");
-		if (getRenderXMLUsingPattern() != null)
-		stringWriter.append("RenderXMLUsingPattern=\"" + String.valueOf(getRenderXMLUsingPattern()) + "\" ");
-		if (getRequired() != null)
-		stringWriter.append("Required=\"" + String.valueOf(getRequired()) + "\" ");
-		if (getRestrictedMode() != null)
-		stringWriter.append("RestrictedMode=\"" + String.valueOf(getRestrictedMode()) + "\" ");
-		if (getResultType() != null)
-		stringWriter.append("ResultType=\"" + String.valueOf(getResultType()) + "\" ");
-		if (getRichText() != null)
-		stringWriter.append("RichText=\"" + String.valueOf(getRichText()) + "\" ");
-		if (getRichTextMode() != null)
-		stringWriter.append("RichTextMode=\"" + String.valueOf(getRichTextMode()) + "\" ");
-		if (getRowOrdinal() != null)
-		stringWriter.append("RowOrdinal=\"" + String.valueOf(getRowOrdinal()) + "\" ");
-		if (getSealed() != null)
-		stringWriter.append("Sealed=\"" + String.valueOf(getSealed()) + "\" ");
-		if (getSeparateLine() != null)
-		stringWriter.append("SeparateLine=\"" + String.valueOf(getSeparateLine()) + "\" ");
-		if (getSetAs() != null)
-		stringWriter.append("SetAs=\"" + String.valueOf(getSetAs()) + "\" ");
-		if (getShowAddressBookButton() != null)
-		stringWriter.append("ShowAddressBookButton=\"" + String.valueOf(getShowAddressBookButton()) + "\" ");
-		if (getShowAlways() != null)
-		stringWriter.append("ShowAlways=\"" + String.valueOf(getShowAlways()) + "\" ");
-		if (getShowField() != null)
-		stringWriter.append("ShowField=\"" + String.valueOf(getShowField()) + "\" ");
-		if (getShowInDisplayForm() != null)
-		stringWriter.append("ShowInDisplayForm=\"" + String.valueOf(getShowInDisplayForm()) + "\" ");
-		if (getShowInEditForm() != null)
-		stringWriter.append("ShowInEditForm=\"" + String.valueOf(getShowInEditForm()) + "\" ");		
-		if (getShowInFileDlg() != null)
-		stringWriter.append("ShowInFileDlg=\"" + String.valueOf(getShowInFileDlg()) + "\" ");
-		if (getShowInListSettings() != null)
-		stringWriter.append("ShowInListSettings=\"" + String.valueOf(getShowInListSettings()) + "\" ");
-		if (getShowInNewForm() != null)
-		stringWriter.append("ShowInNewForm=\"" + String.valueOf(getShowInNewForm()) + "\" ");
-		if (getShowInVersionHistory() != null)
-		stringWriter.append("ShowInVersionHistory=\"" + String.valueOf(getShowInVersionHistory()) + "\" ");
-		if (getShowInViewForms() != null)
-		stringWriter.append("ShowInViewForms=\"" + String.valueOf(getShowInViewForms()) + "\" ");
-		if (getSortable() != null)
-		stringWriter.append("Sortable=\"" + String.valueOf(getSortable()) + "\" ");
-		if (getSourceID() != null)
-		stringWriter.append("SourceID=\"" + String.valueOf(getSourceID()) + "\" ");
-		if (getStaticName() != null)
-		stringWriter.append("StaticName=\"" + String.valueOf(getStaticName()) + "\" ");
-		if (getStorageTZ() != null)
-		stringWriter.append("StorageTZ=\"" + String.valueOf(getStorageTZ()) + "\" ");
-		if (getStripWS() != null)
-		stringWriter.append("StripWS=\"" + String.valueOf(getStripWS()) + "\" ");
-		if (getSuppressNameDisplay() != null)
-		stringWriter.append("SuppressNameDisplay=\"" + String.valueOf(getSuppressNameDisplay()) + "\" ");		
-		if (getTextOnly() != null)
-		stringWriter.append("TextOnly=\"" + String.valueOf(getTextOnly()) + "\" ");
-		if (getTitle() != null)
-		stringWriter.append("Title=\"" + String.valueOf(getTitle()) + "\" ");
-		if (getType() != null)
-		stringWriter.append("Type=\"" + String.valueOf(getType()) + "\" ");
-		if (getUniqueId() != null)
-		stringWriter.append("UniqueId=\"" + String.valueOf(getUniqueId()) + "\" ");
-		if (getUnlimitedLengthInDocumentLibrary() != null)
-		stringWriter.append("UnlimitedLengthInDocumentLibrary=\"" + String.valueOf(getUnlimitedLengthInDocumentLibrary()) + "\" ");
-		if (getUrlEncode() != null)
-		stringWriter.append("URLEncode=\"" + String.valueOf(getUrlEncode()) + "\" ");
-		if (getUrlEncodeAsUrl() != null)
-		stringWriter.append("URLEncodeAsUrl=\"" + String.valueOf(getUrlEncodeAsUrl()) + "\" ");
-		if (getUserSelectionMode() != null)
-		stringWriter.append("UserSelectionMode=\"" + String.valueOf(getUserSelectionMode()) + "\" ");
-		if (getUserSelectionScope() != null)
-		stringWriter.append("UserSelectionScope=\"" + String.valueOf(getUserSelectionScope()) + "\" ");
-		if (getVersion() != null)
-		stringWriter.append("Version=\"" + String.valueOf(getVersion()) + "\" ");
-		if (getViewable() != null)
-		stringWriter.append("Viewable=\"" + String.valueOf(getViewable()) + "\" ");
-		if (getWebId() != null)
-		stringWriter.append("WebId=\"" + String.valueOf(getWebId()) + "\" ");
-		if (getWidth() != null)
-		stringWriter.append("Width=\"" + String.valueOf(getWidth()) + "\" ");
-		if (getWikiLinking() != null)
-		stringWriter.append("WikiLinking=\"" + String.valueOf(getWikiLinking()) + "\" ");
-		if (getxName() != null)
-		stringWriter.append("XName=\"" + String.valueOf(getxName()) + "\" ");		
+		if (getAggregation() != null) {
+			stringWriter.append("Aggregation=\"" + String.valueOf(getAggregation()) + "\" ");
+		}
+		if (getAllowDeletion() != null) {
+			stringWriter.append("AllowDeletion=\"" + String.valueOf(getAllowDeletion()) + "\" ");
+		}
+		if (getAllowHyperlink() != null) {
+			stringWriter.append("AllowHyperlink=\"" + String.valueOf(getAllowHyperlink()) + "\" ");
+		}
+		if (getAllowMultiVote() != null) {
+			stringWriter.append("AllowMultiVote=\"" + String.valueOf(getAllowMultiVote()) + "\" ");
+		}
+		if (getAppendOnly() != null) {
+			stringWriter.append("AppendOnly=\"" + String.valueOf(getAppendOnly()) + "\" ");
+		}
+		if (getAuthoringInfo() != null) {
+			stringWriter.append("AuthoringInfo=\"" + String.valueOf(getAuthoringInfo()) + "\" ");
+		}
+		if (getBaseType() != null) {
+			stringWriter.append("BaseType=\"" + String.valueOf(getBaseType()) + "\" ");
+		}
+		if (getCalType() != null) {
+			stringWriter.append("CalType=\"" + String.valueOf(getCalType()) + "\" ");
+		}
+		if (getCanToggleHidden() != null) {
+			stringWriter.append("CanToggleHidden=\"" + String.valueOf(getCanToggleHidden()) + "\" ");
+		}
+		if (getClassInfo() != null) {
+			stringWriter.append("ClassInfo=\"" + String.valueOf(getClassInfo()) + "\" ");
+		}
+		if (getColName() != null) {
+			stringWriter.append("ColName=\"" + String.valueOf(getColName()) + "\" ");
+		}
+		if (getColName2() != null) {
+			stringWriter.append("ColName2=\"" + String.valueOf(getColName2()) + "\" ");
+		}
+		if (getCommas() != null) {
+			stringWriter.append("Commas=\"" + String.valueOf(getCommas()) + "\" ");
+		}
+		if (getCustomization() != null) {
+			stringWriter.append("Customization=\"" + String.valueOf(getCustomization()) + "\" ");
+		}
+		if (getDecimals() != null) {
+			stringWriter.append("Decimals=\"" + String.valueOf(getDecimals()) + "\" ");
+		}
+		if (getDescription() != null) {
+			stringWriter.append("Description=\"" + String.valueOf(getDescription()) + "\" ");
+		}
+		if (getDir() != null) {
+			stringWriter.append("Dir=\"" + String.valueOf(getDir()) + "\" ");
+		}
+		if (getDirection() != null) {
+			stringWriter.append("Direction=\"" + String.valueOf(getDirection()) + "\" ");
+		}
+		if (getDisplaceOnUpgrade() != null) {
+			stringWriter.append("DisplaceOnUpgrade=\"" + String.valueOf(getDisplaceOnUpgrade()) + "\" ");
+		}
+		if (getDisplayImage() != null) {
+			stringWriter.append("DisplayImage=\"" + String.valueOf(getDisplayImage()) + "\" ");
+		}
+		if (getDisplayName() != null) {
+			stringWriter.append("DisplayName=\"" + String.valueOf(getDisplayName()) + "\" ");
+		}
+		if (getDisplayNameSrcField() != null) {
+			stringWriter.append("DisplayNameSrcField=\"" + String.valueOf(getDisplayNameSrcField()) + "\" ");
+		}
+		if (getDisplaySize() != null) {
+			stringWriter.append("DisplaySize=\"" + String.valueOf(getDisplaySize()) + "\" ");
+		}
+		if (getDiv() != null) {
+			stringWriter.append("Div=\"" + String.valueOf(getDiv()) + "\" ");
+		}
+		if (getEnableLookup() != null) {
+			stringWriter.append("EnableLookup\"" + String.valueOf(getEnableLookup()) + "\" ");
+		}
+		if (getEnforceUniqueValues() != null) {
+			stringWriter.append("EnforceUniqueValues=\"" + String.valueOf(getEnforceUniqueValues()) + "\" ");
+		}
+		if (getExceptionImage() != null) {
+			stringWriter.append("ExceptionImage=\"" + String.valueOf(getExceptionImage()) + "\" ");
+		}
+		if (getFieldRef() != null) {
+			stringWriter.append("FieldRef=\"" + String.valueOf(getFieldRef()) + "\" ");
+		}
+		if (getFillInChoice() != null) {
+			stringWriter.append("FillInChoice=\"" + String.valueOf(getFillInChoice()) + "\" ");
+		}
+		if (getFilterable() != null) {
+			stringWriter.append("Filterable=\"" + String.valueOf(getFilterable()) + "\" ");
+		}
+		if (getFilterableNoRecurrence() != null) {
+			stringWriter.append("FilterableNoRecurrence=\"" + String.valueOf(getFilterableNoRecurrence()) + "\" ");
+		}
+		if (getForcedDisplay() != null) {
+			stringWriter.append("ForcedDisplay=\"" + String.valueOf(getForcedDisplay()) + "\" ");
+		}
+		if (getForcePromoteDemote() != null) {
+			stringWriter.append("ForcePromoteDemote=\"" + String.valueOf(getForcePromoteDemote()) + "\" ");
+		}
+		if (getFormat() != null) {
+			stringWriter.append("Format=\"" + String.valueOf(getFormat()) + "\" ");
+		}
+		if (getFromBaseType() != null) {
+			stringWriter.append("FromBaseType=\"" + String.valueOf(getFromBaseType()) + "\" ");
+		}
+		if (getGroup() != null) {
+			stringWriter.append("Group=\"" + String.valueOf(getGroup()) + "\" ");
+		}
+		if (getHeaderImage() != null) {
+			stringWriter.append("HeaderImage=\"" + String.valueOf(getHeaderImage()) + "\" ");
+		}
+		if (getHeight() != null) {
+			stringWriter.append("Height=\"" + String.valueOf(getHeight()) + "\" ");
+		}
+		if (getHidden() != null) {
+			stringWriter.append("Hidden=\"" + String.valueOf(getHidden()) + "\" ");
+		}
+		if (getHtmlEncode() != null) {
+			stringWriter.append("HTMLEncode=\"" + String.valueOf(getHtmlEncode()) + "\" ");
+		}
+		if (getID() != null) {
+			stringWriter.append("ID=\"" + String.valueOf(getID()) + "\" ");
+		}
+		if (getId() != null) {
+			stringWriter.append("Id=\"" + String.valueOf(getId()) + "\" ");
+		}
+		if (getiMEMode() != null) {
+			stringWriter.append("IMEMode=\"" + String.valueOf(getiMEMode()) + "\" ");
+		}
+		if (getIndexed() != null) {
+			stringWriter.append("Indexed=\"" + String.valueOf(getIndexed()) + "\" ");
+		}
+		if (getIsolateStyles() != null) {
+			stringWriter.append("IsolateStyles=\"" + String.valueOf(getIsolateStyles()) + "\" ");
+		}
+		if (getIsRelationship() != null) {
+			stringWriter.append("IsRelationship=\"" + String.valueOf(getIsRelationship()) + "\" ");
+		}
+		if (getJoinColName() != null) {
+			stringWriter.append("JoinColName=\"" + String.valueOf(getJoinColName()) + "\" ");
+		}
+		if (getJoinRowOrdinal() != null) {
+			stringWriter.append("JoinRowOrdinal=\"" + String.valueOf(getJoinRowOrdinal()) + "\" ");
+		}
+		if (getJoinType() != null) {
+			stringWriter.append("JoinType=\"" + String.valueOf(getJoinType()) + "\" ");
+		}
+		if (getLCID() != null) {
+			stringWriter.append("LCID=\"" + String.valueOf(getLCID()) + "\" ");
+		}
+		if (getLinkToItem() != null) {
+			stringWriter.append("LinkToItem=\"" + String.valueOf(getLinkToItem()) + "\" ");
+		}
+		if (getLinkToItemAllowed() != null) {
+			stringWriter.append("LinkToItemAllowed=\"" + String.valueOf(getLinkToItemAllowed()) + "\" ");
+		}
+		if (getList() != null) {
+			stringWriter.append("List=\"" + String.valueOf(getList()) + "\" ");
+		}
+		if (getListItemMenu() != null) {
+			stringWriter.append("ListItemMenu=\"" + String.valueOf(getListItemMenu()) + "\" ");
+		}
+		if (getListItemMenuAllowed() != null) {
+			stringWriter.append("ListItemMenuAllowed=\"" + String.valueOf(getListItemMenuAllowed()) + "\" ");
+		}
+		if (getMax() != null) {
+			stringWriter.append("Max=\"" + String.valueOf(getMax()) + "\" ");
+		}
+		if (getMaxLength() != null) {
+			stringWriter.append("MaxLength=\"" + String.valueOf(getMaxLength()) + "\" ");
+		}
+		if (getMin() != null) {
+			stringWriter.append("Min=\"" + String.valueOf(getMin()) + "\" ");
+		}
+		if (getMult() != null) {
+			stringWriter.append("Mult=\"" + String.valueOf(getMult()) + "\" ");
+		}
+		if (getName() != null) {
+			stringWriter.append("Name=\"" + String.valueOf(getName()) + "\" ");
+		}
+		if (getNegativeFormat() != null) {
+			stringWriter.append("NegativeFormat=\"" + String.valueOf(getNegativeFormat()) + "\" ");
+		}
+		if (getNode() != null) {
+			stringWriter.append("Node=\"" + String.valueOf(getNode()) + "\" ");
+		}
+		if (getNoEditFormBreak() != null) {
+			stringWriter.append("NoEditFormBreak=\"" + String.valueOf(getNoEditFormBreak()) + "\" ");
+		}
+		if (getNumLines() != null) {
+			stringWriter.append("NumLines=\"" + String.valueOf(getNumLines()) + "\" ");
+		}
+		if (getPercentage() != null) {
+			stringWriter.append("Percentage=\"" + String.valueOf(getPercentage()) + "\" ");
+		}
+		if (getPiAttribute() != null) {
+			stringWriter.append("PIAttribute=\"" + String.valueOf(getPiAttribute()) + "\" ");
+		}
+		if (getPiTarget() != null) {
+			stringWriter.append("PITarget=\"" + String.valueOf(getPiTarget()) + "\" ");
+		}
+		if (getPrependId() != null) {
+			stringWriter.append("PrependId=\"" + String.valueOf(getPrependId()) + "\" ");
+		}
+		if (getPresence() != null) {
+			stringWriter.append("Presence=\"" + String.valueOf(getPresence()) + "\" ");
+		}
+		if (getPrimaryKey() != null) {
+			stringWriter.append("PrimaryKey=\"" + String.valueOf(getPrimaryKey()) + "\" ");
+		}
+		if (getPrimaryPIAttribute() != null) {
+			stringWriter.append("PrimaryPIAttribute=\"" + String.valueOf(getPrimaryPIAttribute()) + "\" ");
+		}
+		if (getPrimaryPITarget() != null) {
+			stringWriter.append("PrimaryPITarget=\"" + String.valueOf(getPrimaryPITarget()) + "\" ");
+		}
+		if (getReadOnly() != null) {
+			stringWriter.append("ReadOnly=\"" + String.valueOf(getReadOnly()) + "\" ");
+		}
+		if (getReadOnlyEnforced() != null) {
+			stringWriter.append("ReadOnlyEnforced=\"" + String.valueOf(getReadOnlyEnforced()) + "\" ");
+		}
+		if (getRelationshipDeleteBehavior() != null) {
+			stringWriter.append("RelationshipDeleteBehavior=\"" + String.valueOf(getRelationshipDeleteBehavior()) + "\" ");
+		}
+		if (getRenderXMLUsingPattern() != null) {
+			stringWriter.append("RenderXMLUsingPattern=\"" + String.valueOf(getRenderXMLUsingPattern()) + "\" ");
+		}
+		if (getRequired() != null) {
+			stringWriter.append("Required=\"" + String.valueOf(getRequired()) + "\" ");
+		}
+		if (getRestrictedMode() != null) {
+			stringWriter.append("RestrictedMode=\"" + String.valueOf(getRestrictedMode()) + "\" ");
+		}
+		if (getResultType() != null) {
+			stringWriter.append("ResultType=\"" + String.valueOf(getResultType()) + "\" ");
+		}
+		if (getRichText() != null) {
+			stringWriter.append("RichText=\"" + String.valueOf(getRichText()) + "\" ");
+		}
+		if (getRichTextMode() != null) {
+			stringWriter.append("RichTextMode=\"" + String.valueOf(getRichTextMode()) + "\" ");
+		}
+		if (getRowOrdinal() != null) {
+			stringWriter.append("RowOrdinal=\"" + String.valueOf(getRowOrdinal()) + "\" ");
+		}
+		if (getSealed() != null) {
+			stringWriter.append("Sealed=\"" + String.valueOf(getSealed()) + "\" ");
+		}
+		if (getSeparateLine() != null) {
+			stringWriter.append("SeparateLine=\"" + String.valueOf(getSeparateLine()) + "\" ");
+		}
+		if (getSetAs() != null) {
+			stringWriter.append("SetAs=\"" + String.valueOf(getSetAs()) + "\" ");
+		}
+		if (getShowAddressBookButton() != null) {
+			stringWriter.append("ShowAddressBookButton=\"" + String.valueOf(getShowAddressBookButton()) + "\" ");
+		}
+		if (getShowAlways() != null) {
+			stringWriter.append("ShowAlways=\"" + String.valueOf(getShowAlways()) + "\" ");
+		}
+		if (getShowField() != null) {
+			stringWriter.append("ShowField=\"" + String.valueOf(getShowField()) + "\" ");
+		} else if(getInternalShowField() != null) {
+			stringWriter.append("ShowField=\"" + getInternalShowField() + "\" ");
+		}
+		if (getShowInDisplayForm() != null) {
+			stringWriter.append("ShowInDisplayForm=\"" + String.valueOf(getShowInDisplayForm()) + "\" ");
+		}
+		if (getShowInEditForm() != null) {
+			stringWriter.append("ShowInEditForm=\"" + String.valueOf(getShowInEditForm()) + "\" ");
+		}		
+		if (getShowInFileDlg() != null) {
+			stringWriter.append("ShowInFileDlg=\"" + String.valueOf(getShowInFileDlg()) + "\" ");
+		}
+		if (getShowInListSettings() != null) {
+			stringWriter.append("ShowInListSettings=\"" + String.valueOf(getShowInListSettings()) + "\" ");
+		}
+		if (getShowInNewForm() != null) {
+			stringWriter.append("ShowInNewForm=\"" + String.valueOf(getShowInNewForm()) + "\" ");
+		}
+		if (getShowInVersionHistory() != null) {
+			stringWriter.append("ShowInVersionHistory=\"" + String.valueOf(getShowInVersionHistory()) + "\" ");
+		}
+		if (getShowInViewForms() != null) {
+			stringWriter.append("ShowInViewForms=\"" + String.valueOf(getShowInViewForms()) + "\" ");
+		}
+		if (getSortable() != null) {
+			stringWriter.append("Sortable=\"" + String.valueOf(getSortable()) + "\" ");
+		}
+		if (getSourceID() != null) {
+			stringWriter.append("SourceID=\"" + String.valueOf(getSourceID()) + "\" ");
+		}
+		if (getStaticName() != null) {
+			stringWriter.append("StaticName=\"" + String.valueOf(getStaticName()) + "\" ");
+		}
+		if (getStorageTZ() != null) {
+			stringWriter.append("StorageTZ=\"" + String.valueOf(getStorageTZ()) + "\" ");
+		}
+		if (getStripWS() != null) {
+			stringWriter.append("StripWS=\"" + String.valueOf(getStripWS()) + "\" ");
+		}
+		if (getSuppressNameDisplay() != null) {
+			stringWriter.append("SuppressNameDisplay=\"" + String.valueOf(getSuppressNameDisplay()) + "\" ");
+		}		
+		if (getTextOnly() != null) {
+			stringWriter.append("TextOnly=\"" + String.valueOf(getTextOnly()) + "\" ");
+		}
+		if (getTitle() != null) {
+			stringWriter.append("Title=\"" + String.valueOf(getTitle()) + "\" ");
+		}
+		if (getType() != null) {
+			stringWriter.append("Type=\"" + String.valueOf(getType()) + "\" ");
+		}
+		if (getUniqueId() != null) {
+			stringWriter.append("UniqueId=\"" + String.valueOf(getUniqueId()) + "\" ");
+		}
+		if (getUnlimitedLengthInDocumentLibrary() != null) {
+			stringWriter.append("UnlimitedLengthInDocumentLibrary=\"" + String.valueOf(getUnlimitedLengthInDocumentLibrary()) + "\" ");
+		}
+		if (getUrlEncode() != null) {
+			stringWriter.append("URLEncode=\"" + String.valueOf(getUrlEncode()) + "\" ");
+		}
+		if (getUrlEncodeAsUrl() != null) {
+			stringWriter.append("URLEncodeAsUrl=\"" + String.valueOf(getUrlEncodeAsUrl()) + "\" ");
+		}
+		if (getUserSelectionMode() != null) {
+			stringWriter.append("UserSelectionMode=\"" + String.valueOf(getUserSelectionMode()) + "\" ");
+		}
+		if (getUserSelectionScope() != null) {
+			stringWriter.append("UserSelectionScope=\"" + String.valueOf(getUserSelectionScope()) + "\" ");
+		}
+		if (getVersion() != null) {
+			stringWriter.append("Version=\"" + String.valueOf(getVersion()) + "\" ");
+		}
+		if (getViewable() != null) {
+			stringWriter.append("Viewable=\"" + String.valueOf(getViewable()) + "\" ");
+		}
+		if (getWebId() != null) {
+			stringWriter.append("WebId=\"" + String.valueOf(getWebId()) + "\" ");
+		}
+		if (getWidth() != null) {
+			stringWriter.append("Width=\"" + String.valueOf(getWidth()) + "\" ");
+		}
+		if (getWikiLinking() != null) {
+			stringWriter.append("WikiLinking=\"" + String.valueOf(getWikiLinking()) + "\" ");
+		}
+		if (getxName() != null) {
+			stringWriter.append("XName=\"" + String.valueOf(getxName()) + "\" ");
+		}		
 		stringWriter.append("</Field>");
 				 
 		return stringWriter.toString();
@@ -1195,7 +1433,7 @@ public class SpField extends DataObject {
 	 * @param aggregation
 	 *            the aggregation to set
 	 */
-	public void setAggregation(AggregationEnum aggregation) {
+	public void setAggregation(final AggregationEnum aggregation) {
 		this.aggregation = aggregation;
 	}
 
@@ -1210,7 +1448,7 @@ public class SpField extends DataObject {
 	 * @param allowDeletion
 	 *            the allowDeletion to set
 	 */
-	public void setAllowDeletion(Boolean allowDeletion) {
+	public void setAllowDeletion(final Boolean allowDeletion) {
 		this.allowDeletion = allowDeletion;
 	}
 
@@ -1225,7 +1463,7 @@ public class SpField extends DataObject {
 	 * @param allowHyperlink
 	 *            the allowHyperlink to set
 	 */
-	public void setAllowHyperlink(Boolean allowHyperlink) {
+	public void setAllowHyperlink(final Boolean allowHyperlink) {
 		this.allowHyperlink = allowHyperlink;
 	}
 
@@ -1240,7 +1478,7 @@ public class SpField extends DataObject {
 	 * @param allowMultiVote
 	 *            the allowMultiVote to set
 	 */
-	public void setAllowMultiVote(Boolean allowMultiVote) {
+	public void setAllowMultiVote(final Boolean allowMultiVote) {
 		this.allowMultiVote = allowMultiVote;
 	}
 
@@ -1255,7 +1493,7 @@ public class SpField extends DataObject {
 	 * @param appendOnly
 	 *            the appendOnly to set
 	 */
-	public void setAppendOnly(Boolean appendOnly) {
+	public void setAppendOnly(final Boolean appendOnly) {
 		this.appendOnly = appendOnly;
 	}
 
@@ -1270,7 +1508,7 @@ public class SpField extends DataObject {
 	 * @param authoringInfo
 	 *            the authoringInfo to set
 	 */
-	public void setAuthoringInfo(String authoringInfo) {
+	public void setAuthoringInfo(final String authoringInfo) {
 		this.authoringInfo = authoringInfo;
 	}
 
@@ -1285,7 +1523,7 @@ public class SpField extends DataObject {
 	 * @param baseType
 	 *            the baseType to set
 	 */
-	public void setBaseType(SpBaseTypeEnum baseType) {
+	public void setBaseType(final SpBaseTypeEnum baseType) {
 		this.baseType = baseType;
 	}
 
@@ -1300,7 +1538,7 @@ public class SpField extends DataObject {
 	 * @param calType
 	 *            the calType to set
 	 */
-	public void setCalType(Integer calType) {
+	public void setCalType(final Integer calType) {
 		this.calType = calType;
 	}
 
@@ -1315,7 +1553,7 @@ public class SpField extends DataObject {
 	 * @param canToggleHidden
 	 *            the canToggleHidden to set
 	 */
-	public void setCanToggleHidden(Boolean canToggleHidden) {
+	public void setCanToggleHidden(final Boolean canToggleHidden) {
 		this.canToggleHidden = canToggleHidden;
 	}
 
@@ -1330,7 +1568,7 @@ public class SpField extends DataObject {
 	 * @param classInfo
 	 *            the classInfo to set
 	 */
-	public void setClassInfo(String classInfo) {
+	public void setClassInfo(final String classInfo) {
 		this.classInfo = classInfo;
 	}
 
@@ -1345,7 +1583,7 @@ public class SpField extends DataObject {
 	 * @param colName
 	 *            the colName to set
 	 */
-	public void setColName(String colName) {
+	public void setColName(final String colName) {
 		this.colName = colName;
 	}
 
@@ -1360,7 +1598,7 @@ public class SpField extends DataObject {
 	 * @param colName2
 	 *            the colName2 to set
 	 */
-	public void setColName2(String colName2) {
+	public void setColName2(final String colName2) {
 		this.colName2 = colName2;
 	}
 
@@ -1375,7 +1613,7 @@ public class SpField extends DataObject {
 	 * @param commas
 	 *            the commas to set
 	 */
-	public void setCommas(Boolean commas) {
+	public void setCommas(final Boolean commas) {
 		this.commas = commas;
 	}
 
@@ -1390,7 +1628,7 @@ public class SpField extends DataObject {
 	 * @param customization
 	 *            the customization to set
 	 */
-	public void setCustomization(String customization) {
+	public void setCustomization(final String customization) {
 		this.customization = customization;
 	}
 
@@ -1405,7 +1643,7 @@ public class SpField extends DataObject {
 	 * @param decimals
 	 *            the decimals to set
 	 */
-	public void setDecimals(Integer decimals) {
+	public void setDecimals(final Integer decimals) {
 		this.decimals = decimals;
 	}
 
@@ -1420,7 +1658,7 @@ public class SpField extends DataObject {
 	 * @param description
 	 *            the description to set
 	 */
-	public void setDescription(String description) {
+	public void setDescription(final String description) {
 		this.description = description;
 	}
 
@@ -1435,7 +1673,7 @@ public class SpField extends DataObject {
 	 * @param dir
 	 *            the dir to set
 	 */
-	public void setDir(String dir) {
+	public void setDir(final String dir) {
 		this.dir = dir;
 	}
 
@@ -1450,7 +1688,7 @@ public class SpField extends DataObject {
 	 * @param direction
 	 *            the direction to set
 	 */
-	public void setDirection(String direction) {
+	public void setDirection(final String direction) {
 		this.direction = direction;
 	}
 
@@ -1465,7 +1703,7 @@ public class SpField extends DataObject {
 	 * @param displaceOnUpgrade
 	 *            the displaceOnUpgrade to set
 	 */
-	public void setDisplaceOnUpgrade(Boolean displaceOnUpgrade) {
+	public void setDisplaceOnUpgrade(final Boolean displaceOnUpgrade) {
 		this.displaceOnUpgrade = displaceOnUpgrade;
 	}
 
@@ -1480,7 +1718,7 @@ public class SpField extends DataObject {
 	 * @param displayImage
 	 *            the displayImage to set
 	 */
-	public void setDisplayImage(String displayImage) {
+	public void setDisplayImage(final String displayImage) {
 		this.displayImage = displayImage;
 	}
 
@@ -1495,7 +1733,7 @@ public class SpField extends DataObject {
 	 * @param displayName
 	 *            the displayName to set
 	 */
-	public void setDisplayName(String displayName) {
+	public void setDisplayName(final String displayName) {
 		this.displayName = displayName;
 	}
 
@@ -1510,7 +1748,7 @@ public class SpField extends DataObject {
 	 * @param displayNameSrcField
 	 *            the displayNameSrcField to set
 	 */
-	public void setDisplayNameSrcField(String displayNameSrcField) {
+	public void setDisplayNameSrcField(final String displayNameSrcField) {
 		this.displayNameSrcField = displayNameSrcField;
 	}
 
@@ -1525,7 +1763,7 @@ public class SpField extends DataObject {
 	 * @param displaySize
 	 *            the displaySize to set
 	 */
-	public void setDisplaySize(Integer displaySize) {
+	public void setDisplaySize(final Integer displaySize) {
 		this.displaySize = displaySize;
 	}
 
@@ -1540,7 +1778,7 @@ public class SpField extends DataObject {
 	 * @param div
 	 *            the div to set
 	 */
-	public void setDiv(Integer div) {
+	public void setDiv(final Integer div) {
 		this.div = div;
 	}
 
@@ -1555,7 +1793,7 @@ public class SpField extends DataObject {
 	 * @param enableLookup
 	 *            the enableLookup to set
 	 */
-	public void setEnableLookup(Boolean enableLookup) {
+	public void setEnableLookup(final Boolean enableLookup) {
 		this.enableLookup = enableLookup;
 	}
 
@@ -1570,7 +1808,7 @@ public class SpField extends DataObject {
 	 * @param enforceUniqueValues
 	 *            the enforceUniqueValues to set
 	 */
-	public void setEnforceUniqueValues(Boolean enforceUniqueValues) {
+	public void setEnforceUniqueValues(final Boolean enforceUniqueValues) {
 		this.enforceUniqueValues = enforceUniqueValues;
 	}
 
@@ -1585,7 +1823,7 @@ public class SpField extends DataObject {
 	 * @param exceptionImage
 	 *            the exceptionImage to set
 	 */
-	public void setExceptionImage(String exceptionImage) {
+	public void setExceptionImage(final String exceptionImage) {
 		this.exceptionImage = exceptionImage;
 	}
 
@@ -1600,7 +1838,7 @@ public class SpField extends DataObject {
 	 * @param fieldRef
 	 *            the fieldRef to set
 	 */
-	public void setFieldRef(String fieldRef) {
+	public void setFieldRef(final String fieldRef) {
 		this.fieldRef = fieldRef;
 	}
 
@@ -1615,7 +1853,7 @@ public class SpField extends DataObject {
 	 * @param fillInChoice
 	 *            the fillInChoice to set
 	 */
-	public void setFillInChoice(Boolean fillInChoice) {
+	public void setFillInChoice(final Boolean fillInChoice) {
 		this.fillInChoice = fillInChoice;
 	}
 
@@ -1630,7 +1868,7 @@ public class SpField extends DataObject {
 	 * @param filterable
 	 *            the filterable to set
 	 */
-	public void setFilterable(Boolean filterable) {
+	public void setFilterable(final Boolean filterable) {
 		this.filterable = filterable;
 	}
 
@@ -1645,7 +1883,7 @@ public class SpField extends DataObject {
 	 * @param filterableNoRecurrence
 	 *            the filterableNoRecurrence to set
 	 */
-	public void setFilterableNoRecurrence(Boolean filterableNoRecurrence) {
+	public void setFilterableNoRecurrence(final Boolean filterableNoRecurrence) {
 		this.filterableNoRecurrence = filterableNoRecurrence;
 	}
 
@@ -1660,7 +1898,7 @@ public class SpField extends DataObject {
 	 * @param forcedDisplay
 	 *            the forcedDisplay to set
 	 */
-	public void setForcedDisplay(String forcedDisplay) {
+	public void setForcedDisplay(final String forcedDisplay) {
 		this.forcedDisplay = forcedDisplay;
 	}
 
@@ -1675,7 +1913,7 @@ public class SpField extends DataObject {
 	 * @param forcePromoteDemote
 	 *            the forcePromoteDemote to set
 	 */
-	public void setForcePromoteDemote(Boolean forcePromoteDemote) {
+	public void setForcePromoteDemote(final Boolean forcePromoteDemote) {
 		this.forcePromoteDemote = forcePromoteDemote;
 	}
 
@@ -1690,7 +1928,7 @@ public class SpField extends DataObject {
 	 * @param format
 	 *            the format to set
 	 */
-	public void setFormat(String format) {
+	public void setFormat(final String format) {
 		this.format = format;
 	}
 
@@ -1705,7 +1943,7 @@ public class SpField extends DataObject {
 	 * @param fromBaseType
 	 *            the fromBaseType to set
 	 */
-	public void setFromBaseType(Boolean fromBaseType) {
+	public void setFromBaseType(final Boolean fromBaseType) {
 		this.fromBaseType = fromBaseType;
 	}
 
@@ -1720,7 +1958,7 @@ public class SpField extends DataObject {
 	 * @param group
 	 *            the group to set
 	 */
-	public void setGroup(String group) {
+	public void setGroup(final String group) {
 		this.group = group;
 	}
 
@@ -1735,7 +1973,7 @@ public class SpField extends DataObject {
 	 * @param headerImage
 	 *            the headerImage to set
 	 */
-	public void setHeaderImage(String headerImage) {
+	public void setHeaderImage(final String headerImage) {
 		this.headerImage = headerImage;
 	}
 
@@ -1750,7 +1988,7 @@ public class SpField extends DataObject {
 	 * @param height
 	 *            the height to set
 	 */
-	public void setHeight(Integer height) {
+	public void setHeight(final Integer height) {
 		this.height = height;
 	}
 
@@ -1765,7 +2003,7 @@ public class SpField extends DataObject {
 	 * @param hidden
 	 *            the hidden to set
 	 */
-	public void setHidden(Boolean hidden) {
+	public void setHidden(final Boolean hidden) {
 		this.hidden = hidden;
 	}
 
@@ -1780,7 +2018,7 @@ public class SpField extends DataObject {
 	 * @param htmlEncode
 	 *            the htmlEncode to set
 	 */
-	public void setHtmlEncode(Boolean htmlEncode) {
+	public void setHtmlEncode(final Boolean htmlEncode) {
 		this.htmlEncode = htmlEncode;
 	}
 
@@ -1795,7 +2033,7 @@ public class SpField extends DataObject {
 	 * @param iD
 	 *            the iD to set
 	 */
-	public void setID(String iD) {
+	public void setID(final String iD) {
 		ID = iD;
 	}
 
@@ -1810,7 +2048,7 @@ public class SpField extends DataObject {
 	 * @param id
 	 *            the id to set
 	 */
-	public void setId(String id) {
+	public void setId(final String id) {
 		this.id = id;
 	}
 
@@ -1825,7 +2063,7 @@ public class SpField extends DataObject {
 	 * @param iMEMode
 	 *            the iMEMode to set
 	 */
-	public void setiMEMode(String iMEMode) {
+	public void setiMEMode(final String iMEMode) {
 		this.iMEMode = iMEMode;
 	}
 
@@ -1840,7 +2078,7 @@ public class SpField extends DataObject {
 	 * @param indexed
 	 *            the indexed to set
 	 */
-	public void setIndexed(Boolean indexed) {
+	public void setIndexed(final Boolean indexed) {
 		this.indexed = indexed;
 	}
 
@@ -1855,7 +2093,7 @@ public class SpField extends DataObject {
 	 * @param isolateStyles
 	 *            the isolateStyles to set
 	 */
-	public void setIsolateStyles(Boolean isolateStyles) {
+	public void setIsolateStyles(final Boolean isolateStyles) {
 		this.isolateStyles = isolateStyles;
 	}
 
@@ -1870,7 +2108,7 @@ public class SpField extends DataObject {
 	 * @param isRelationship
 	 *            the isRelationship to set
 	 */
-	public void setIsRelationship(Boolean isRelationship) {
+	public void setIsRelationship(final Boolean isRelationship) {
 		this.isRelationship = isRelationship;
 	}
 
@@ -1885,7 +2123,7 @@ public class SpField extends DataObject {
 	 * @param joinColName
 	 *            the joinColName to set
 	 */
-	public void setJoinColName(String joinColName) {
+	public void setJoinColName(final String joinColName) {
 		this.joinColName = joinColName;
 	}
 
@@ -1900,7 +2138,7 @@ public class SpField extends DataObject {
 	 * @param joinRowOrdinal
 	 *            the joinRowOrdinal to set
 	 */
-	public void setJoinRowOrdinal(Integer joinRowOrdinal) {
+	public void setJoinRowOrdinal(final Integer joinRowOrdinal) {
 		this.joinRowOrdinal = joinRowOrdinal;
 	}
 
@@ -1915,7 +2153,7 @@ public class SpField extends DataObject {
 	 * @param joinType
 	 *            the joinType to set
 	 */
-	public void setJoinType(String joinType) {
+	public void setJoinType(final String joinType) {
 		this.joinType = joinType;
 	}
 
@@ -1930,7 +2168,7 @@ public class SpField extends DataObject {
 	 * @param lCID
 	 *            the lCID to set
 	 */
-	public void setLCID(Integer lCID) {
+	public void setLCID(final Integer lCID) {
 		LCID = lCID;
 	}
 
@@ -1945,7 +2183,7 @@ public class SpField extends DataObject {
 	 * @param linkToItem
 	 *            the linkToItem to set
 	 */
-	public void setLinkToItem(Boolean linkToItem) {
+	public void setLinkToItem(final Boolean linkToItem) {
 		this.linkToItem = linkToItem;
 	}
 
@@ -1960,7 +2198,7 @@ public class SpField extends DataObject {
 	 * @param linkToItemAllowed
 	 *            the linkToItemAllowed to set
 	 */
-	public void setLinkToItemAllowed(String linkToItemAllowed) {
+	public void setLinkToItemAllowed(final String linkToItemAllowed) {
 		this.linkToItemAllowed = linkToItemAllowed;
 	}
 
@@ -1975,7 +2213,7 @@ public class SpField extends DataObject {
 	 * @param list
 	 *            the list to set
 	 */
-	public void setList(String list) {
+	public void setList(final String list) {
 		this.list = list;
 	}
 
@@ -1990,7 +2228,7 @@ public class SpField extends DataObject {
 	 * @param listItemMenu
 	 *            the listItemMenu to set
 	 */
-	public void setListItemMenu(Boolean listItemMenu) {
+	public void setListItemMenu(final Boolean listItemMenu) {
 		this.listItemMenu = listItemMenu;
 	}
 
@@ -2005,7 +2243,7 @@ public class SpField extends DataObject {
 	 * @param max
 	 *            the max to set
 	 */
-	public void setMax(Integer max) {
+	public void setMax(final Integer max) {
 		this.max = max;
 	}
 
@@ -2020,7 +2258,7 @@ public class SpField extends DataObject {
 	 * @param maxLength
 	 *            the maxLength to set
 	 */
-	public void setMaxLength(Integer maxLength) {
+	public void setMaxLength(final Integer maxLength) {
 		this.maxLength = maxLength;
 	}
 
@@ -2035,7 +2273,7 @@ public class SpField extends DataObject {
 	 * @param min
 	 *            the min to set
 	 */
-	public void setMin(Integer min) {
+	public void setMin(final Integer min) {
 		this.min = min;
 	}
 
@@ -2050,7 +2288,7 @@ public class SpField extends DataObject {
 	 * @param mult
 	 *            the mult to set
 	 */
-	public void setMult(Boolean mult) {
+	public void setMult(final Boolean mult) {
 		this.mult = mult;
 	}
 
@@ -2065,7 +2303,7 @@ public class SpField extends DataObject {
 	 * @param negativeFormat
 	 *            the negativeFormat to set
 	 */
-	public void setNegativeFormat(NegativeFormatEnum negativeFormat) {
+	public void setNegativeFormat(final NegativeFormatEnum negativeFormat) {
 		NegativeFormat = negativeFormat;
 	}
 
@@ -2080,7 +2318,7 @@ public class SpField extends DataObject {
 	 * @param node
 	 *            the node to set
 	 */
-	public void setNode(String node) {
+	public void setNode(final String node) {
 		this.node = node;
 	}
 
@@ -2095,7 +2333,7 @@ public class SpField extends DataObject {
 	 * @param noEditFormBreak
 	 *            the noEditFormBreak to set
 	 */
-	public void setNoEditFormBreak(Boolean noEditFormBreak) {
+	public void setNoEditFormBreak(final Boolean noEditFormBreak) {
 		this.noEditFormBreak = noEditFormBreak;
 	}
 
@@ -2110,7 +2348,7 @@ public class SpField extends DataObject {
 	 * @param numLines
 	 *            the numLines to set
 	 */
-	public void setNumLines(Integer numLines) {
+	public void setNumLines(final Integer numLines) {
 		this.numLines = numLines;
 	}
 
@@ -2125,7 +2363,7 @@ public class SpField extends DataObject {
 	 * @param percentage
 	 *            the percentage to set
 	 */
-	public void setPercentage(Boolean percentage) {
+	public void setPercentage(final Boolean percentage) {
 		this.percentage = percentage;
 	}
 
@@ -2140,7 +2378,7 @@ public class SpField extends DataObject {
 	 * @param piAttribute
 	 *            the piAttribute to set
 	 */
-	public void setPiAttribute(String piAttribute) {
+	public void setPiAttribute(final String piAttribute) {
 		this.piAttribute = piAttribute;
 	}
 
@@ -2155,7 +2393,7 @@ public class SpField extends DataObject {
 	 * @param piTarget
 	 *            the piTarget to set
 	 */
-	public void setPiTarget(String piTarget) {
+	public void setPiTarget(final String piTarget) {
 		this.piTarget = piTarget;
 	}
 
@@ -2170,7 +2408,7 @@ public class SpField extends DataObject {
 	 * @param prependId
 	 *            the prependId to set
 	 */
-	public void setPrependId(Boolean prependId) {
+	public void setPrependId(final Boolean prependId) {
 		this.prependId = prependId;
 	}
 
@@ -2185,7 +2423,7 @@ public class SpField extends DataObject {
 	 * @param presence
 	 *            the presence to set
 	 */
-	public void setPresence(Boolean presence) {
+	public void setPresence(final Boolean presence) {
 		this.presence = presence;
 	}
 
@@ -2200,7 +2438,7 @@ public class SpField extends DataObject {
 	 * @param primaryKey
 	 *            the primaryKey to set
 	 */
-	public void setPrimaryKey(Boolean primaryKey) {
+	public void setPrimaryKey(final Boolean primaryKey) {
 		this.primaryKey = primaryKey;
 	}
 
@@ -2215,7 +2453,7 @@ public class SpField extends DataObject {
 	 * @param primaryPIAttribute
 	 *            the primaryPIAttribute to set
 	 */
-	public void setPrimaryPIAttribute(String primaryPIAttribute) {
+	public void setPrimaryPIAttribute(final String primaryPIAttribute) {
 		this.primaryPIAttribute = primaryPIAttribute;
 	}
 
@@ -2230,7 +2468,7 @@ public class SpField extends DataObject {
 	 * @param primaryPITarget
 	 *            the primaryPITarget to set
 	 */
-	public void setPrimaryPITarget(String primaryPITarget) {
+	public void setPrimaryPITarget(final String primaryPITarget) {
 		this.primaryPITarget = primaryPITarget;
 	}
 
@@ -2245,7 +2483,7 @@ public class SpField extends DataObject {
 	 * @param readOnly
 	 *            the readOnly to set
 	 */
-	public void setReadOnly(Boolean readOnly) {
+	public void setReadOnly(final Boolean readOnly) {
 		this.readOnly = readOnly;
 	}
 
@@ -2260,7 +2498,7 @@ public class SpField extends DataObject {
 	 * @param readOnlyEnforced
 	 *            the readOnlyEnforced to set
 	 */
-	public void setReadOnlyEnforced(Boolean readOnlyEnforced) {
+	public void setReadOnlyEnforced(final Boolean readOnlyEnforced) {
 		this.readOnlyEnforced = readOnlyEnforced;
 	}
 
@@ -2275,7 +2513,7 @@ public class SpField extends DataObject {
 	 * @param relationshipDeleteBehavior
 	 *            the relationshipDeleteBehavior to set
 	 */
-	public void setRelationshipDeleteBehavior(String relationshipDeleteBehavior) {
+	public void setRelationshipDeleteBehavior(final String relationshipDeleteBehavior) {
 		this.relationshipDeleteBehavior = relationshipDeleteBehavior;
 	}
 
@@ -2290,7 +2528,7 @@ public class SpField extends DataObject {
 	 * @param renderXMLUsingPattern
 	 *            the renderXMLUsingPattern to set
 	 */
-	public void setRenderXMLUsingPattern(Boolean renderXMLUsingPattern) {
+	public void setRenderXMLUsingPattern(final Boolean renderXMLUsingPattern) {
 		this.renderXMLUsingPattern = renderXMLUsingPattern;
 	}
 
@@ -2305,7 +2543,7 @@ public class SpField extends DataObject {
 	 * @param required
 	 *            the required to set
 	 */
-	public void setRequired(Boolean required) {
+	public void setRequired(final Boolean required) {
 		this.required = required;
 	}
 
@@ -2320,7 +2558,7 @@ public class SpField extends DataObject {
 	 * @param restrictedMode
 	 *            the restrictedMode to set
 	 */
-	public void setRestrictedMode(Boolean restrictedMode) {
+	public void setRestrictedMode(final Boolean restrictedMode) {
 		this.restrictedMode = restrictedMode;
 	}
 
@@ -2335,7 +2573,7 @@ public class SpField extends DataObject {
 	 * @param resultType
 	 *            the resultType to set
 	 */
-	public void setResultType(String resultType) {
+	public void setResultType(final String resultType) {
 		this.resultType = resultType;
 	}
 
@@ -2350,7 +2588,7 @@ public class SpField extends DataObject {
 	 * @param richText
 	 *            the richText to set
 	 */
-	public void setRichText(Boolean richText) {
+	public void setRichText(final Boolean richText) {
 		this.richText = richText;
 	}
 
@@ -2365,7 +2603,7 @@ public class SpField extends DataObject {
 	 * @param richTextMode
 	 *            the richTextMode to set
 	 */
-	public void setRichTextMode(String richTextMode) {
+	public void setRichTextMode(final String richTextMode) {
 		this.richTextMode = richTextMode;
 	}
 
@@ -2380,7 +2618,7 @@ public class SpField extends DataObject {
 	 * @param rowOrdinal
 	 *            the rowOrdinal to set
 	 */
-	public void setRowOrdinal(Integer rowOrdinal) {
+	public void setRowOrdinal(final Integer rowOrdinal) {
 		this.rowOrdinal = rowOrdinal;
 	}
 
@@ -2395,7 +2633,7 @@ public class SpField extends DataObject {
 	 * @param sealed
 	 *            the sealed to set
 	 */
-	public void setSealed(Boolean sealed) {
+	public void setSealed(final Boolean sealed) {
 		this.sealed = sealed;
 	}
 
@@ -2410,7 +2648,7 @@ public class SpField extends DataObject {
 	 * @param separateLine
 	 *            the separateLine to set
 	 */
-	public void setSeparateLine(Boolean separateLine) {
+	public void setSeparateLine(final Boolean separateLine) {
 		this.separateLine = separateLine;
 	}
 
@@ -2425,7 +2663,7 @@ public class SpField extends DataObject {
 	 * @param setAs
 	 *            the setAs to set
 	 */
-	public void setSetAs(String setAs) {
+	public void setSetAs(final String setAs) {
 		this.setAs = setAs;
 	}
 
@@ -2440,7 +2678,7 @@ public class SpField extends DataObject {
 	 * @param showAddressBookButton
 	 *            the showAddressBookButton to set
 	 */
-	public void setShowAddressBookButton(Boolean showAddressBookButton) {
+	public void setShowAddressBookButton(final Boolean showAddressBookButton) {
 		this.showAddressBookButton = showAddressBookButton;
 	}
 
@@ -2455,7 +2693,7 @@ public class SpField extends DataObject {
 	 * @param showAlways
 	 *            the showAlways to set
 	 */
-	public void setShowAlways(Boolean showAlways) {
+	public void setShowAlways(final Boolean showAlways) {
 		this.showAlways = showAlways;
 	}
 
@@ -2470,7 +2708,7 @@ public class SpField extends DataObject {
 	 * @param listItemMenuAllowed
 	 *            the listItemMenuAllowed to set
 	 */
-	public void setListItemMenuAllowed(String listItemMenuAllowed) {
+	public void setListItemMenuAllowed(final String listItemMenuAllowed) {
 		this.listItemMenuAllowed = listItemMenuAllowed;
 	}
 
@@ -2485,10 +2723,42 @@ public class SpField extends DataObject {
 	 * @param showField
 	 *            the showField to set
 	 */
-	public void setShowField(ShowFieldEnum showField) {
+	public void setShowField(final ShowFieldEnum showField) {
 		this.showField = showField;
 	}
 
+	/**
+	 * 
+	 * @return the internal field name
+	 */
+	public String getInternalShowField() {
+		return internalShowField;
+	}
+	
+	/**
+	 * 
+	 * @param internalShowField
+	 * 			the internal field name
+	 */
+	public void setInternalShowField(final String internalShowField) {
+		this.internalShowField = internalShowField;
+	}
+	
+	/**
+	 * 
+	 * @param fieldName
+	 * 			fieldName to control
+	 * @return true if it's an internal field name (when field type is Lookup), otherwise false.
+	 */
+	private boolean isInternalShowField(final String fieldName) {
+		for(final ShowFieldEnum field : ShowFieldEnum.values()){
+			if(field.name().equals(fieldName)){
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	/**
 	 * @return the showInDisplayForm
 	 */
@@ -2500,7 +2770,7 @@ public class SpField extends DataObject {
 	 * @param showInDisplayForm
 	 *            the showInDisplayForm to set
 	 */
-	public void setShowInDisplayForm(Boolean showInDisplayForm) {
+	public void setShowInDisplayForm(final Boolean showInDisplayForm) {
 		this.showInDisplayForm = showInDisplayForm;
 	}
 
@@ -2515,7 +2785,7 @@ public class SpField extends DataObject {
 	 * @param showInEditForm
 	 *            the showInEditForm to set
 	 */
-	public void setShowInEditForm(Boolean showInEditForm) {
+	public void setShowInEditForm(final Boolean showInEditForm) {
 		this.showInEditForm = showInEditForm;
 	}
 
@@ -2530,7 +2800,7 @@ public class SpField extends DataObject {
 	 * @param showInFileDlg
 	 *            the showInFileDlg to set
 	 */
-	public void setShowInFileDlg(Boolean showInFileDlg) {
+	public void setShowInFileDlg(final Boolean showInFileDlg) {
 		this.showInFileDlg = showInFileDlg;
 	}
 
@@ -2545,7 +2815,7 @@ public class SpField extends DataObject {
 	 * @param showInListSettings
 	 *            the showInListSettings to set
 	 */
-	public void setShowInListSettings(Boolean showInListSettings) {
+	public void setShowInListSettings(final Boolean showInListSettings) {
 		this.showInListSettings = showInListSettings;
 	}
 
@@ -2560,7 +2830,7 @@ public class SpField extends DataObject {
 	 * @param showInNewForm
 	 *            the showInNewForm to set
 	 */
-	public void setShowInNewForm(Boolean showInNewForm) {
+	public void setShowInNewForm(final Boolean showInNewForm) {
 		this.showInNewForm = showInNewForm;
 	}
 
@@ -2575,7 +2845,7 @@ public class SpField extends DataObject {
 	 * @param showInVersionHistory
 	 *            the showInVersionHistory to set
 	 */
-	public void setShowInVersionHistory(Boolean showInVersionHistory) {
+	public void setShowInVersionHistory(final Boolean showInVersionHistory) {
 		this.showInVersionHistory = showInVersionHistory;
 	}
 
@@ -2590,7 +2860,7 @@ public class SpField extends DataObject {
 	 * @param showInViewForms
 	 *            the showInViewForms to set
 	 */
-	public void setShowInViewForms(Boolean showInViewForms) {
+	public void setShowInViewForms(final Boolean showInViewForms) {
 		this.showInViewForms = showInViewForms;
 	}
 
@@ -2605,7 +2875,7 @@ public class SpField extends DataObject {
 	 * @param sortable
 	 *            the sortable to set
 	 */
-	public void setSortable(Boolean sortable) {
+	public void setSortable(final Boolean sortable) {
 		this.sortable = sortable;
 	}
 
@@ -2620,7 +2890,7 @@ public class SpField extends DataObject {
 	 * @param sourceID
 	 *            the sourceID to set
 	 */
-	public void setSourceID(String sourceID) {
+	public void setSourceID(final String sourceID) {
 		this.sourceID = sourceID;
 	}
 
@@ -2635,7 +2905,7 @@ public class SpField extends DataObject {
 	 * @param staticName
 	 *            the staticName to set
 	 */
-	public void setStaticName(String staticName) {
+	public void setStaticName(final String staticName) {
 		this.staticName = staticName;
 	}
 
@@ -2650,7 +2920,7 @@ public class SpField extends DataObject {
 	 * @param storageTZ
 	 *            the storageTZ to set
 	 */
-	public void setStorageTZ(StorageTZEnum storageTZ) {
+	public void setStorageTZ(final StorageTZEnum storageTZ) {
 		this.storageTZ = storageTZ;
 	}
 
@@ -2665,7 +2935,7 @@ public class SpField extends DataObject {
 	 * @param stripWS
 	 *            the stripWS to set
 	 */
-	public void setStripWS(Boolean stripWS) {
+	public void setStripWS(final Boolean stripWS) {
 		this.stripWS = stripWS;
 	}
 
@@ -2680,7 +2950,7 @@ public class SpField extends DataObject {
 	 * @param suppressNameDisplay
 	 *            the suppressNameDisplay to set
 	 */
-	public void setSuppressNameDisplay(Boolean suppressNameDisplay) {
+	public void setSuppressNameDisplay(final Boolean suppressNameDisplay) {
 		this.suppressNameDisplay = suppressNameDisplay;
 	}
 
@@ -2695,7 +2965,7 @@ public class SpField extends DataObject {
 	 * @param textOnly
 	 *            the textOnly to set
 	 */
-	public void setTextOnly(Boolean textOnly) {
+	public void setTextOnly(final Boolean textOnly) {
 		this.textOnly = textOnly;
 	}
 
@@ -2710,7 +2980,7 @@ public class SpField extends DataObject {
 	 * @param title
 	 *            the title to set
 	 */
-	public void setTitle(String title) {
+	public void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -2725,7 +2995,7 @@ public class SpField extends DataObject {
 	 * @param uniqueId
 	 *            the uniqueId to set
 	 */
-	public void setUniqueId(String uniqueId) {
+	public void setUniqueId(final String uniqueId) {
 		this.uniqueId = uniqueId;
 	}
 
@@ -2741,7 +3011,7 @@ public class SpField extends DataObject {
 	 *            the unlimitedLengthInDocumentLibrary to set
 	 */
 	public void setUnlimitedLengthInDocumentLibrary(
-			Boolean unlimitedLengthInDocumentLibrary) {
+			final Boolean unlimitedLengthInDocumentLibrary) {
 		this.unlimitedLengthInDocumentLibrary = unlimitedLengthInDocumentLibrary;
 	}
 
@@ -2756,7 +3026,7 @@ public class SpField extends DataObject {
 	 * @param urlEncode
 	 *            the urlEncode to set
 	 */
-	public void setUrlEncode(Boolean urlEncode) {
+	public void setUrlEncode(final Boolean urlEncode) {
 		this.urlEncode = urlEncode;
 	}
 
@@ -2771,7 +3041,7 @@ public class SpField extends DataObject {
 	 * @param urlEncodeAsUrl
 	 *            the urlEncodeAsUrl to set
 	 */
-	public void setUrlEncodeAsUrl(Boolean urlEncodeAsUrl) {
+	public void setUrlEncodeAsUrl(final Boolean urlEncodeAsUrl) {
 		this.urlEncodeAsUrl = urlEncodeAsUrl;
 	}
 
@@ -2786,7 +3056,7 @@ public class SpField extends DataObject {
 	 * @param userSelectionMode
 	 *            the userSelectionMode to set
 	 */
-	public void setUserSelectionMode(String userSelectionMode) {
+	public void setUserSelectionMode(final String userSelectionMode) {
 		this.userSelectionMode = userSelectionMode;
 	}
 
@@ -2801,7 +3071,7 @@ public class SpField extends DataObject {
 	 * @param userSelectionScope
 	 *            the userSelectionScope to set
 	 */
-	public void setUserSelectionScope(Integer userSelectionScope) {
+	public void setUserSelectionScope(final Integer userSelectionScope) {
 		this.userSelectionScope = userSelectionScope;
 	}
 
@@ -2816,7 +3086,7 @@ public class SpField extends DataObject {
 	 * @param version
 	 *            the version to set
 	 */
-	public void setVersion(String version) {
+	public void setVersion(final String version) {
 		this.version = version;
 	}
 
@@ -2831,7 +3101,7 @@ public class SpField extends DataObject {
 	 * @param viewable
 	 *            the viewable to set
 	 */
-	public void setViewable(Boolean viewable) {
+	public void setViewable(final Boolean viewable) {
 		this.viewable = viewable;
 	}
 
@@ -2846,7 +3116,7 @@ public class SpField extends DataObject {
 	 * @param webId
 	 *            the webId to set
 	 */
-	public void setWebId(String webId) {
+	public void setWebId(final String webId) {
 		this.webId = webId;
 	}
 
@@ -2861,7 +3131,7 @@ public class SpField extends DataObject {
 	 * @param width
 	 *            the width to set
 	 */
-	public void setWidth(Integer width) {
+	public void setWidth(final Integer width) {
 		this.width = width;
 	}
 
@@ -2876,7 +3146,7 @@ public class SpField extends DataObject {
 	 * @param wikiLinking
 	 *            the wikiLinking to set
 	 */
-	public void setWikiLinking(Boolean wikiLinking) {
+	public void setWikiLinking(final Boolean wikiLinking) {
 		this.wikiLinking = wikiLinking;
 	}
 
@@ -2891,7 +3161,7 @@ public class SpField extends DataObject {
 	 * @param xName
 	 *            the xName to set
 	 */
-	public void setxName(String xName) {
+	public void setxName(final String xName) {
 		this.xName = xName;
 	}
 
@@ -2906,7 +3176,7 @@ public class SpField extends DataObject {
 	 * @param name
 	 *            the name to set
 	 */
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -2921,7 +3191,7 @@ public class SpField extends DataObject {
 	 * @param type
 	 *            the type to set
 	 */
-	public void setType(String type) {
+	public void setType(final String type) {
 		this.type = type;
 	}
 
@@ -2936,7 +3206,7 @@ public class SpField extends DataObject {
 	 * @param value
 	 *            the value to set
 	 */
-	public void setValue(String value) {
+	public void setValue(final String value) {
 		this.value = value;
 	}
 

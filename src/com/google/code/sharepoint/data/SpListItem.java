@@ -31,58 +31,59 @@ public class SpListItem extends DataObject {
 	private String editor = null;	
 	
 	// SP formater
-	private SimpleDateFormat sharepointFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	private final SimpleDateFormat sharepointFormatter = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 	
 	
 	
 	public SpListItem() {
 	}
 
-	public SpListItem(String xmlString) throws XMLStreamException {
+	public SpListItem(final String xmlString) throws XMLStreamException {
 		OMElement xmlElement = null;
 		xmlElement = Support.stringToOmElement(xmlString);
 
 		if (xmlElement != null) {
 			try {
 				parse(xmlElement);
-			} catch (ParseException ex) {
+			} catch (final ParseException ex) {
 				Logger.getLogger(SpList.class.getName()).log(Level.SEVERE,
 						null, ex);
 			}
 		}
 	}
 
-	public SpListItem(OMElement xmlElement) {
+	public SpListItem(final OMElement xmlElement) {
 		try {
 			parse(xmlElement);
-		} catch (ParseException ex) {
+		} catch (final ParseException ex) {
 			Logger.getLogger(SpList.class.getName())
 					.log(Level.SEVERE, null, ex);
 		}
 	}	
 	
 	@Override
-	public void parse(OMElement xmlElement) throws ParseException {			
-		Iterator children = xmlElement.getAllAttributes();
+	public void parse(final OMElement xmlElement) throws ParseException {			
+		final Iterator children = xmlElement.getAllAttributes();
 		fieldValues = new Hashtable();
 
 		while (children.hasNext()) {
-			OMAttribute attribute = (OMAttribute) children.next();
-			if (attribute != null)
+			final OMAttribute attribute = (OMAttribute) children.next();
+			if (attribute != null) {
 				fieldValues.put(attribute.getLocalName(), attribute.getAttributeValue());
+			}
 		}
 	}
 
 	@Override
 	public String getAsXmlString() {
-		StringWriter stringWriter = new StringWriter();
+		final StringWriter stringWriter = new StringWriter();
 		
 		if (this.getFieldValues().size() > 0) {		
 			stringWriter.append("<row ");
-			 Enumeration keys = this.getFieldValues().keys();
+			 final Enumeration keys = this.getFieldValues().keys();
 			 while(keys.hasMoreElements() ){
-				 Object key = keys.nextElement();
-				 Object value = this.getFieldValues().get(key);				 	
+				 final Object key = keys.nextElement();
+				 final Object value = this.getFieldValues().get(key);				 	
 				 stringWriter.append(String.valueOf(key) + "=\""+ String.valueOf(value) + "\" ");
 			}				
 			stringWriter.append("/>");						
@@ -101,8 +102,17 @@ public class SpListItem extends DataObject {
 	/**
 	 * @param fieldValues the fieldValues to set
 	 */
-	public void setFieldValues(Hashtable fieldValues) {
+	public void setFieldValues(final Hashtable fieldValues) {
 		this.fieldValues = fieldValues;
+	}
+	
+	/**
+	 * 
+	 * @param key the key of field value to return
+	 * @return field value of with given key if exists, otherwise null
+	 */
+	public Object getFieldValue(final Object key){
+		return this.fieldValues.get(key);
 	}
 
 	/**
@@ -111,10 +121,10 @@ public class SpListItem extends DataObject {
 	public int getId() {	
 		if (id < 0)
 		{
-			Enumeration keys = getFieldValues().keys();				
+			final Enumeration keys = getFieldValues().keys();				
 			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				String value = (String) getFieldValues().get(
+				final String key = (String) keys.nextElement();
+				final String value = (String) getFieldValues().get(
 						key);					
 				if (key.equals("ows_ID"))
 				{
@@ -132,10 +142,10 @@ public class SpListItem extends DataObject {
 	public String getTitle() {
 		if (title == null)
 		{
-			Enumeration keys = getFieldValues().keys();				
+			final Enumeration keys = getFieldValues().keys();				
 			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				String value = (String) getFieldValues().get(
+				final String key = (String) keys.nextElement();
+				final String value = (String) getFieldValues().get(
 						key);					
 				if (key.equals("ows_Title"))
 				{
@@ -153,10 +163,10 @@ public class SpListItem extends DataObject {
 	public String getUrl() {
 		if (url == null)
 		{
-			Enumeration keys = getFieldValues().keys();				
+			final Enumeration keys = getFieldValues().keys();				
 			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				String value = (String) getFieldValues().get(
+				final String key = (String) keys.nextElement();
+				final String value = (String) getFieldValues().get(
 						key);					
 				if (key.equals("ows_ServerUrl"))
 				{
@@ -175,16 +185,16 @@ public class SpListItem extends DataObject {
 	public Date getCreated() throws Exception {
 		if (created == null)
 		{
-			Enumeration keys = getFieldValues().keys();				
+			final Enumeration keys = getFieldValues().keys();				
 			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				String value = (String) getFieldValues().get(
+				final String key = (String) keys.nextElement();
+				final String value = (String) getFieldValues().get(
 						key);					
 				if (key.equals("ows_Created"))
 				{
 					try {
 						created = sharepointFormatter.parse(value);						
-					} catch (ParseException exc) {
+					} catch (final ParseException exc) {
 						throw new Exception(
 								"Cannot parse \"Created\" field received from Sharepoint to Date object. exc.n: caf5f5c0-a0b0-11e0-8264-0800200c9a66",
 								exc);
@@ -203,16 +213,16 @@ public class SpListItem extends DataObject {
 	public Date getModified() throws Exception {
 		if (modified == null)
 		{
-			Enumeration keys = getFieldValues().keys();				
+			final Enumeration keys = getFieldValues().keys();				
 			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				String value = (String) getFieldValues().get(
+				final String key = (String) keys.nextElement();
+				final String value = (String) getFieldValues().get(
 						key);					
 				if (key.equals("ows_Modified"))
 				{
 					try {
 						modified = sharepointFormatter.parse(value);						
-					} catch (ParseException exc) {
+					} catch (final ParseException exc) {
 						throw new Exception(
 								"Cannot parse \"Modified\" field received from Sharepoint to Date object. exc.n: 98ee7ed0-a0b0-11e0-8264-0800200c9a66",
 								exc);
@@ -230,10 +240,10 @@ public class SpListItem extends DataObject {
 	public String getAuthor() {
 		if (author == null)
 		{
-			Enumeration keys = getFieldValues().keys();				
+			final Enumeration keys = getFieldValues().keys();				
 			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				String value = (String) getFieldValues().get(
+				final String key = (String) keys.nextElement();
+				final String value = (String) getFieldValues().get(
 						key);					
 				if (key.equals("ows_Author"))
 				{
@@ -251,10 +261,10 @@ public class SpListItem extends DataObject {
 	public String getEditor() {
 		if (editor == null)
 		{
-			Enumeration keys = getFieldValues().keys();				
+			final Enumeration keys = getFieldValues().keys();				
 			while (keys.hasMoreElements()) {
-				String key = (String) keys.nextElement();
-				String value = (String) getFieldValues().get(
+				final String key = (String) keys.nextElement();
+				final String value = (String) getFieldValues().get(
 						key);					
 				if (key.equals("ows_Editor"))
 				{
