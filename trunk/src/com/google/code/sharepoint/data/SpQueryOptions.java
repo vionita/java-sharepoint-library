@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.text.ParseException;
 import java.util.Iterator;
 
+import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
@@ -72,11 +73,12 @@ public class SpQueryOptions extends DataObject {
 	// return all documents in a library, the ViewAttributes element is used as
 	// follows: <ViewAttributes Scope="Recursive" />.
 	private String viewAttributes = null;
+	private String viewAttributesScope = null;
 
 	public SpQueryOptions() {
 	}
 
-	public SpQueryOptions(String xmlString) throws XMLStreamException,
+	public SpQueryOptions(final String xmlString) throws XMLStreamException,
 			ParseException {
 		OMElement xmlElement = null;
 		xmlElement = Support.stringToOmElement(xmlString);
@@ -86,15 +88,15 @@ public class SpQueryOptions extends DataObject {
 		}
 	}
 
-	public SpQueryOptions(OMElement xmlElement) throws ParseException {
+	public SpQueryOptions(final OMElement xmlElement) throws ParseException {
 		parse(xmlElement);
 	}
 
 	@Override
-	public void parse(OMElement xmlElement) throws ParseException {
-		Iterator children = xmlElement.getChildElements();
+	public void parse(final OMElement xmlElement) throws ParseException {
+		final Iterator children = xmlElement.getChildElements();
 		while (children.hasNext()) {
-			OMElement childElement = (OMElement) children.next();
+			final OMElement childElement = (OMElement) children.next();
 			if ((childElement.getText() != null)
 					&& (childElement.getText().length() > 0)) {
 				if (childElement.getQName().getLocalPart().equals("DateInUtc")) {
@@ -117,6 +119,10 @@ public class SpQueryOptions extends DataObject {
 				} else if (childElement.getQName().getLocalPart()
 						.equals("ViewAttributes")) {
 					this.setViewAttributes(childElement.getText());
+					final String scope = childElement.getAttributeValue(new QName("Scope"));
+					if((scope != null) && (scope.length() > 0)){
+						this.setViewAttributesScope(scope);
+					}
 				}
 			}
 		}
@@ -125,7 +131,7 @@ public class SpQueryOptions extends DataObject {
 
 	@Override
 	public String getAsXmlString() {
-		StringWriter stringWriter = new StringWriter();
+		final StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<QueryOptions>");
 
 		if (this.getDateInUtc() != null) {
@@ -160,9 +166,13 @@ public class SpQueryOptions extends DataObject {
 		}
 
 		if (this.getViewAttributes() != null) {
-			stringWriter.append("<ViewAttributes>");
+			if(getViewAttributesScope() != null){
+				stringWriter.append("<ViewAttributes Scope=\"" + getViewAttributesScope() + "\"");
+			}
 			stringWriter.append(String.valueOf(this.getViewAttributes()));
 			stringWriter.append("</ViewAttributes>");
+		} else if(getViewAttributesScope() != null){
+			stringWriter.append("<ViewAttributes Scope=\"" + getViewAttributesScope() + "\"/>");
 		}
 
 		stringWriter.append("</QueryOptions>");
@@ -181,7 +191,7 @@ public class SpQueryOptions extends DataObject {
 	 * @param dateInUtc
 	 *            the dateInUtc to set
 	 */
-	public void setDateInUtc(Boolean dateInUtc) {
+	public void setDateInUtc(final Boolean dateInUtc) {
 		this.dateInUtc = dateInUtc;
 	}
 
@@ -196,7 +206,7 @@ public class SpQueryOptions extends DataObject {
 	 * @param folder
 	 *            the folder to set
 	 */
-	public void setFolder(String folder) {
+	public void setFolder(final String folder) {
 		this.folder = folder;
 	}
 
@@ -211,7 +221,7 @@ public class SpQueryOptions extends DataObject {
 	 * @param paging
 	 *            the paging to set
 	 */
-	public void setPaging(String paging) {
+	public void setPaging(final String paging) {
 		this.paging = paging;
 	}
 
@@ -226,7 +236,7 @@ public class SpQueryOptions extends DataObject {
 	 * @param includeMandatoryColumns
 	 *            the includeMandatoryColumns to set
 	 */
-	public void setIncludeMandatoryColumns(Boolean includeMandatoryColumns) {
+	public void setIncludeMandatoryColumns(final Boolean includeMandatoryColumns) {
 		this.includeMandatoryColumns = includeMandatoryColumns;
 	}
 
@@ -241,7 +251,7 @@ public class SpQueryOptions extends DataObject {
 	 * @param meetingInstanceID
 	 *            the meetingInstanceID to set
 	 */
-	public void setMeetingInstanceID(Integer meetingInstanceID) {
+	public void setMeetingInstanceID(final Integer meetingInstanceID) {
 		this.meetingInstanceID = meetingInstanceID;
 	}
 
@@ -256,8 +266,24 @@ public class SpQueryOptions extends DataObject {
 	 * @param viewAttributes
 	 *            the viewAttributes to set
 	 */
-	public void setViewAttributes(String viewAttributes) {
+	public void setViewAttributes(final String viewAttributes) {
 		this.viewAttributes = viewAttributes;
 	}
 
+	/**
+	 * 
+	 * @param viewAttributesScope
+	 */
+	public void setViewAttributesScope(final String viewAttributesScope) {
+		this.viewAttributesScope = viewAttributesScope;
+	}
+	
+	/**
+	 * 
+	 * @return viewAttributesScope
+	 * 				the viewAttributesScope to set
+	 */
+	public String getViewAttributesScope() {
+		return viewAttributesScope;
+	}
 }

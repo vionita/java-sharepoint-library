@@ -11,13 +11,16 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
 
-import com.google.code.sharepoint.data.*;
+import com.google.code.sharepoint.data.SpList;
+import com.google.code.sharepoint.data.SpListItems;
+import com.google.code.sharepoint.data.SpQueryOptions;
+import com.google.code.sharepoint.data.SpViewField;
+import com.google.code.sharepoint.data.Support;
 import com.google.code.sharepoint.soap.ListsStub;
 import com.google.code.sharepoint.soap.ListsStub.GetListCollectionResult_type0;
 import com.google.code.sharepoint.soap.ListsStub.GetListItemsResult_type0;
@@ -37,17 +40,17 @@ public class ListsWS extends BaseWebService {
 	static Logger logger = Logger.getLogger(ListsWS.class);
 	private ListsStub webServiceStub = null;
 	
-	public ListsWS(String domain, String userName, String password,
-			URL webServiceURL, AuthenticationTypeEnum authenticationType) throws GeneralSecurityException, IOException {
+	public ListsWS(final String domain, final String userName, final String password,
+			final URL webServiceURL, final AuthenticationTypeEnum authenticationType) throws GeneralSecurityException, IOException {
 		super(domain, userName, password, webServiceURL, authenticationType);
 		
 		webServiceStub = new ListsStub();
 		initializeWebService(webServiceStub);
 	}
 
-	public ListsWS(String domain, String userName, String password,
-			URL webServiceURL, AuthenticationTypeEnum authenticationType,
-			HttpProxy httpProxy) throws GeneralSecurityException, IOException {
+	public ListsWS(final String domain, final String userName, final String password,
+			final URL webServiceURL, final AuthenticationTypeEnum authenticationType,
+			final HttpProxy httpProxy) throws GeneralSecurityException, IOException {
 		super(domain, userName, password, webServiceURL, authenticationType,
 				httpProxy);
 		
@@ -55,9 +58,9 @@ public class ListsWS extends BaseWebService {
 		initializeWebService(webServiceStub);
 	}
 
-	public ListsWS(String domain, String userName, String password,
-			URL webServiceURL, AuthenticationTypeEnum authenticationType,
-			HttpProxy httpProxy, Boolean trustAllSSLs) throws GeneralSecurityException, IOException {
+	public ListsWS(final String domain, final String userName, final String password,
+			final URL webServiceURL, final AuthenticationTypeEnum authenticationType,
+			final HttpProxy httpProxy, final Boolean trustAllSSLs) throws GeneralSecurityException, IOException {
 		super(domain, userName, password, webServiceURL, authenticationType,
 				httpProxy, trustAllSSLs);
 		
@@ -65,14 +68,14 @@ public class ListsWS extends BaseWebService {
 		initializeWebService(webServiceStub);
 	}
 	
-	public SpList getList(String listName) throws RemoteException
+	public SpList getList(final String listName) throws RemoteException
 	{
 		SpList list = null;
 		
 		// GetList
-		GetListResult_type0 result = webServiceStub.getList(listName);
+		final GetListResult_type0 result = webServiceStub.getList(listName);
 
-		OMElement element = (OMElement)result.getExtraElement();			
+		final OMElement element = result.getExtraElement();			
 		list = new SpList(element);
 		
 		return list;
@@ -80,24 +83,24 @@ public class ListsWS extends BaseWebService {
 	
 	public List<SpList>  getListCollection() throws RemoteException
 	{
-		List<SpList> listCollection = new ArrayList<SpList>();
+		final List<SpList> listCollection = new ArrayList<SpList>();
 		
 		// GetListCollection
-		GetListCollectionResult_type0 result = webServiceStub.getListCollection();
+		final GetListCollectionResult_type0 result = webServiceStub.getListCollection();
 
-		Iterator children = result.getExtraElement().getChildElements();
+		final Iterator children = result.getExtraElement().getChildElements();
 		while (children.hasNext()) {
-			OMElement element = (OMElement) children.next();			
-			SpList newList = new SpList(element);
+			final OMElement element = (OMElement) children.next();			
+			final SpList newList = new SpList(element);
             listCollection.add(newList);			
 		}
 		
 		return listCollection;
 	}
 	
-	public SpListItems getListItems(String listID, String viewID, String queryCaml,
-			SpViewField viewFields, int itemCount, SpQueryOptions queryOptions,
-			String webID) throws XMLStreamException, RemoteException { 		
+	public SpListItems getListItems(final String listID, final String viewID, final String queryCaml,
+			final SpViewField viewFields, final int itemCount, final SpQueryOptions queryOptions,
+			final String webID) throws XMLStreamException, RemoteException { 		
 
 		SpListItems listItems = null;
 
@@ -110,16 +113,22 @@ public class ListsWS extends BaseWebService {
 		}
 		
 		// Create view fields element
-		ViewFields_type0 viewFieldsWs = new ViewFields_type0();
-		viewFieldsWs.setExtraElement(Support.stringToOmElement(viewFields.getAsXmlString()));
+		ViewFields_type0 viewFieldsWs = null;
+		if(viewFields != null) {
+			viewFieldsWs = new ViewFields_type0();
+			viewFieldsWs.setExtraElement(Support.stringToOmElement(viewFields.getAsXmlString()));
+		}
 		
 		// Create query options  element
-		QueryOptions_type0 queryOptionsWs = new QueryOptions_type0();
-		queryOptionsWs.setExtraElement(Support.stringToOmElement(queryOptions.getAsXmlString()));
+		QueryOptions_type0 queryOptionsWs = null;
+		if(queryOptions != null) {
+			queryOptionsWs = new QueryOptions_type0();
+			queryOptionsWs.setExtraElement(Support.stringToOmElement(queryOptions.getAsXmlString()));
+		}
 		
 		// Call web service
-		GetListItemsResult_type0 resutl2 = webServiceStub.getListItems(listID, viewID, queryWs, viewFieldsWs, String.valueOf(itemCount), queryOptionsWs, webID);		
-		System.out.println(Support.omElementToString(resutl2.getExtraElement()));
+		final GetListItemsResult_type0 resutl2 = webServiceStub.getListItems(listID, viewID, queryWs, viewFieldsWs, String.valueOf(itemCount), queryOptionsWs, webID);		
+		// System.out.println(Support.omElementToString(resutl2.getExtraElement()));
 		listItems = new SpListItems(resutl2.getExtraElement());
 		
 		return listItems;
