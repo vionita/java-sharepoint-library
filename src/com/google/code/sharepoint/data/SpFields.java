@@ -1,9 +1,7 @@
 package com.google.code.sharepoint.data;
 
 import java.io.StringWriter;
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -25,7 +23,7 @@ public class SpFields extends DataObject {
 	public SpFields() {
     }    
 
-	public SpFields(String xmlString) throws XMLStreamException, ParseException { 
+	public SpFields(final String xmlString) throws XMLStreamException, ParseException { 
 		OMElement xmlElement = null;
 		xmlElement = Support.stringToOmElement(xmlString);
 
@@ -34,22 +32,19 @@ public class SpFields extends DataObject {
 		}
 	}
 
-	public SpFields(OMElement xmlElement) throws ParseException {
+	public SpFields(final OMElement xmlElement) throws ParseException {
 		parse(xmlElement);
 	}	
 
 	@Override
-	public void parse(OMElement xmlElement) throws ParseException {
-		DateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd hh:mm:ss");
-		String tempAttributeValue = null;
-
-		List<SpField> fields = new ArrayList<SpField>();
+	public void parse(final OMElement xmlElement) throws ParseException {
+		final List<SpField> fields = new ArrayList<SpField>();
 		
-		Iterator children = xmlElement.getChildElements();
+		final Iterator children = xmlElement.getChildElements();
 		while (children.hasNext()) {
-			OMElement childElement = (OMElement) children.next();
+			final OMElement childElement = (OMElement) children.next();
 			if (childElement.getQName().getLocalPart().equals("Field")) {
-				SpField newField = new SpField(childElement);
+				final SpField newField = new SpField(childElement);
 				fields.add(newField);
 			}
 		}
@@ -58,10 +53,9 @@ public class SpFields extends DataObject {
 
 	@Override
 	public String getAsXmlString() {
-		StringWriter stringWriter = new StringWriter();
+		final StringWriter stringWriter = new StringWriter();
 		stringWriter.append("<Fields>");
-		for (SpField field : this.getFieldCollection())
-		{
+		for (final SpField field : this.getFieldCollection()) {
 			stringWriter.append(field.getAsXmlString());
 		}
 		stringWriter.append("</Fields>");
@@ -72,7 +66,7 @@ public class SpFields extends DataObject {
 	/**
 	 * @param feildCollection the feildCollection to set
 	 */
-	public void setFieldCollection(List<SpField> fieldCollection) {
+	public void setFieldCollection(final List<SpField> fieldCollection) {
 		this.fieldCollection = fieldCollection;
 	}	
 }

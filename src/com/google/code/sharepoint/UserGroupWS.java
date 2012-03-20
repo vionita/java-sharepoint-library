@@ -11,8 +11,10 @@ import java.security.GeneralSecurityException;
 import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
 
+import com.google.code.sharepoint.data.SpGroups;
 import com.google.code.sharepoint.data.SpUser;
 import com.google.code.sharepoint.soap.UserGroupStub;
+import com.google.code.sharepoint.soap.UserGroupStub.GetGroupCollectionFromUserResult_type0;
 import com.google.code.sharepoint.soap.UserGroupStub.GetUserInfoResult_type0;
 
 /**
@@ -48,11 +50,20 @@ public class UserGroupWS extends BaseWebService {
 		SpUser user = null;
 		
 		final GetUserInfoResult_type0 result = webServiceStub.getUserInfo(userLoginName);
-
 		final OMElement element = result.getExtraElement();			
 		user = new SpUser(element);
 		
 		return user;
+	}
+	
+	public SpGroups getGroupCollectionFromUser(final String userLoginName) throws RemoteException{
+		SpGroups groups = null;
+		
+		final GetGroupCollectionFromUserResult_type0 result = webServiceStub.getGroupCollectionFromUser(userLoginName);
+		final OMElement element = result.getExtraElement();			
+		groups = new SpGroups(element);
+		
+		return groups;
 	}
 
 }
