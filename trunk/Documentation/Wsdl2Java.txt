@@ -1,3 +1,0 @@
-Example:
---------
-c:\axis2-1.5.4\bin>wsdl2java.bat -uri webs.wsdl -o outputFolder -uw -p com.google.code.sharepoint.soap
