@@ -14,6 +14,12 @@ public class SPWeb {
 	String theme;	
 	
 	/**
+	 * Constructor
+	 */
+	public SPWeb() {		
+	}
+	
+	/**
 	 * Updates the database with changes that are made to the website.
 	 * @throws Exception 
 	 */
