@@ -7,5 +7,9 @@ package org.korecky.sharepoint.sp2010;
  *
  */
 public class SPWeb extends org.korecky.sharepoint.sp2007.SPWeb {
-	
+	/**
+	 * Constructor
+	 */
+	public SPWeb() {	
+	}
 }
