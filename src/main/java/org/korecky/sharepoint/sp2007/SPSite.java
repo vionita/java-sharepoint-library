@@ -1,11 +1,20 @@
 package org.korecky.sharepoint.sp2007;
 
-import com.microsoft.schemas.sharepoint.soap.sites.Sites;
-import com.microsoft.schemas.sharepoint.soap.sites.SitesSoap;
+import com.microsoft.schemas.sharepoint.soap.webs.GetAllSubWebCollectionResponse.GetAllSubWebCollectionResult;
+import com.microsoft.schemas.sharepoint.soap.webs.Webs;
+import com.microsoft.schemas.sharepoint.soap.webs.WebsSoap;
+import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 import java.net.Authenticator;
-import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
-import org.korecky.sharepoint.NetworkCredentials;
+import javax.xml.ws.BindingProvider;
+import org.korecky.sharepoint.BaseWebServiceClient;
+import org.korecky.sharepoint.HttpProxy;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Represents a collection of sites in a Web application, including a top-level
@@ -16,19 +25,76 @@ import org.korecky.sharepoint.NetworkCredentials;
  * @author Vladislav Korecký [vladislav@korecky.org] - http://www.korecky.org
  *
  */
-public class SPSite {
+public class SPSite extends BaseWebServiceClient {
 
-    private String url;
-    private Authenticator credentials;
+    protected WebsSoap port;
 
     /**
-     * Initializes a new instance of the SPSite class based on the specified
-     * URL.
+     * Initializes a new instance of the SPSite
      *
      * @param url
+     * @param credentials
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
      */
-    public SPSite(String url) {
-        this.url = url;
+    public SPSite(URL url, Authenticator credentials) throws NoSuchAlgorithmException, KeyManagementException {
+        super(url, credentials);
+    }
+
+    /**
+     * Initializes a new instance of the SPSite
+     *
+     * @param url
+     * @param credentials
+     * @param trustAllSSLs
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     */
+    public SPSite(URL url, Authenticator credentials, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+        super(url, credentials, trustAllSSLs);
+    }
+
+    /**
+     * Initializes a new instance of the SPSite
+     *
+     * @param url
+     * @param credentials
+     * @param httpProxy
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     */
+    public SPSite(URL url, Authenticator credentials, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
+        super(url, credentials, httpProxy);
+    }
+
+    /**
+     * Initializes a new instance of the SPSite
+     *
+     * @param url
+     * @param credentials
+     * @param httpProxy
+     * @param trustAllSSLs
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     */
+    public SPSite(URL url, Authenticator credentials, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+        super(url, credentials, httpProxy, trustAllSSLs);
+    }
+
+    /**
+     * Initializes a new instance of the SPSite
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     */
+    protected WebsSoap getPort() throws NoSuchAlgorithmException, KeyManagementException {
+        if (port == null) {
+            Webs service = new Webs();
+            port = service.getWebsSoap();
+            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url.toString());
+        }
+        return port;
     }
 
     /**
@@ -37,81 +103,26 @@ public class SPSite {
      *
      * @return
      */
-    public List<SPWeb> getAllWebs() throws MalformedURLException {
-        List<SPWeb> allWebs = null;
-        Sites service = new Sites(getClass().getResource("/wsdl/sites.wsdl"));
-        SitesSoap soap = service.getSitesSoap();
-        
-        NetworkCredentials myAuth = new NetworkCredentials("GORDIC\\vkorecky","ykorec01");  
-        Authenticator.setDefault(myAuth);   
-        
-        String result = soap.getSite(url);        
-        System.out.println("Server said: " + result);        
+    public List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException {
+        List<SPWeb> allWebs = new ArrayList<>();
+        GetAllSubWebCollectionResult result = getPort().getAllSubWebCollection();
+
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof ElementNSImpl) {
+                    // Parse XML file                    
+                    Element rootElement = (Element) content;
+                    NodeList webNodeList = rootElement.getElementsByTagName("Web");
+                    for (int i = 0; i < webNodeList.getLength(); i++) {
+                        Element webElement = (Element) webNodeList.item(i);;
+                        String title = webElement.getAttribute("Title");
+                        String url = webElement.getAttribute("Url");
+                        SPWeb web = new SPWeb(title, url);
+                        allWebs.add(web);
+                    }
+                }
+            }
+        }
         return allWebs;
     }
-    
-//    protected void initializeWebService(Stub webServiceStub)
-//            throws GeneralSecurityException, IOException {
-//        // Set authenticator
-//        Options options = webServiceStub._getServiceClient().getOptions();
-//
-//        if (this.authenticationType == BaseWebService.AuthenticationTypeEnum.basic) {
-//            options.setProperty(HTTPConstants.AUTHENTICATE,
-//                    getBasicAuthenticator());
-//        } else if (this.authenticationType == BaseWebService.AuthenticationTypeEnum.ntlm) {
-////			options.setProperty(HTTPConstants.AUTHENTICATE,
-////					getNtlmAuthenticator());
-//            NtlmJcifsCredentials.register(this.userName, this.password, this.domain);
-//        }
-//
-//        // Set httpProxy
-//        if (this.httpProxy != null) {
-//            // Proxy
-//            HttpTransportProperties.ProxyProperties proxyProperties = new HttpTransportProperties.ProxyProperties();
-//            proxyProperties.setProxyName(this.httpProxy.getProxyHost());
-//            proxyProperties.setProxyPort(this.httpProxy.getProxyPort());
-//            // Proxy authentication
-//            if (this.httpProxy.getDomain() != null) {
-//                proxyProperties.setUserName(this.httpProxy.getDomain());
-//            }
-//            if (this.httpProxy.getUserName() != null) {
-//                proxyProperties.setUserName(this.httpProxy.getUserName());
-//                proxyProperties.setUserName(this.httpProxy.getPassword());
-//            }
-//            options.setProperty(HTTPConstants.PROXY, proxyProperties);
-//        }
-//        // HTTP 1.0 protocol
-//        options.setProperty(HTTPConstants.HTTP_PROTOCOL_VERSION, HTTPConstants.HEADER_PROTOCOL_10);
-//
-//        // Set web service URL
-//        options.setTo(new EndpointReference(getWebServiceURL().toString()));
-//
-//        // SSL
-//        if (this.trustAllSSLs) {
-//            // Trust all SSLs
-//            // This code must not be used in production environment
-//            // because it ignores any certificates but
-//            // it is convenient to have for testing purposes
-//
-//            org.apache.commons.httpclient.protocol.Protocol
-//                    .unregisterProtocol("https");
-//
-//            int port = this.webServiceURL.getPort();
-//            if (this.webServiceURL.getPort() < 0) {
-//                port = 443; // default https port
-//            }
-//            org.apache.commons.httpclient.protocol.Protocol
-//                    .registerProtocol(
-//                    "https",
-//                    new Protocol(
-//                    "https",
-//                    new org.apache.commons.httpclient.contrib.ssl.EasySSLProtocolSocketFactory(),
-//                    port));
-//            System.out
-//                    .print("WARNING: SSL CERTIFICATE CONFIGURATION IS TURNED OFF!");
-//        }
-//
-//        // Apply all service options
-//        webServiceStub._getServiceClient().setOptions(options);
-//    }
 }
