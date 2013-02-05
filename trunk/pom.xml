@@ -21,16 +21,9 @@
             <version>4.10</version>
         </dependency>
         <dependency>
-            <groupId>jcifs</groupId>
-            <artifactId>jcifs</artifactId>
-            <version>1.3.17</version>
-            <type>jar</type>
-        </dependency>
-        <dependency>
-            <groupId>commons-httpclient</groupId>
-            <artifactId>commons-httpclient</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
             <version>3.1</version>
-            <type>jar</type>
         </dependency>
     </dependencies>
     <build>
@@ -43,104 +36,107 @@
                     <source>1.7</source>
                     <target>1.7</target>
                 </configuration>
-            </plugin>   
+            </plugin>            
             <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>
                 <version>2.2</version>
+                <configuration>
+                    <sourceDestDir>${project.build.directory}/generated-sources/jaxws</sourceDestDir>                                                                                
+                </configuration>
                 <executions>
                     <execution>
                         <id>authentication</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.authentication</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
-                                <wsdlFile>authentication.wsdl</wsdlFile>                                
+                                <wsdlFile>authentication.wsdl</wsdlFile>    
                             </wsdlFiles>
                         </configuration>
                     </execution>
                     <execution>
                         <id>copy</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.copy</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
-                            <wsdlFiles>                                
-                                <wsdlFile>copy.wsdl</wsdlFile>                                
+                            <wsdlFiles>    
+                                <wsdlFile>copy.wsdl</wsdlFile>    
                             </wsdlFiles>
                         </configuration>
                     </execution>
                     <execution>
                         <id>dspsts</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.dspsts</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
-                            <wsdlFiles>                                                       
+                            <wsdlFiles>                           
                                 <wsdlFile>dspsts.wsdl</wsdlFile> 
                             </wsdlFiles>
                         </configuration>
                     </execution>
                     <execution>
                         <id>dws</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.dws</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
-                            <wsdlFiles>                                                                                       
+                            <wsdlFiles>   
                                 <wsdlFile>dws.wsdl</wsdlFile>
                             </wsdlFiles>
                         </configuration>
                     </execution>
                     <execution>
                         <id>forms</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.forms</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
-                            <wsdlFiles>                                                                                                                       
+                            <wsdlFiles>       
                                 <wsdlFile>forms.wsdl</wsdlFile>   
                             </wsdlFiles>
                         </configuration>
                     </execution>
                     <execution>
                         <id>imaging</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.imaging</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
-                            <wsdlFiles>                                                                                                                                                       
+                            <wsdlFiles>           
                                 <wsdlFile>imaging.wsdl</wsdlFile> 
                             </wsdlFiles>
                         </configuration>
                     </execution>
                     <execution>
                         <id>lists</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.lists</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>lists.wsdl</wsdlFile>
@@ -149,26 +145,26 @@
                     </execution>
                     <execution>
                         <id>meetings</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.meetings</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
-                            <wsdlFiles>                                                                                                                                                                                       
+                            <wsdlFiles>               
                                 <wsdlFile>meetings.wsdl</wsdlFile>
                             </wsdlFiles>
                         </configuration>
                     </execution>
                     <execution>
                         <id>people</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.people</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>people.wsdl</wsdlFile>
@@ -177,12 +173,12 @@
                     </execution>
                     <execution>
                         <id>permissions</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.permissions</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>permissions.wsdl</wsdlFile>
@@ -191,12 +187,12 @@
                     </execution>
                     <execution>
                         <id>publishedlinksservice</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.publishedlinksservice</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>publishedlinksservice.wsdl</wsdlFile>  
@@ -205,12 +201,12 @@
                     </execution>
                     <execution>
                         <id>search</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.search</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>search.wsdl</wsdlFile>  
@@ -219,12 +215,12 @@
                     </execution>
                     <execution>
                         <id>sitedata</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.sitedata</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>sitedata.wsdl</wsdlFile> 
@@ -233,12 +229,12 @@
                     </execution>
                     <execution>
                         <id>sites</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.sites</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>sites.wsdl</wsdlFile>  
@@ -247,12 +243,12 @@
                     </execution>
                     <execution>
                         <id>socialdataservice</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.socialdataservice</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>socialdataservice.wsdl</wsdlFile>
@@ -261,12 +257,12 @@
                     </execution>
                     <execution>
                         <id>spsearch</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.spsearch</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>spsearch.wsdl</wsdlFile>
@@ -275,12 +271,12 @@
                     </execution>
                     <execution>
                         <id>usergroup</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.usergroup</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>usergroup.wsdl</wsdlFile>    
@@ -289,12 +285,12 @@
                     </execution>
                     <execution>
                         <id>versions</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.versions</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>versions.wsdl</wsdlFile>   
@@ -303,12 +299,12 @@
                     </execution>
                     <execution>
                         <id>views</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.views</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>views.wsdl</wsdlFile>   
@@ -317,12 +313,12 @@
                     </execution>
                     <execution>
                         <id>webpartpages</id>
+                        <phase>generate-sources</phase>
                         <goals>
                             <goal>wsimport</goal>
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.webpartpages</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>webpartpages.wsdl</wsdlFile>
@@ -336,23 +332,13 @@
                         </goals>
                         <configuration>
                             <packageName>com.microsoft.schemas.sharepoint.soap.webs</packageName>
-                            <wsdlLocation>${basedir}/src/main/resources/wsdl/*</wsdlLocation>
                             <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
                             <wsdlFiles>
                                 <wsdlFile>webs.wsdl</wsdlFile>    
                             </wsdlFiles>
-                        </configuration>
+                        </configuration>                        
                     </execution>
-                </executions>
-                <configuration>
-                    <sourceDestDir>${project.build.directory}/generated-sources/jaxws</sourceDestDir>
-                    <xnocompile>true</xnocompile>
-                    <verbose>true</verbose>
-                    <extension>true</extension>
-                    <catalog>
-                        ${basedir}/src/jax-ws-catalog.xml
-                    </catalog>
-                </configuration>
+                </executions>                    
             </plugin>                        
         </plugins>
     </build>

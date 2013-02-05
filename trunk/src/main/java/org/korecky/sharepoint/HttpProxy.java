@@ -1,107 +1,52 @@
-package com.google.code.sharepoint;
-
-import java.net.URL;
+package org.korecky.sharepoint;
 
 /**
  * HttpProxy configuration object
- * 
+ *
  * @author "Vladislav Korecký"
- * 
+ *
  */
 public class HttpProxy {
-	private String domain = null;
-	private String userName = null;
-	private String password = null;
-	private String proxyHost = null;
-	private int proxyPort = 0;
 
-	/**
-	 * Constructor
-	 * @param httpProxyURL
-	 */
-	public HttpProxy() {
-	}
-	
-	/**
-	 * Gets proxy host
-	 * @return
-	 */
-	public String getProxyHost() {
-		return proxyHost;
-	}
+    private String domain;
+    private String userName;
+    private String password;
+    private String proxyHost;
+    private int proxyPort;
 
+    public HttpProxy(String proxyHost, int proxyPort) {
+        this(proxyHost, proxyPort, null, null, null);
+    }
 
-	/**
-	 * Sets proxy hosts
-	 * @param proxyHost
-	 */
-	public void setProxyHost(String proxyHost) {
-		this.proxyHost = proxyHost;
-	}
+    public HttpProxy(String proxyHost, int proxyPort, String userName, String password) {
+        this(proxyHost, proxyPort, null, userName, password);
+    }
 
+    public HttpProxy(String proxyHost, int proxyPort, String domain, String userName, String password) {
+        this.domain = domain;
+        this.userName = userName;
+        this.password = password;
+        this.proxyHost = proxyHost;
+        this.proxyPort = proxyPort;
+    }
 
-	/**
-	 * Gets proxy port
-	 * @return
-	 */
-	public int getProxyPort() {
-		return proxyPort;
-	}
+    public String getDomain() {
+        return domain;
+    }
 
-	/**
-	 * Sets proxy port
-	 * @param proxyPort
-	 */
-	public void setProxyPort(int proxyPort) {
-		this.proxyPort = proxyPort;
-	}
+    public String getUserName() {
+        return userName;
+    }
 
+    public String getPassword() {
+        return password;
+    }
 
-	/**
-	 * Sets http proxy login domain
-	 * @param domain
-	 */
-	public void setDomain(String domain) {
-		this.domain = domain;
-	}
+    public String getProxyHost() {
+        return proxyHost;
+    }
 
-	/**
-	 * Gets http proxy login domain
-	 * @return
-	 */
-	public String getDomain() {
-		return domain;
-	}
-
-	/**
-	 * Sets http proxy login name
-	 * @param userName
-	 */
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	/**
-	 * Gets http proxy login name
-	 * @return
-	 */
-	public String getUserName() {
-		return userName;
-	}
-
-	/**
-	 * Sets http proxy login password
-	 * @param password
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	/**
-	 * Gets http proxy login password
-	 * @return
-	 */
-	public String getPassword() {
-		return password;
-	}
+    public int getProxyPort() {
+        return proxyPort;
+    }
 }
