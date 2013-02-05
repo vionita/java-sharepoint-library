@@ -46,7 +46,7 @@ public class SPSiteTest {
     public void testGetAllWebs() throws MalformedURLException, KeyManagementException, NoSuchAlgorithmException {              
         System.out.println("getAllWebs");
         List<SPWeb> expResult = null;
-        NetworkCredentials credentials = new NetworkCredentials("GORDIC", "vkorecky", "ykorec01");
+        NetworkCredentials credentials = new NetworkCredentials("domain", "user", "password");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
        
         SPSite instance = new SPSite(new URL("https://devport2.gordic.cz/_vti_bin/Webs.asmx"), credentials, httpProxy, true);
