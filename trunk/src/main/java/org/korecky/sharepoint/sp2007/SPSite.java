@@ -4,10 +4,8 @@ import com.microsoft.schemas.sharepoint.soap.sites.Sites;
 import com.microsoft.schemas.sharepoint.soap.sites.SitesSoap;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
-import java.util.Map;
-import javax.xml.ws.BindingProvider;
+import org.korecky.sharepoint.NetworkCredentials;
 
 /**
  * Represents a collection of sites in a Web application, including a top-level
@@ -41,12 +39,12 @@ public class SPSite {
      */
     public List<SPWeb> getAllWebs() throws MalformedURLException {
         List<SPWeb> allWebs = null;
-        Sites service = new Sites(new URL(url + "?WSDL"));        
-        Map<String, Object> context = ((BindingProvider)service).getRequestContext();        
-        context.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, this.url);
-        context.put(BindingProvider.USERNAME_PROPERTY, "GORDIC\\vkorecky");
-        context.put(BindingProvider.PASSWORD_PROPERTY, "ykorec01");
+        Sites service = new Sites(getClass().getResource("/wsdl/sites.wsdl"));
         SitesSoap soap = service.getSitesSoap();
+        
+        NetworkCredentials myAuth = new NetworkCredentials("GORDIC\\vkorecky","ykorec01");  
+        Authenticator.setDefault(myAuth);   
+        
         String result = soap.getSite(url);        
         System.out.println("Server said: " + result);        
         return allWebs;
