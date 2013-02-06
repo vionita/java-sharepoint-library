@@ -46,6 +46,20 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <id>alerts</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>wsimport</goal>
+                        </goals>
+                        <configuration>
+                            <packageName>com.microsoft.schemas.sharepoint.soap.alerts</packageName>
+                            <wsdlDirectory>${basedir}/src/main/resources/wsdl</wsdlDirectory>
+                            <wsdlFiles>
+                                <wsdlFile>alerts.wsdl</wsdlFile>    
+                            </wsdlFiles>
+                        </configuration>
+                    </execution>
+                    <execution>
                         <id>authentication</id>
                         <phase>generate-sources</phase>
                         <goals>
