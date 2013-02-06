@@ -1,17 +1,10 @@
 package org.korecky.sharepoint.sp2007;
 
-import com.microsoft.schemas.sharepoint.soap.webs.GetAllSubWebCollectionResponse.GetAllSubWebCollectionResult;
-import com.microsoft.schemas.sharepoint.soap.webs.Webs;
-import com.microsoft.schemas.sharepoint.soap.webs.WebsSoap;
-import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 import java.net.Authenticator;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
-import javax.xml.ws.BindingProvider;
-import org.korecky.sharepoint.BaseWebServiceClient;
 import org.korecky.sharepoint.HttpProxy;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -25,9 +18,7 @@ import org.w3c.dom.NodeList;
  * @author Vladislav Korecký [vladislav@korecky.org] - http://www.korecky.org
  *
  */
-public class SPSite extends BaseWebServiceClient {
-
-    protected WebsSoap port;
+public class SPSite extends org.korecky.sharepoint.general.SPSite {
 
     /**
      * Initializes a new instance of the SPSite
@@ -82,45 +73,19 @@ public class SPSite extends BaseWebServiceClient {
     }
 
     /**
-     * Initializes a new instance of the SPSite
-     *
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     */
-    protected WebsSoap getPort() throws NoSuchAlgorithmException, KeyManagementException {
-        if (port == null) {
-            Webs service = new Webs();
-            port = service.getWebsSoap();
-            ((BindingProvider) port).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url.toString());
-        }
-        return port;
-    }
-
-    /**
      * Gets the collection of all Web sites that are contained within the site
      * collection, including the top-level site and its subsites.
      *
      * @return
      */
     public List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException {
-        List<SPWeb> allWebs = new ArrayList<>();
-        GetAllSubWebCollectionResult result = getPort().getAllSubWebCollection();
-
-        if (result.getContent() != null) {
-            for (Object content : result.getContent()) {
-                if (content instanceof ElementNSImpl) {
-                    // Parse XML file                    
-                    Element rootElement = (Element) content;
-                    NodeList webNodeList = rootElement.getElementsByTagName("Web");
-                    for (int i = 0; i < webNodeList.getLength(); i++) {
-                        Element webElement = (Element) webNodeList.item(i);;
-                        String title = webElement.getAttribute("Title");
-                        String url = webElement.getAttribute("Url");
-                        SPWeb web = new SPWeb(title, url);
-                        allWebs.add(web);
-                    }
-                }
+        List<SPWeb> allWebs = null;
+        NodeList webNodeList = getAllWebsWs();
+        if (webNodeList != null) {
+            for (int i = 0; i < webNodeList.getLength(); i++) {
+                Element webElement = (Element) webNodeList.item(i);;
+                SPWeb web = new SPWeb(webElement.getAttribute("Title"), webElement.getAttribute("Url"));
+                allWebs.add(web);
             }
         }
         return allWebs;

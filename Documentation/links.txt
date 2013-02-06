@@ -1,0 +1,8 @@
+Content Hierarchy of SharePoint Foundation
+------------------------------------------
+http://msdn.microsoft.com/en-us/library/cc768619%28v=office.14%29.aspx
+
+
+SharePoint 2010 Server Object Model
+-----------------------------------
+http://www.techbubbles.com/sharepoint-2010/sharepoint-2010-server-object-model/
