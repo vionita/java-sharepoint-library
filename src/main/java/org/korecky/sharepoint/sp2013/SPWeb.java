@@ -1,6 +1,5 @@
 package org.korecky.sharepoint.sp2013;
 
-import org.korecky.sharepoint.sp2007.*;
 
 /**
  * Represents a SharePoint Foundation website.
@@ -10,11 +9,11 @@ import org.korecky.sharepoint.sp2007.*;
  */
 public class SPWeb extends org.korecky.sharepoint.general.SPWeb {
 
-    public SPWeb() {
+    protected SPWeb() {
         super();
     }
 
-    public SPWeb(String title, String url) {
+    protected SPWeb(String title, String url) {
         super(title, url);
     }
     

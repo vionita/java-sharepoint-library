@@ -1,18 +1,12 @@
 package org.korecky.sharepoint.general;
 
 import com.microsoft.schemas.sharepoint.soap.webs.GetAllSubWebCollectionResponse.GetAllSubWebCollectionResult;
-import com.microsoft.schemas.sharepoint.soap.webs.Webs;
-import com.microsoft.schemas.sharepoint.soap.webs.WebsSoap;
-import com.sun.org.apache.xerces.internal.dom.ElementNSImpl;
 import java.net.Authenticator;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-import javax.xml.ws.BindingProvider;
+import org.apache.commons.lang3.StringUtils;
 import org.korecky.sharepoint.HttpProxy;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -27,12 +21,6 @@ import org.w3c.dom.NodeList;
  *
  */
 public class SPSite {
-
-    private Authenticator credentials;
-    private HttpProxy httpProxy;
-    private URL url;
-    private boolean trustAllSSLs = false;
-    private WebsSoap websPort;
 
     /**
      * Initializes a new instance of the SPSite
@@ -83,74 +71,11 @@ public class SPSite {
      * @throws KeyManagementException
      */
     protected SPSite(URL url, Authenticator credentials, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
-        this.credentials = credentials;
-        this.httpProxy = httpProxy;
-        this.url = url;
-        this.trustAllSSLs = trustAllSSLs;
-        configureEnviroment();
-    }
-
-    private void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {
-        // Set httpProxy        
-        if (this.httpProxy != null) {
-            // Proxy            
-            System.setProperty("http.proxyHost", this.httpProxy.getProxyHost());
-            System.setProperty("http.proxyPort", String.valueOf(this.httpProxy.getProxyPort()));
-            System.setProperty("https.proxyHost", this.httpProxy.getProxyHost());
-            System.setProperty("https.proxyPort", String.valueOf(this.httpProxy.getProxyPort()));
-            // Proxy authentication
-            if ((this.httpProxy.getDomain() != null) && (this.httpProxy.getUserName() != null)) {
-                System.setProperty("http.proxyUser", this.httpProxy.getDomain() + "\\" + this.httpProxy.getUserName());
-                System.setProperty("http.proxyPassword", this.httpProxy.getPassword());
-            } else if (this.httpProxy.getUserName() != null) {
-                System.setProperty("http.proxyUser", this.httpProxy.getUserName());
-                System.setProperty("http.proxyPassword", this.httpProxy.getPassword());
-            }
-        }
-
-        // Authentication        
-        Authenticator.setDefault(this.credentials);
-
-        // SSL settings        
-        if (this.trustAllSSLs) {
-            // Trust all SSLs, create a trust manager that does not validate certificate chains            
-            TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
-
-            @Override
-            public void checkClientTrusted(
-                    java.security.cert.X509Certificate[] certs, String authType) {
-            }
-
-            @Override
-            public void checkServerTrusted(
-                    java.security.cert.X509Certificate[] certs, String authType) {
-            }
-        }};
-            // Install the all-trusting trust manager                    
-            SSLContext sc = SSLContext.getInstance("SSL");
-            sc.init(null, trustAllCerts, new java.security.SecureRandom());
-            HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        }
-    }
-
-    /**
-     * Initializes a new instance of the SPSite
-     *
-     * @return
-     * @throws NoSuchAlgorithmException
-     * @throws KeyManagementException
-     */
-    private WebsSoap getPort() throws NoSuchAlgorithmException, KeyManagementException {
-        if (websPort == null) {
-            Webs service = new Webs();
-            websPort = service.getWebsSoap();
-            ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, url.toString());
-        }
-        return websPort;
+        WsContext.setCredentials(credentials);
+        WsContext.setHttpProxy(httpProxy);
+        WsContext.setUrl(url);
+        WsContext.setTrustAllSSLs(trustAllSSLs);
+        WsContext.configureEnviroment();
     }
 
     /**
@@ -159,17 +84,19 @@ public class SPSite {
      *
      * @return NodeList contains web elements
      */
-    protected NodeList getAllWebsWs() throws KeyManagementException, NoSuchAlgorithmException {
+    protected NodeList getAllWebsWs() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
         NodeList webNodeList = null;
-        GetAllSubWebCollectionResult result = getPort().getAllSubWebCollection();
+        GetAllSubWebCollectionResult result = WsContext.getWebsPort().getAllSubWebCollection();
 
         if (result.getContent() != null) {
             for (Object content : result.getContent()) {
-                if (content instanceof ElementNSImpl) {
+                if (content instanceof Element) {
                     // Parse XML file                    
                     Element rootElement = (Element) content;
-                    webNodeList = rootElement.getElementsByTagName("Web");
-                    break;                    
+                    if (StringUtils.equals(rootElement.getLocalName(), "Webs")) {
+                        webNodeList = rootElement.getElementsByTagName("Web");
+                        break;
+                    }
                 }
             }
         }

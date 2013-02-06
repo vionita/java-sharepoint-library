@@ -19,8 +19,9 @@ import org.korecky.sharepoint.NetworkCredentials;
  *
  * @author vkorecky
  */
-public class SPSiteTest {
-    public SPSiteTest() {
+public class SP2007Test {
+
+    public SP2007Test() {
     }
 
     @BeforeClass
@@ -43,14 +44,20 @@ public class SPSiteTest {
      * Test of getAllWebs method, of class SPSite.
      */
     @Test
-    public void testGetAllWebs() throws MalformedURLException, KeyManagementException, NoSuchAlgorithmException {              
-        System.out.println("getAllWebs");
-        List<SPWeb> expResult = null;
-        NetworkCredentials credentials = new NetworkCredentials("domain", "user", "password");
+    public void ComplexTest() throws MalformedURLException, KeyManagementException, NoSuchAlgorithmException {        
+        // SPSite test
+        NetworkCredentials credentials = new NetworkCredentials("aaa", "aaa", "aa");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
-       
-        SPSite instance = new SPSite(new URL("https://devport2.gordic.cz/_vti_bin/Webs.asmx"), credentials, httpProxy, true);
+
+        SPSite instance = new SPSite(new URL("https://devport2.gordic.cz/"), credentials, httpProxy, true);
         List<SPWeb> result = instance.getAllWebs();
-        assertEquals(expResult, result);// Proxy            
+        assertNotNull(result);
+        if (result != null) {
+            for (SPWeb web : result) {
+                // SPWebTest
+                System.out.println(web.getUrl());
+                List<SPAlert> alertCollection = web.getAlerts();
+            }
+        }
     }
 }

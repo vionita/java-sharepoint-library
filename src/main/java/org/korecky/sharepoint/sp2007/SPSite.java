@@ -1,9 +1,11 @@
 package org.korecky.sharepoint.sp2007;
 
 import java.net.Authenticator;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.List;
 import org.korecky.sharepoint.HttpProxy;
 import org.w3c.dom.Element;
@@ -78,10 +80,11 @@ public class SPSite extends org.korecky.sharepoint.general.SPSite {
      *
      * @return
      */
-    public List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException {
+    public List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
         List<SPWeb> allWebs = null;
         NodeList webNodeList = getAllWebsWs();
         if (webNodeList != null) {
+            allWebs = new ArrayList<>();
             for (int i = 0; i < webNodeList.getLength(); i++) {
                 Element webElement = (Element) webNodeList.item(i);;
                 SPWeb web = new SPWeb(webElement.getAttribute("Title"), webElement.getAttribute("Url"));
