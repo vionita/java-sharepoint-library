@@ -41,12 +41,14 @@
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="44.681640625" x="159.6543174508712" y="4.0">SPWeb</y:NodeLabel>
-          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="209.81640625" modelName="custom" textColor="#000000" visible="true" width="342.8125" x="2.0" y="30.701171875">List&lt;SPAlert&gt; getAlerts()
-String getTitle()
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="239.21875" modelName="custom" textColor="#000000" visible="true" width="342.8125" x="2.0" y="30.701171875">String getTitle()
 String getUrl()
 String getDescription()
 int getLanguage()
 String getTheme()
+List&lt;SPAlert&gt; getAlerts()
+Map&lt;String, String&gt; getAllProperties()
+
 SPRoleDefinitionBindingCollection getAllRolesForCurrentUser()
 List&lt;SPUser&gt; getAllUsers()
 List&lt;SPGroup&gt; getAssociatedGroups()
