@@ -1,6 +1,7 @@
 package org.korecky.sharepoint;
 
 import com.microsoft.schemas.sharepoint.soap.webs.GetAllSubWebCollectionResponse.GetAllSubWebCollectionResult;
+import com.microsoft.schemas.sharepoint.soap.webs.GetWebResponse.GetWebResult;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -33,7 +34,7 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    protected SPSite(URL url, Authenticator credentials) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, Authenticator credentials) throws NoSuchAlgorithmException, KeyManagementException {
         this(url, credentials, null, false);
     }
 
@@ -46,7 +47,7 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    protected SPSite(URL url, Authenticator credentials, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, Authenticator credentials, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
         this(url, credentials, null, trustAllSSLs);
     }
 
@@ -59,7 +60,7 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    protected SPSite(URL url, Authenticator credentials, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, Authenticator credentials, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
         this(url, credentials, httpProxy, false);
     }
 
@@ -73,13 +74,36 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    protected SPSite(URL url, Authenticator credentials, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, Authenticator credentials, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
         this.url = url;
         WsContext.setCredentials(credentials);
         WsContext.setHttpProxy(httpProxy);
         WsContext.setTrustAllSSLs(trustAllSSLs);
         WsContext.configureEnviroment();
-    }    
+    }
+
+    /**
+     * Gets the root Web site of the site collection.
+     *
+     * @return NodeList contains web elements
+     */
+    public SPWeb getRootWeb() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
+        SPWeb rootWeb = null;
+        GetWebResult result = WsContext.getWebsPort(url).getWeb(url.toString());
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof Element) {
+                    // Parse XML file                                       
+                    Element webElement = (Element) content;
+                    if (StringUtils.equals(webElement.getLocalName(), "Web")) {
+                        rootWeb = new SPWeb();
+                        rootWeb.loadFromXml(webElement);
+                    }
+                }
+            }
+        }
+        return rootWeb;
+    }
 
     /**
      * Gets the collection of all Web sites that are contained within the site
@@ -87,7 +111,7 @@ public class SPSite {
      *
      * @return NodeList contains web elements
      */
-    protected List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
+    public List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
         List<SPWeb> allWebs = null;
         GetAllSubWebCollectionResult result = WsContext.getWebsPort(url).getAllSubWebCollection();
 

@@ -8,6 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -107,7 +108,7 @@ public class SPWeb {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected List<SPAlert> getAlerts() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public List<SPAlert> getAlerts() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         List<SPAlert> alertCollection = null;
         AlertInfo alertInfo = WsContext.getAlertsPort(new URL(url)).getAlerts();
         if (alertInfo != null) {
@@ -148,7 +149,7 @@ public class SPWeb {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected List<SPList> getLists() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public List<SPList> getLists() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
         List<SPList> listsCollection = null;
         GetListCollectionResponse.GetListCollectionResult result = WsContext.getListsPort(new URL(url)).getListCollection();
         if (result.getContent() != null) {
@@ -161,8 +162,8 @@ public class SPWeb {
                         NodeList listNodeList = rootElement.getElementsByTagName("List");
                         for (int i = 0; i < listNodeList.getLength(); i++) {
                             Element listElement = (Element) listNodeList.item(i);
-                            SPList list = new SPList();
-                            list.loadFromXml(listElement);
+                            SPList list = new SPList(url);
+                            list.loadFromXml(listElement);                            
                             listsCollection.add(list);
                         }
 
