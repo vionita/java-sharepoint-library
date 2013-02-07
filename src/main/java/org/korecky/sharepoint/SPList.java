@@ -1,10 +1,19 @@
 package org.korecky.sharepoint;
 
+import com.microsoft.schemas.sharepoint.soap.lists.GetListCollectionResponse;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItemsResponse;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Represents a list on a Microsoft SharePoint Foundation Web site.
@@ -14,7 +23,8 @@ import org.w3c.dom.Element;
  */
 public class SPList {
 
-    SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd HH:mm:ss");
+    private final String DATE_TIME_PATTERN = "yyyyMMdd HH:mm:ss";
+    private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PATTERN);
     private String id;
     private String title;
     private String name;
@@ -65,8 +75,10 @@ public class SPList {
     private boolean showUser;
     private boolean enableMinorVersion;
     private boolean requireCheckout;
+    private final String webAbsluteUrl;
 
-    protected SPList() {
+    protected SPList(String webAbsluteUrl) {
+        this.webAbsluteUrl = webAbsluteUrl;
     }
 
     public void loadFromXml(Element rootElement) throws ParseException {
@@ -174,6 +186,35 @@ public class SPList {
                 requireCheckout = Boolean.valueOf(rootElement.getAttribute("RequireCheckout"));
             }
         }
+    }
+
+    public List<SPListItem> getItems() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+        List<SPListItem> itemsCollection = null;
+        GetListItemsResponse.GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(title, null, null, null, null, null, webId);
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof Element) {
+                    // Parse XML file                    
+                    Element rootElement = (Element) content;
+                    if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
+                        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+                        for (int i = 0; i < dataNodeList.getLength(); i++) {
+                            Element dataElement = (Element) dataNodeList.item(i);
+                            itemsCollection = new ArrayList<>();
+                            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                            for (int j = 0; j < rowNodeList.getLength(); j++) {
+                                Element rowElement = (Element) rowNodeList.item(j);
+                                SPListItem item = new SPListItem(webAbsluteUrl);
+                                item.loadFromXml(rowElement);
+                                itemsCollection.add(item);
+                            }
+
+                        }
+                    }
+                }
+            }
+        }
+        return itemsCollection;
     }
 
     public String getId() {
@@ -374,5 +415,9 @@ public class SPList {
 
     public boolean isRequireCheckout() {
         return requireCheckout;
+    }
+
+    public String getWebAbsluteUrl() {
+        return webAbsluteUrl;
     }
 }

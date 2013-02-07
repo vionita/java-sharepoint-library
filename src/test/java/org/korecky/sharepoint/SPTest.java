@@ -1,13 +1,12 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.korecky.sharepoint;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.*;
@@ -23,9 +22,9 @@ public class SPTest {
     }
 
     @Test
-    public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException {
+    public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException {
         // SPSite test
-        NetworkCredentials credentials = new NetworkCredentials("aaa", "aa", "aa");
+        NetworkCredentials credentials = new NetworkCredentials("aa", "aa", "aa");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
 
         SPSite instance = new SPSite(new URL("https://devport2.gordic.cz/"), credentials, httpProxy, true);
@@ -43,8 +42,34 @@ public class SPTest {
             // Lists
             List<SPList> lists = web.getLists();
             assertNotNull(lists);
+            for (SPList list : lists) {
+                System.out.println(list.getTitle());
+            }
             if ((lists != null) && (lists.size() > 1)) {
-                System.out.println(lists.get(0).getTitle());
+                // List items in list
+                SPList list = lists.get(0);
+                System.out.println(list.getTitle());                
+                List<SPListItem> items = list.getItems();
+                for (SPListItem item : items) {
+                    System.out.println(item.getTitle());
+                }
+
+                // List items in document library
+                list = lists.get(3);
+                System.out.println(list.getTitle());                
+                items = list.getItems();
+                for (SPListItem item : items) {                    
+                    File file = new File("c:\\Users\\vkorecky\\workspace\\" + item.getFile().getName());
+                    item.getFile().saveBinary(file);
+                }
+                                
+                // List items with attachements
+//                list = lists.get(34);
+//                System.out.println(list.getTitle());                
+//                items = list.getItems();
+//                for (SPListItem item : items) {
+//                    System.out.println(item.getFile().saveBinary());
+//                }
             }
         }
     }

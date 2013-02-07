@@ -21,10 +21,9 @@ import javax.xml.ws.BindingProvider;
  *
  * @author vkorecky
  */
-class WsContext {
-
+class WsContext {    
     private static Authenticator credentials;
-    private static HttpProxy httpProxy;    
+    private static HttpProxy httpProxy;
     private static boolean trustAllSSLs = false;
     private static AlertsSoap alertsPort;
     private static ListsSoap listsPort;
@@ -145,7 +144,7 @@ class WsContext {
 
     protected static void setHttpProxy(HttpProxy httpProxy) {
         WsContext.httpProxy = httpProxy;
-    }   
+    }
 
     protected static boolean isTrustAllSSLs() {
         return trustAllSSLs;
