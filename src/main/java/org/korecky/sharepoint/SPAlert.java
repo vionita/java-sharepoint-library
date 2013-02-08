@@ -39,7 +39,7 @@ public class SPAlert {
         eventType = SPEventType.valueOf(tmpAlert.getEventType());
         active = tmpAlert.isActive();
         if (tmpAlert.getDeliveryChannels() != null) {
-            deliveryChanels = new ArrayList<>();
+            deliveryChanels = new ArrayList<SPDeliveryChannel>();
             for (DeliveryChannel deliveryChanel : tmpAlert.getDeliveryChannels().getDeliveryChannel()) {
                 if (deliveryChanel instanceof EmailChannel) {
                     SPEmailChannel emailChanel = new SPEmailChannel();
@@ -113,7 +113,7 @@ public class SPAlert {
      * @return
      */
     public Map<String, String> getProperties() {
-        Map<String, String> properties = new HashMap<>();
+        Map<String, String> properties = new HashMap<String, String>();
         properties.put("id", id);
         properties.put("Title", title);
         properties.put("AlertForTitle", alertForUrl);

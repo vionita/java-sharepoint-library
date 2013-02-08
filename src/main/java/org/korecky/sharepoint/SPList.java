@@ -200,11 +200,11 @@ public class SPList {
                         NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
                         for (int i = 0; i < dataNodeList.getLength(); i++) {
                             Element dataElement = (Element) dataNodeList.item(i);
-                            itemsCollection = new ArrayList<>();
+                            itemsCollection = new ArrayList<SPListItem>();
                             NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
                             for (int j = 0; j < rowNodeList.getLength(); j++) {
                                 Element rowElement = (Element) rowNodeList.item(j);
-                                SPListItem item = new SPListItem(webAbsluteUrl);
+                                SPListItem item = new SPListItem(name, webAbsluteUrl);
                                 item.loadFromXml(rowElement);
                                 itemsCollection.add(item);
                             }

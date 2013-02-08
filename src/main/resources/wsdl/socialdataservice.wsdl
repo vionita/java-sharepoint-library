@@ -1931,10 +1931,10 @@
   <wsdl:service name="SocialDataService">
     <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Social Data Service</wsdl:documentation>
     <wsdl:port name="SocialDataServiceSoap" binding="tns:SocialDataServiceSoap">
-      <soap:address location="http://192.168.151.48/_vti_bin/socialdataservice.asmx" />
+      <soap:address location="" />
     </wsdl:port>
     <wsdl:port name="SocialDataServiceSoap12" binding="tns:SocialDataServiceSoap12">
-      <soap12:address location="http://192.168.151.48/_vti_bin/socialdataservice.asmx" />
+      <soap12:address location="" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

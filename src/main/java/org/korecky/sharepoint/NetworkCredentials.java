@@ -33,7 +33,7 @@ public class NetworkCredentials extends Authenticator {
     public PasswordAuthentication getPasswordAuthentication() {
         if (domain != null && !domain.isEmpty()) {
             user = domain + "\\" + user;
-        }
+        }        
         return new PasswordAuthentication(user, password.toCharArray());
     }
 }

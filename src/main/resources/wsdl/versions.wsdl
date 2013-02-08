@@ -1,12 +1,11 @@
-
 <wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://schemas.microsoft.com/sharepoint/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://schemas.microsoft.com/sharepoint/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/sharepoint/soap/">
-      <s:import namespace="http://www.w3.org/2001/XMLSchema" />
+      <s:import namespace="http://www.w3.org/2001/XMLSchema"/>
       <s:element name="GetVersions">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -16,7 +15,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="GetVersionsResult">
               <s:complexType mixed="true">
                 <s:sequence>
-                  <s:any />
+                  <s:any/>
                 </s:sequence>
               </s:complexType>
             </s:element>
@@ -26,8 +25,8 @@
       <s:element name="RestoreVersion">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="fileVersion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="fileVersion" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -37,7 +36,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="RestoreVersionResult">
               <s:complexType mixed="true">
                 <s:sequence>
-                  <s:any />
+                  <s:any/>
                 </s:sequence>
               </s:complexType>
             </s:element>
@@ -47,8 +46,8 @@
       <s:element name="DeleteVersion">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
-            <s:element minOccurs="0" maxOccurs="1" name="fileVersion" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
+            <s:element minOccurs="0" maxOccurs="1" name="fileVersion" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -58,7 +57,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="DeleteVersionResult">
               <s:complexType mixed="true">
                 <s:sequence>
-                  <s:any />
+                  <s:any/>
                 </s:sequence>
               </s:complexType>
             </s:element>
@@ -68,7 +67,7 @@
       <s:element name="DeleteAllVersions">
         <s:complexType>
           <s:sequence>
-            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="fileName" type="s:string"/>
           </s:sequence>
         </s:complexType>
       </s:element>
@@ -78,7 +77,7 @@
             <s:element minOccurs="0" maxOccurs="1" name="DeleteAllVersionsResult">
               <s:complexType mixed="true">
                 <s:sequence>
-                  <s:any />
+                  <s:any/>
                 </s:sequence>
               </s:complexType>
             </s:element>
@@ -88,131 +87,131 @@
     </s:schema>
   </wsdl:types>
   <wsdl:message name="GetVersionsSoapIn">
-    <wsdl:part name="parameters" element="tns:GetVersions" />
+    <wsdl:part name="parameters" element="tns:GetVersions"/>
   </wsdl:message>
   <wsdl:message name="GetVersionsSoapOut">
-    <wsdl:part name="parameters" element="tns:GetVersionsResponse" />
+    <wsdl:part name="parameters" element="tns:GetVersionsResponse"/>
   </wsdl:message>
   <wsdl:message name="RestoreVersionSoapIn">
-    <wsdl:part name="parameters" element="tns:RestoreVersion" />
+    <wsdl:part name="parameters" element="tns:RestoreVersion"/>
   </wsdl:message>
   <wsdl:message name="RestoreVersionSoapOut">
-    <wsdl:part name="parameters" element="tns:RestoreVersionResponse" />
+    <wsdl:part name="parameters" element="tns:RestoreVersionResponse"/>
   </wsdl:message>
   <wsdl:message name="DeleteVersionSoapIn">
-    <wsdl:part name="parameters" element="tns:DeleteVersion" />
+    <wsdl:part name="parameters" element="tns:DeleteVersion"/>
   </wsdl:message>
   <wsdl:message name="DeleteVersionSoapOut">
-    <wsdl:part name="parameters" element="tns:DeleteVersionResponse" />
+    <wsdl:part name="parameters" element="tns:DeleteVersionResponse"/>
   </wsdl:message>
   <wsdl:message name="DeleteAllVersionsSoapIn">
-    <wsdl:part name="parameters" element="tns:DeleteAllVersions" />
+    <wsdl:part name="parameters" element="tns:DeleteAllVersions"/>
   </wsdl:message>
   <wsdl:message name="DeleteAllVersionsSoapOut">
-    <wsdl:part name="parameters" element="tns:DeleteAllVersionsResponse" />
+    <wsdl:part name="parameters" element="tns:DeleteAllVersionsResponse"/>
   </wsdl:message>
   <wsdl:portType name="VersionsSoap">
     <wsdl:operation name="GetVersions">
-      <wsdl:input message="tns:GetVersionsSoapIn" />
-      <wsdl:output message="tns:GetVersionsSoapOut" />
+      <wsdl:input message="tns:GetVersionsSoapIn"/>
+      <wsdl:output message="tns:GetVersionsSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="RestoreVersion">
-      <wsdl:input message="tns:RestoreVersionSoapIn" />
-      <wsdl:output message="tns:RestoreVersionSoapOut" />
+      <wsdl:input message="tns:RestoreVersionSoapIn"/>
+      <wsdl:output message="tns:RestoreVersionSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="DeleteVersion">
-      <wsdl:input message="tns:DeleteVersionSoapIn" />
-      <wsdl:output message="tns:DeleteVersionSoapOut" />
+      <wsdl:input message="tns:DeleteVersionSoapIn"/>
+      <wsdl:output message="tns:DeleteVersionSoapOut"/>
     </wsdl:operation>
     <wsdl:operation name="DeleteAllVersions">
-      <wsdl:input message="tns:DeleteAllVersionsSoapIn" />
-      <wsdl:output message="tns:DeleteAllVersionsSoapOut" />
+      <wsdl:input message="tns:DeleteAllVersionsSoapIn"/>
+      <wsdl:output message="tns:DeleteAllVersionsSoapOut"/>
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="VersionsSoap" type="tns:VersionsSoap">
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="GetVersions">
-      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/GetVersions" style="document" />
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/GetVersions" style="document"/>
       <wsdl:input>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="RestoreVersion">
-      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/RestoreVersion" style="document" />
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/RestoreVersion" style="document"/>
       <wsdl:input>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteVersion">
-      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteVersion" style="document" />
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteVersion" style="document"/>
       <wsdl:input>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteAllVersions">
-      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteAllVersions" style="document" />
+      <soap:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteAllVersions" style="document"/>
       <wsdl:input>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap:body use="literal" />
+        <soap:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="VersionsSoap12" type="tns:VersionsSoap">
-    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
     <wsdl:operation name="GetVersions">
-      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/GetVersions" style="document" />
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/GetVersions" style="document"/>
       <wsdl:input>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="RestoreVersion">
-      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/RestoreVersion" style="document" />
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/RestoreVersion" style="document"/>
       <wsdl:input>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteVersion">
-      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteVersion" style="document" />
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteVersion" style="document"/>
       <wsdl:input>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="DeleteAllVersions">
-      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteAllVersions" style="document" />
+      <soap12:operation soapAction="http://schemas.microsoft.com/sharepoint/soap/DeleteAllVersions" style="document"/>
       <wsdl:input>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:input>
       <wsdl:output>
-        <soap12:body use="literal" />
+        <soap12:body use="literal"/>
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="Versions">
     <wsdl:port name="VersionsSoap" binding="tns:VersionsSoap">
-      <soap:address location="http://192.168.151.48/_vti_bin/versions.asmx" />
+      <soap:address location=""/>
     </wsdl:port>
     <wsdl:port name="VersionsSoap12" binding="tns:VersionsSoap12">
-      <soap12:address location="http://192.168.151.48/_vti_bin/versions.asmx" />
+      <soap12:address location=""/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

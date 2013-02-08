@@ -1,16 +1,15 @@
 package org.korecky.sharepoint;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
+import com.microsoft.schemas.sharepoint.soap.lists.GetAttachmentCollectionResponse.GetAttachmentCollectionResult;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.httpclient.util.URIUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -33,21 +32,23 @@ public class SPListItem {
     private int owshiddenversion;
     private String uniqueId;
     private Date created;
-    private Date modified;
-    private final String webAbsluteUrl;
+    private Date modified;    
     private String metaInfo;
     private Map<String, String> properties;
     private String fileRef;
     private String fileName;
+    private final String webAbsluteUrl;
+    private final String listName;
 
-    protected SPListItem(String webAbsluteUrl) {
+    protected SPListItem(String listName, String webAbsluteUrl) {
         this.webAbsluteUrl = webAbsluteUrl;
+        this.listName = listName;
     }
 
     public void loadFromXml(Element rootElement) throws ParseException {
         // Parse XML file                            
         if (StringUtils.contains(rootElement.getLocalName(), "row")) {
-            properties = new HashMap<>();
+            properties = new HashMap<String, String>();
             for (int i = 0; i < rootElement.getAttributes().getLength(); i++) {
                 Attr attribute = (Attr) rootElement.getAttributes().item(i);
                 properties.put(attribute.getName(), attribute.getValue());
@@ -91,6 +92,10 @@ public class SPListItem {
         }
     }
 
+    /**
+     * Gets the file that is represented by the item from a document library.
+     * @return 
+     */
     public SPFile getFile() {
         SPFile file = new SPFile(webAbsluteUrl);
         file.setName(fileName);
@@ -100,6 +105,35 @@ public class SPListItem {
         } else {
             file.setExists(true);
         }
+        return file;
+    }
+    
+    public SPFile getAttachments() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+        SPFile file = new SPFile(webAbsluteUrl);
+       GetAttachmentCollectionResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getAttachmentCollection(listName, String.valueOf(id));
+//        if (result.getContent() != null) {
+//            for (Object content : result.getContent()) {
+//                if (content instanceof Element) {
+//                    // Parse XML file                    
+//                    Element rootElement = (Element) content;
+//                    if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
+//                        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+//                        for (int i = 0; i < dataNodeList.getLength(); i++) {
+//                            Element dataElement = (Element) dataNodeList.item(i);
+//                            itemsCollection = new ArrayList<>();
+//                            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+//                            for (int j = 0; j < rowNodeList.getLength(); j++) {
+//                                Element rowElement = (Element) rowNodeList.item(j);
+//                                SPListItem item = new SPListItem(webAbsluteUrl);
+//                                item.loadFromXml(rowElement);
+//                                itemsCollection.add(item);
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }
         return file;
     }
 

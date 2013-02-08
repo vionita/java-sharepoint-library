@@ -2,8 +2,8 @@ package org.korecky.sharepoint;
 
 import com.microsoft.schemas.sharepoint.soap.alerts.Alert;
 import com.microsoft.schemas.sharepoint.soap.alerts.AlertInfo;
-import com.microsoft.schemas.sharepoint.soap.webs.GetWebResponse;
 import com.microsoft.schemas.sharepoint.soap.lists.GetListCollectionResponse;
+import com.microsoft.schemas.sharepoint.soap.webs.GetWebResponse;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -112,7 +112,7 @@ public class SPWeb {
         List<SPAlert> alertCollection = null;
         AlertInfo alertInfo = WsContext.getAlertsPort(new URL(url)).getAlerts();
         if (alertInfo != null) {
-            alertCollection = new ArrayList<>();
+            alertCollection = new ArrayList<SPAlert>();
             for (Alert tmpAlert : alertInfo.getAlerts().getAlert()) {
                 SPAlert alert = new SPAlert();
                 alert.loadFromAlert(tmpAlert);
@@ -132,7 +132,7 @@ public class SPWeb {
      */
     public Map<String, String> getAllProperties() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         Map<String, String> properties = null;
-        properties = new HashMap<>();
+        properties = new HashMap<String, String>();
         properties.put("Title", getTitle());
         properties.put("Url", getUrl());
         properties.put("Description", getDescription());
@@ -158,12 +158,12 @@ public class SPWeb {
                     // Parse XML file                    
                     Element rootElement = (Element) content;
                     if (StringUtils.equals(rootElement.getLocalName(), "Lists")) {
-                        listsCollection = new ArrayList<>();
+                        listsCollection = new ArrayList<SPList>();
                         NodeList listNodeList = rootElement.getElementsByTagName("List");
                         for (int i = 0; i < listNodeList.getLength(); i++) {
                             Element listElement = (Element) listNodeList.item(i);
                             SPList list = new SPList(url);
-                            list.loadFromXml(listElement);                            
+                            list.loadFromXml(listElement);
                             listsCollection.add(list);
                         }
 
@@ -196,7 +196,11 @@ public class SPWeb {
                     }
                 }
             }
-        } catch (NoSuchAlgorithmException | KeyManagementException | MalformedURLException ex) {
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (KeyManagementException ex) {
+            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
             Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

@@ -223,10 +223,10 @@
   </wsdl:binding>
   <wsdl:service name="Copy">
     <wsdl:port name="CopySoap" binding="tns:CopySoap">
-      <soap:address location="http://192.168.151.48/_vti_bin/Copy.asmx"/>
+      <soap:address location=""/>
     </wsdl:port>
     <wsdl:port name="CopySoap12" binding="tns:CopySoap12">
-      <soap12:address location="http://192.168.151.48/_vti_bin/Copy.asmx"/>
+      <soap12:address location=""/>
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
