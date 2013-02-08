@@ -67,10 +67,10 @@
   </wsdl:binding>
   <wsdl:service name="PublishedLinksService">
     <wsdl:port name="PublishedLinksServiceSoap" binding="tns:PublishedLinksServiceSoap">
-      <soap:address location="http://192.168.151.48/_vti_bin/publishedlinksservice.asmx" />
+      <soap:address location="" />
     </wsdl:port>
     <wsdl:port name="PublishedLinksServiceSoap12" binding="tns:PublishedLinksServiceSoap12">
-      <soap12:address location="http://192.168.151.48/_vti_bin/publishedlinksservice.asmx" />
+      <soap12:address location="" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

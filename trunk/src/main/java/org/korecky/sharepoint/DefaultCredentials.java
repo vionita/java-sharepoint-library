@@ -15,7 +15,7 @@ public class DefaultCredentials extends Authenticator {
         super();
     }
 
-    protected PasswordAuthentication getPasswordAuthentication() {
+    public PasswordAuthentication getPasswordAuthentication() {
         return super.getPasswordAuthentication();
     }
 }

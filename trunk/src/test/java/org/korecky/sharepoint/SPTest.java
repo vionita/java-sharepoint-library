@@ -24,10 +24,10 @@ public class SPTest {
     @Test
     public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException {
         // SPSite test
-        NetworkCredentials credentials = new NetworkCredentials("aa", "aa", "aa");
+        NetworkCredentials credentials = new NetworkCredentials("aaa", "aaa", "aaa");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
 
-        SPSite instance = new SPSite(new URL("https://devport2.gordic.cz/"), credentials, httpProxy, true);
+        SPSite instance = new SPSite(new URL("https://aaa/"), credentials, httpProxy, true);
         List<SPWeb> result = instance.getAllWebs();
         assertNotNull(result);
         if ((result != null) && (result.size() > 1)) {
@@ -64,12 +64,12 @@ public class SPTest {
                 }
                                 
                 // List items with attachements
-//                list = lists.get(34);
-//                System.out.println(list.getTitle());                
-//                items = list.getItems();
-//                for (SPListItem item : items) {
-//                    System.out.println(item.getFile().saveBinary());
-//                }
+                list = lists.get(34);
+                System.out.println(list.getTitle());                
+                items = list.getItems();
+                for (SPListItem item : items) {
+                    System.out.println(item.getAttachments());
+                }
             }
         }
     }

@@ -177,10 +177,10 @@
   </wsdl:binding>
   <wsdl:service name="People">
     <wsdl:port name="PeopleSoap" binding="tns:PeopleSoap">
-      <soap:address location="http://192.168.151.48/_vti_bin/People.asmx" />
+      <soap:address location="" />
     </wsdl:port>
     <wsdl:port name="PeopleSoap12" binding="tns:PeopleSoap12">
-      <soap12:address location="http://192.168.151.48/_vti_bin/People.asmx" />
+      <soap12:address location="" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>

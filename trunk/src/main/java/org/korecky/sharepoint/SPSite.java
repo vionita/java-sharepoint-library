@@ -121,7 +121,7 @@ public class SPSite {
                     // Parse XML file                    
                     Element rootElement = (Element) content;
                     if (StringUtils.equals(rootElement.getLocalName(), "Webs")) {
-                        allWebs = new ArrayList<>();
+                        allWebs = new ArrayList<SPWeb>();
                         NodeList webNodeList = rootElement.getElementsByTagName("Web");
                         for (int i = 0; i < webNodeList.getLength(); i++) {
                             Element webElement = (Element) webNodeList.item(i);

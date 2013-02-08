@@ -39,9 +39,10 @@ class WsContext {
      */
     protected static AlertsSoap getAlertsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         if (alertsPort == null) {
-            Alerts service = new Alerts();
-            alertsPort = service.getAlertsSoap();
             URL wsURL = new URL(webUrl, "/_vti_bin/Alerts.asmx");
+            URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+            Alerts service = new Alerts(wsdlURL);
+            alertsPort = service.getAlertsSoap();            
             ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         }
         return alertsPort;
@@ -57,9 +58,10 @@ class WsContext {
      */
     protected static ListsSoap getListsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         if (listsPort == null) {
-            Lists service = new Lists();
-            listsPort = service.getListsSoap();
             URL wsURL = new URL(webUrl, "/_vti_bin/Lists.asmx");
+            URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+            Lists service = new Lists(wsdlURL);
+            listsPort = service.getListsSoap();            
             ((BindingProvider) listsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         }
         return listsPort;
@@ -75,15 +77,16 @@ class WsContext {
      */
     protected static WebsSoap getWebsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         if (websPort == null) {
-            Webs service = new Webs();
-            websPort = service.getWebsSoap();
             URL wsURL = new URL(webUrl, "/_vti_bin/Webs.asmx");
+            URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+            Webs service = new Webs(wsdlURL);
+            websPort = service.getWebsSoap();            
             ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         }
         return websPort;
     }
 
-    protected static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {
+    protected static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {               
         // Set httpProxy        
         if (httpProxy != null) {
             // Proxy            

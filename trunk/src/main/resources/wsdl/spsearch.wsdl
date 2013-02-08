@@ -1,6 +1,6 @@
 
 <wsdl:definitions xmlns:s0="urn:Microsoft.Search" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://microsoft.com/webservices/SharePoint/QueryService" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://microsoft.com/webservices/SharePoint/QueryService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
-  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Microsoft SharePoint Foundation 2013 Preview Search Query Web Service</wsdl:documentation>
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Microsoft Windows SharePoint Server 3.0 Search Query Web Service</wsdl:documentation>
   <wsdl:types>
     <s:schema elementFormDefault="qualified" targetNamespace="urn:Microsoft.Search">
       <s:element name="Query">
@@ -56,7 +56,6 @@
             <s:element minOccurs="0" maxOccurs="1" name="QueryExResult">
               <s:complexType>
                 <s:sequence>
-<!--                   <s:element ref="s:schema" /> -->
                   <s:any />
                 </s:sequence>
               </s:complexType>
@@ -187,12 +186,12 @@
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="QueryService">
-    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Microsoft SharePoint Foundation 2013 Preview Search Query Web Service</wsdl:documentation>
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Microsoft Windows SharePoint Server 3.0 Search Query Web Service</wsdl:documentation>
     <wsdl:port name="QueryServiceSoap" binding="tns:QueryServiceSoap">
-      <soap:address location="http://192.168.151.48/_vti_bin/spsearch.asmx" />
+      <soap:address location="" />
     </wsdl:port>
     <wsdl:port name="QueryServiceSoap12" binding="tns:QueryServiceSoap12">
-      <soap12:address location="http://192.168.151.48/_vti_bin/spsearch.asmx" />
+      <soap12:address location="" />
     </wsdl:port>
   </wsdl:service>
 </wsdl:definitions>
