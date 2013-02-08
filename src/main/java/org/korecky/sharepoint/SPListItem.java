@@ -7,12 +7,15 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Represents an item or row in a list
@@ -32,7 +35,7 @@ public class SPListItem {
     private int owshiddenversion;
     private String uniqueId;
     private Date created;
-    private Date modified;    
+    private Date modified;
     private String metaInfo;
     private Map<String, String> properties;
     private String fileRef;
@@ -94,7 +97,8 @@ public class SPListItem {
 
     /**
      * Gets the file that is represented by the item from a document library.
-     * @return 
+     *
+     * @return
      */
     public SPFile getFile() {
         SPFile file = new SPFile(webAbsluteUrl);
@@ -107,34 +111,36 @@ public class SPListItem {
         }
         return file;
     }
-    
-    public SPFile getAttachments() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
-        SPFile file = new SPFile(webAbsluteUrl);
-       GetAttachmentCollectionResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getAttachmentCollection(listName, String.valueOf(id));
-//        if (result.getContent() != null) {
-//            for (Object content : result.getContent()) {
-//                if (content instanceof Element) {
-//                    // Parse XML file                    
-//                    Element rootElement = (Element) content;
-//                    if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
-//                        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
-//                        for (int i = 0; i < dataNodeList.getLength(); i++) {
-//                            Element dataElement = (Element) dataNodeList.item(i);
-//                            itemsCollection = new ArrayList<>();
-//                            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
-//                            for (int j = 0; j < rowNodeList.getLength(); j++) {
-//                                Element rowElement = (Element) rowNodeList.item(j);
-//                                SPListItem item = new SPListItem(webAbsluteUrl);
-//                                item.loadFromXml(rowElement);
-//                                itemsCollection.add(item);
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-        return file;
+
+    /**
+     * Gets the collection of attachments that are associated with the item.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     */
+    public List<SPAttachment> getAttachments() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+        List<SPAttachment> attachmentCollection = new ArrayList<SPAttachment>();
+        GetAttachmentCollectionResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getAttachmentCollection(listName, String.valueOf(id));
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof Element) {
+                    // Parse XML file                    
+                    Element rootElement = (Element) content;
+                    if (StringUtils.equals(rootElement.getLocalName(), "Attachments")) {
+                        NodeList attachmentNodeList = rootElement.getElementsByTagName("Attachment");
+                        for (int i = 0; i < attachmentNodeList.getLength(); i++) {
+                            Element attachmentElement = (Element) attachmentNodeList.item(i);
+                            SPAttachment attachment = new SPAttachment(webAbsluteUrl);
+                            attachment.loadFromXml(attachmentElement);
+                            attachmentCollection.add(attachment);
+                        }
+                    }
+                }
+            }
+        }
+        return attachmentCollection;
     }
 
     public int getId() {

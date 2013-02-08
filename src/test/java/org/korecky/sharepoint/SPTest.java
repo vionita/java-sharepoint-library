@@ -48,7 +48,7 @@ public class SPTest {
             if ((lists != null) && (lists.size() > 1)) {
                 // List items in list
                 SPList list = lists.get(0);
-                System.out.println(list.getTitle());                
+                System.out.println(list.getTitle());
                 List<SPListItem> items = list.getItems();
                 for (SPListItem item : items) {
                     System.out.println(item.getTitle());
@@ -56,19 +56,23 @@ public class SPTest {
 
                 // List items in document library
                 list = lists.get(3);
-                System.out.println(list.getTitle());                
+                System.out.println(list.getTitle());
                 items = list.getItems();
-                for (SPListItem item : items) {                    
+                for (SPListItem item : items) {
                     File file = new File("c:\\Users\\vkorecky\\workspace\\" + item.getFile().getName());
                     item.getFile().saveBinary(file);
                 }
-                                
+
                 // List items with attachements
                 list = lists.get(34);
-                System.out.println(list.getTitle());                
+                System.out.println(list.getTitle());
                 items = list.getItems();
                 for (SPListItem item : items) {
-                    System.out.println(item.getAttachments());
+                    // Attachements                    
+                    for (SPAttachment attachement : item.getAttachments()) {
+                        File file = new File("c:\\Users\\vkorecky\\workspace\\" + attachement.getName());
+                        attachement.saveBinary(file);
+                    }
                 }
             }
         }
