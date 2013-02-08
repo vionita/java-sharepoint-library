@@ -114,7 +114,7 @@ public class SPWeb {
         if (alertInfo != null) {
             alertCollection = new ArrayList<SPAlert>();
             for (Alert tmpAlert : alertInfo.getAlerts().getAlert()) {
-                SPAlert alert = new SPAlert();
+                SPAlert alert = new SPAlert(url);
                 alert.loadFromAlert(tmpAlert);
                 alertCollection.add(alert);
             }

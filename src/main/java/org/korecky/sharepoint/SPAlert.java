@@ -1,8 +1,17 @@
 package org.korecky.sharepoint;
 
 import com.microsoft.schemas.sharepoint.soap.alerts.Alert;
+import com.microsoft.schemas.sharepoint.soap.alerts.AlertInfo;
+import com.microsoft.schemas.sharepoint.soap.alerts.ArrayOfDeleteFailure;
+import com.microsoft.schemas.sharepoint.soap.alerts.ArrayOfString;
+import com.microsoft.schemas.sharepoint.soap.alerts.DeleteFailure;
 import com.microsoft.schemas.sharepoint.soap.alerts.DeliveryChannel;
 import com.microsoft.schemas.sharepoint.soap.alerts.EmailChannel;
+import com.microsoft.schemas.sharepoint.soap.alerts.ErrorType;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -26,8 +35,10 @@ public class SPAlert {
     private String editAlertUrl;
     private Map<String, String> properties;
     private List<SPDeliveryChannel> deliveryChanels;
+    private final String webAbsluteUrl;
 
-    protected SPAlert() {
+    protected SPAlert(String webAbsluteUrl) {
+        this.webAbsluteUrl = webAbsluteUrl;
     }
 
     public void loadFromAlert(Alert tmpAlert) {
@@ -49,6 +60,22 @@ public class SPAlert {
                 }
             }
         }
+    }
+
+    /**
+     * Delete current allert from Sharepoint
+     *
+     * @param tmpAlert
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws MalformedURLException
+     * @throws KeyManagementException
+     */
+    public ErrorType delete(Alert tmpAlert) throws NoSuchAlgorithmException, MalformedURLException, KeyManagementException {
+        ArrayOfString arrayStr = new ArrayOfString();
+        arrayStr.getString().add(id);
+        ArrayOfDeleteFailure failureArray = WsContext.getAlertsPort(new URL(webAbsluteUrl)).deleteAlerts(arrayStr);
+        return failureArray.getDeleteFailure().get(0).getError();
     }
 
     /**

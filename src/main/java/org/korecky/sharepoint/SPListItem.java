@@ -1,7 +1,14 @@
 package org.korecky.sharepoint;
 
 import com.microsoft.schemas.sharepoint.soap.lists.GetAttachmentCollectionResponse.GetAttachmentCollectionResult;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -120,7 +127,7 @@ public class SPListItem {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public List<SPAttachment> getAttachments() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+    public List<SPAttachment> getAttachments() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, URISyntaxException {
         List<SPAttachment> attachmentCollection = new ArrayList<SPAttachment>();
         GetAttachmentCollectionResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getAttachmentCollection(listName, String.valueOf(id));
         if (result.getContent() != null) {
@@ -141,6 +148,64 @@ public class SPListItem {
             }
         }
         return attachmentCollection;
+    }
+
+    /**
+     * Add attachment to existing list item.
+     *
+     * @param fileName
+     * @param fileContent
+     * @return
+     * @throws MalformedURLException
+     * @throws KeyManagementException
+     * @throws NoSuchAlgorithmException
+     */
+    public SPAttachment addAttachment(String fileName, byte[] fileContent) throws MalformedURLException, KeyManagementException, NoSuchAlgorithmException {
+        String result = WsContext.getListsPort(new URL(webAbsluteUrl)).addAttachment(listName, String.valueOf(id), fileName, fileContent);
+        SPAttachment attachment = new SPAttachment(webAbsluteUrl);
+        attachment.setUrl(result);
+        return attachment;
+    }
+
+    /**
+     * Add attachment to existing list item.
+     *
+     * @param fileName
+     * @param fileContent
+     * @return
+     * @throws MalformedURLException
+     * @throws KeyManagementException
+     * @throws NoSuchAlgorithmException
+     */
+    public SPAttachment addAttachment(File localFile) throws MalformedURLException, KeyManagementException, NoSuchAlgorithmException, FileNotFoundException, IOException {
+        ByteArrayOutputStream ous = null;
+        InputStream ios = null;
+        try {
+            byte[] buffer = new byte[4096];
+            ous = new ByteArrayOutputStream();
+            ios = new FileInputStream(localFile);
+            int read = 0;
+            while ((read = ios.read(buffer)) != -1) {
+                ous.write(buffer, 0, read);
+            }
+        } finally {
+            try {
+                if (ous != null) {
+                    ous.flush();
+                    ous.close();
+                }
+            } catch (IOException e) {
+                // swallow, since not that important
+            }
+            try {
+                if (ios != null) {
+                    ios.close();
+                }
+            } catch (IOException e) {
+                // swallow, since not that important
+            }
+        }
+        return addAttachment(localFile.getName(), ous.toByteArray());        
     }
 
     public int getId() {
