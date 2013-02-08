@@ -17,7 +17,7 @@
     <node id="n0">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="153.28414839797642" width="502.3052276559865" x="110.3251639497845" y="-1742.8356534656639"/>
+          <y:Geometry height="153.28414839797642" width="502.3052276559865" x="134.9088941085147" y="-1752.8356534656639"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="40.685546875" x="230.80984039049326" y="4.0">SPSite</y:NodeLabel>
@@ -43,10 +43,10 @@ SPWeb getRootWeb()<y:LabelModel>
     <node id="n1">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="187.76424562944936" width="255.3309163361859" x="233.8123196096848" y="-1569.5515050676875"/>
+          <y:Geometry height="187.76424562944936" width="255.3309163361859" x="258.39604976841497" y="-1579.5515050676875"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
-          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="44.681640625" x="105.32463785559295" y="4.0">SPWeb</y:NodeLabel>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="44.681640625" x="105.32463785559298" y="4.0">SPWeb</y:NodeLabel>
           <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="151.01171875" modelName="custom" textColor="#000000" visible="true" width="224.078125" x="2.0" y="30.701171875">List&lt;SPAlert&gt; getAlerts()
 List&lt;SPList&gt; getLists()
 void loadFromXml(Element rootElement) 
@@ -73,7 +73,7 @@ Map&lt;String,String&gt; getAllProperties()
     <node id="n2">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="831.9042968750002" width="226.0" x="248.47777777777776" y="-1361.7872594382382"/>
+          <y:Geometry height="831.9042968750002" width="226.0" x="71.5" y="-1361.7872594382382"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="38.681640625" x="93.6591796875" y="4.0">SPList</y:NodeLabel>
@@ -146,7 +146,7 @@ void loadFromXml(Element rootElement) <y:LabelModel>
     <node id="n3">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="275.7453625632379" width="226.0" x="55.826388888888886" y="-499.8829625632379"/>
+          <y:Geometry height="275.7453625632379" width="226.0" x="71.5" y="-509.8829625632379"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="62.01953125" x="81.990234375" y="4.0">SPListItem</y:NodeLabel>
@@ -181,7 +181,7 @@ void loadFromXml(Element rootElement)<y:LabelModel>
     <node id="n4">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="275.7453625632379" width="484.6053962900505" x="311.82646852164146" y="-499.8829625632379"/>
+          <y:Geometry height="275.7453625632379" width="484.6053962900505" x="327.50007963275254" y="-1083.7077922823569"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="44.681640625" x="219.96187783252526" y="4.0">SPAlert</y:NodeLabel>
@@ -218,7 +218,7 @@ enum SPEventType
     <node id="n5">
       <data key="d6">
         <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
-          <y:Geometry height="204.13760000000002" width="226.0" x="55.826388888888886" y="-204.13760000000002"/>
+          <y:Geometry height="204.13760000000002" width="226.0" x="15.0" y="-204.13760000000002"/>
           <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
           <y:BorderStyle color="#000000" type="line" width="1.0"/>
           <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="39.34375" x="93.328125" y="4.0">SPFile</y:NodeLabel>
@@ -244,10 +244,41 @@ boolean	 isExists()<y:LabelModel>
         </y:GenericNode>
       </data>
     </node>
+    <node id="n6">
+      <data key="d6">
+        <y:GenericNode configuration="com.yworks.entityRelationship.big_entity">
+          <y:Geometry height="204.13760000000002" width="226.0" x="271.0" y="-204.13760000000002"/>
+          <y:Fill color="#E8EEF7" color2="#B7C9E3" transparent="false"/>
+          <y:BorderStyle color="#000000" type="line" width="1.0"/>
+          <y:NodeLabel alignment="center" autoSizePolicy="content" backgroundColor="#B7C9E3" configuration="com.yworks.entityRelationship.label.name" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasLineColor="false" height="18.701171875" modelName="internal" modelPosition="t" textColor="#000000" visible="true" width="80.705078125" x="72.6474609375" y="4.0">SPAttachment</y:NodeLabel>
+          <y:NodeLabel alignment="left" autoSizePolicy="content" configuration="com.yworks.entityRelationship.label.attributes" fontFamily="Dialog" fontSize="12" fontStyle="plain" hasBackgroundColor="false" hasLineColor="false" height="136.310546875" modelName="custom" textColor="#000000" visible="true" width="158.060546875" x="2.0" y="30.701171875">SPWeb	 getWeb()
+SPList	 getDocumentLibrary()
+SPListItem	 getItem()
+byte[]	 saveBinary()
+void	 saveBinary(File file)
+
+String	 getAbsoluteUrl()
+String	 getName()
+String	 getUrl()<y:LabelModel>
+              <y:ErdAttributesNodeLabelModel/>
+            </y:LabelModel>
+            <y:ModelParameter>
+              <y:ErdAttributesNodeLabelModelParameter/>
+            </y:ModelParameter>
+          </y:NodeLabel>
+          <y:StyleProperties>
+            <y:Property class="java.lang.Boolean" name="y.view.ShadowNodePainter.SHADOW_PAINTING" value="true"/>
+          </y:StyleProperties>
+        </y:GenericNode>
+      </data>
+    </node>
     <edge id="e0" source="n2" target="n1">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="-415.9521484375001" tx="0.0" ty="93.88212281472468"/>
+          <y:Path sx="0.0" sy="-415.9521484375001" tx="-63.83272908404648" ty="93.88212281472468">
+            <y:Point x="184.5" y="-1376.7872594382382"/>
+            <y:Point x="322.22877885246146" y="-1376.7872594382382"/>
+          </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="none"/>
           <y:BendStyle smoothed="false"/>
@@ -257,10 +288,7 @@ boolean	 isExists()<y:LabelModel>
     <edge id="e1" source="n3" target="n2">
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="-137.87268128161895" tx="-56.5" ty="415.9521484375001">
-            <y:Point x="168.82638888888889" y="-514.8829625632379"/>
-            <y:Point x="304.97777777777776" y="-514.8829625632379"/>
-          </y:Path>
+          <y:Path sx="0.0" sy="-137.87268128161895" tx="0.0" ty="415.9521484375001"/>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="none"/>
           <y:BendStyle smoothed="false"/>
@@ -277,13 +305,23 @@ boolean	 isExists()<y:LabelModel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e3" source="n4" target="n2">
+    <edge id="e3" source="n5" target="n3">
+      <data key="d10">
+        <y:PolyLineEdge>
+          <y:Path sx="0.0" sy="-102.06880000000001" tx="-56.5" ty="137.87268128161895"/>
+          <y:LineStyle color="#000000" type="line" width="1.0"/>
+          <y:Arrows source="none" target="none"/>
+          <y:BendStyle smoothed="false"/>
+        </y:PolyLineEdge>
+      </data>
+    </edge>
+    <edge id="e4" source="n4" target="n1">
       <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="-137.87268128161895" tx="56.5" ty="415.9521484375001">
-            <y:Point x="554.1291666666667" y="-514.8829625632379"/>
-            <y:Point x="417.97777777777776" y="-514.8829625632379"/>
+          <y:Path sx="0.0" sy="-137.87268128161895" tx="63.83272908404646" ty="93.88212281472468">
+            <y:Point x="569.8027777777778" y="-1098.7077922823569"/>
+            <y:Point x="449.89423702055444" y="-1098.7077922823569"/>
           </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="none"/>
@@ -291,11 +329,14 @@ boolean	 isExists()<y:LabelModel>
         </y:PolyLineEdge>
       </data>
     </edge>
-    <edge id="e4" source="n5" target="n3">
+    <edge id="e5" source="n6" target="n3">
       <data key="d9"/>
       <data key="d10">
         <y:PolyLineEdge>
-          <y:Path sx="0.0" sy="-102.06880000000001" tx="0.0" ty="137.87268128161895"/>
+          <y:Path sx="0.0" sy="-102.06880000000001" tx="56.5" ty="137.87268128161895">
+            <y:Point x="384.0" y="-219.13760000000002"/>
+            <y:Point x="241.0" y="-219.13760000000002"/>
+          </y:Path>
           <y:LineStyle color="#000000" type="line" width="1.0"/>
           <y:Arrows source="none" target="none"/>
           <y:BendStyle smoothed="false"/>

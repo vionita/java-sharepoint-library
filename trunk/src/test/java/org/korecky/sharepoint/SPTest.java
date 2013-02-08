@@ -3,6 +3,7 @@ package org.korecky.sharepoint;
 import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -22,9 +23,9 @@ public class SPTest {
     }
 
     @Test
-    public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException {
+    public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException, URISyntaxException {
         // SPSite test
-        NetworkCredentials credentials = new NetworkCredentials("aaa", "aaa", "aaa");
+        NetworkCredentials credentials = new NetworkCredentials("aaa", "aa", "aa");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
 
         SPSite instance = new SPSite(new URL("https://aaa/"), credentials, httpProxy, true);
@@ -58,9 +59,10 @@ public class SPTest {
                 list = lists.get(3);
                 System.out.println(list.getTitle());
                 items = list.getItems();
+                File savedFile = null;
                 for (SPListItem item : items) {
-                    File file = new File("c:\\Users\\vkorecky\\workspace\\" + item.getFile().getName());
-                    item.getFile().saveBinary(file);
+                    savedFile = new File("c:\\Users\\vkorecky\\workspace\\" + item.getFile().getName());
+                    item.getFile().saveBinary(savedFile);
                 }
 
                 // List items with attachements
@@ -73,6 +75,9 @@ public class SPTest {
                         File file = new File("c:\\Users\\vkorecky\\workspace\\" + attachement.getName());
                         attachement.saveBinary(file);
                     }
+                    
+                    SPAttachment attachment = item.addAttachment(savedFile);
+                    System.out.println(attachment.getAbsoluteUrl());
                 }
             }
         }
