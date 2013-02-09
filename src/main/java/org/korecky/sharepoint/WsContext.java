@@ -4,8 +4,13 @@ import com.microsoft.schemas.sharepoint.soap.alerts.Alerts;
 import com.microsoft.schemas.sharepoint.soap.alerts.AlertsSoap;
 import com.microsoft.schemas.sharepoint.soap.lists.Lists;
 import com.microsoft.schemas.sharepoint.soap.lists.ListsSoap;
+import com.microsoft.schemas.sharepoint.soap.sitedata.SiteData;
+import com.microsoft.schemas.sharepoint.soap.sitedata.SiteDataSoap;
+import com.microsoft.schemas.sharepoint.soap.views.Views;
+import com.microsoft.schemas.sharepoint.soap.views.ViewsSoap;
 import com.microsoft.schemas.sharepoint.soap.webs.Webs;
 import com.microsoft.schemas.sharepoint.soap.webs.WebsSoap;
+import java.io.IOException;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,19 +20,20 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.ws.BindingProvider;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  *
  * @author vkorecky
  */
-class WsContext {    
+class WsContext {
+
     private static Authenticator credentials;
     private static HttpProxy httpProxy;
     private static boolean trustAllSSLs = false;
-    private static AlertsSoap alertsPort;
-    private static ListsSoap listsPort;
-    private static WebsSoap websPort;
 
     /**
      * Get instance of alerts web service
@@ -38,13 +44,11 @@ class WsContext {
      * @throws MalformedURLException
      */
     protected static AlertsSoap getAlertsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
-        if (alertsPort == null) {
-            URL wsURL = new URL(webUrl, "/_vti_bin/Alerts.asmx");
-            URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
-            Alerts service = new Alerts(wsdlURL);
-            alertsPort = service.getAlertsSoap();            
-            ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
-        }
+        URL wsURL = new URL(webUrl, "/_vti_bin/Alerts.asmx");
+        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        Alerts service = new Alerts(wsdlURL);
+        AlertsSoap alertsPort = service.getAlertsSoap();
+        ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         return alertsPort;
     }
 
@@ -57,14 +61,46 @@ class WsContext {
      * @throws MalformedURLException
      */
     protected static ListsSoap getListsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
-        if (listsPort == null) {
-            URL wsURL = new URL(webUrl, "/_vti_bin/Lists.asmx");
-            URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
-            Lists service = new Lists(wsdlURL);
-            listsPort = service.getListsSoap();            
-            ((BindingProvider) listsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
-        }
+        URL wsURL = new URL(webUrl, "/_vti_bin/Lists.asmx");
+        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        Lists service = new Lists(wsdlURL);
+        ListsSoap listsPort = service.getListsSoap();
+        ((BindingProvider) listsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         return listsPort;
+    }
+
+    /**
+     * Get instance of SiteData web service
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     */
+    protected static SiteDataSoap getSiteDataPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+        URL wsURL = new URL(webUrl, "/_vti_bin/SiteData.asmx");
+        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        SiteData service = new SiteData(wsdlURL);
+        SiteDataSoap siteDataPort = service.getSiteDataSoap();
+        ((BindingProvider) siteDataPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
+        return siteDataPort;
+    }
+
+    /**
+     * Get instance of views web service
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     */
+    protected static ViewsSoap getViewsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+        URL wsURL = new URL(webUrl, "/_vti_bin/Views.asmx");
+        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        Views service = new Views(wsdlURL);
+        ViewsSoap websPort = service.getViewsSoap();
+        ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
+        return websPort;
     }
 
     /**
@@ -76,17 +112,15 @@ class WsContext {
      * @throws MalformedURLException
      */
     protected static WebsSoap getWebsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
-        if (websPort == null) {
-            URL wsURL = new URL(webUrl, "/_vti_bin/Webs.asmx");
-            URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
-            Webs service = new Webs(wsdlURL);
-            websPort = service.getWebsSoap();            
-            ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
-        }
+        URL wsURL = new URL(webUrl, "/_vti_bin/Webs.asmx");
+        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        Webs service = new Webs(wsdlURL);
+        WebsSoap websPort = service.getWebsSoap();
+        ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         return websPort;
     }
 
-    protected static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {               
+    protected static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {
         // Set httpProxy        
         if (httpProxy != null) {
             // Proxy            
@@ -131,6 +165,17 @@ class WsContext {
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         }
+    }
+
+    protected static Element stringToXmlElement(String xml) throws ParserConfigurationException, SAXException, IOException {
+        java.io.InputStream sbis = new java.io.StringBufferInputStream(xml);
+        javax.xml.parsers.DocumentBuilderFactory b = javax.xml.parsers.DocumentBuilderFactory.newInstance();
+        b.setNamespaceAware(false);
+        org.w3c.dom.Document doc = null;
+        javax.xml.parsers.DocumentBuilder db = null;
+        db = b.newDocumentBuilder();
+        doc = db.parse(sbis);
+        return doc.getDocumentElement();
     }
 
     protected static Authenticator getCredentials() {
