@@ -1,7 +1,10 @@
 package org.korecky.sharepoint;
 
-import com.microsoft.schemas.sharepoint.soap.lists.GetListCollectionResponse;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItemChanges;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItems.Query;
 import com.microsoft.schemas.sharepoint.soap.lists.GetListItemsResponse;
+import com.microsoft.schemas.sharepoint.soap.views.GetViewCollectionResponse.GetViewCollectionResult;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -11,9 +14,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.xml.parsers.ParserConfigurationException;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
  * Represents a list on a Microsoft SharePoint Foundation Web site.
@@ -81,6 +86,12 @@ public class SPList {
         this.webAbsluteUrl = webAbsluteUrl;
     }
 
+    /**
+     * Initialize object form XML
+     *
+     * @param rootElement
+     * @throws ParseException
+     */
     public void loadFromXml(Element rootElement) throws ParseException {
         // Parse XML file                            
         if (StringUtils.equals(rootElement.getLocalName(), "List")) {
@@ -188,35 +199,111 @@ public class SPList {
         }
     }
 
-    public List<SPListItem> getItems() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
-        List<SPListItem> itemsCollection = null;
-        GetListItemsResponse.GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(title, null, null, null, null, null, webId);
+    /**
+     * Gets the collection of view objects that represents all the views of the
+     * list.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPView> getViews() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+        List<SPView> viewsCollection = null;
+        GetViewCollectionResult result = WsContext.getViewsPort(new URL(webAbsluteUrl)).getViewCollection(name);
         if (result.getContent() != null) {
             for (Object content : result.getContent()) {
                 if (content instanceof Element) {
                     // Parse XML file                    
                     Element rootElement = (Element) content;
-                    if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
-                        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
-                        for (int i = 0; i < dataNodeList.getLength(); i++) {
-                            Element dataElement = (Element) dataNodeList.item(i);
-                            itemsCollection = new ArrayList<SPListItem>();
-                            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
-                            for (int j = 0; j < rowNodeList.getLength(); j++) {
-                                Element rowElement = (Element) rowNodeList.item(j);
-                                SPListItem item = new SPListItem(name, webAbsluteUrl);
-                                item.loadFromXml(rowElement);
-                                itemsCollection.add(item);
-                            }
-
+                    if (StringUtils.equals(rootElement.getLocalName(), "Views")) {
+                        NodeList viewNodeList = rootElement.getElementsByTagName("View");
+                        viewsCollection = new ArrayList<SPView>();
+                        for (int i = 0; i < viewNodeList.getLength(); i++) {
+                            Element viewElement = (Element) viewNodeList.item(i);
+                            SPView view = new SPView(name, webAbsluteUrl);
+                            view.loadFromXml(viewElement);
+                            viewsCollection.add(view);
                         }
                     }
                 }
             }
         }
+        return viewsCollection;
+    }
+
+    /**
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPListItem> getItems(String strQuery, String strViewFields, int rowLimit) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException {
+        List<SPListItem> itemsCollection = null;
+        String strResult = WsContext.getSiteDataPort(new URL(webAbsluteUrl)).getListItems(name, strQuery, strViewFields, rowLimit);
+        Element rootElement = WsContext.stringToXmlElement(strResult);
+        if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
+            NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+            for (int i = 0; i < dataNodeList.getLength(); i++) {
+                Element dataElement = (Element) dataNodeList.item(i);
+                itemsCollection = new ArrayList<SPListItem>();
+                NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                for (int j = 0; j < rowNodeList.getLength(); j++) {
+                    Element rowElement = (Element) rowNodeList.item(j);
+                    SPListItem item = new SPListItem(name, webAbsluteUrl);
+                    item.loadFromXml(rowElement);
+                    itemsCollection.add(item);
+                }
+
+            }
+        }
         return itemsCollection;
     }
 
+//    /**
+//     * Returns a collection of list items from the list based on the specified
+//     * view.
+//     *
+//     * @return
+//     * @throws NoSuchAlgorithmException
+//     * @throws KeyManagementException
+//     * @throws MalformedURLException
+//     * @throws ParseException
+//     */
+//    public List<SPListItem> getItems(SPView view, Query query, GetListItemChanges.ViewFields String rowLimit, ) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+//        List<SPListItem> itemsCollection = null;        
+//        GetListItemsResponse.GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(title, view.getName(), query, rowLimit, null, null, webId);
+//        if (result.getContent() != null) {
+//            for (Object content : result.getContent()) {
+//                if (content instanceof Element) {
+//                    // Parse XML file                    
+//                    Element rootElement = (Element) content;
+//                    if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
+//                        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+//                        for (int i = 0; i < dataNodeList.getLength(); i++) {
+//                            Element dataElement = (Element) dataNodeList.item(i);
+//                            itemsCollection = new ArrayList<SPListItem>();
+//                            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+//                            for (int j = 0; j < rowNodeList.getLength(); j++) {
+//                                Element rowElement = (Element) rowNodeList.item(j);
+//                                SPListItem item = new SPListItem(name, webAbsluteUrl);
+//                                item.loadFromXml(rowElement);
+//                                itemsCollection.add(item);
+//                            }
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return itemsCollection;
+//    }
+//    Delete
     public String getId() {
         return id;
     }

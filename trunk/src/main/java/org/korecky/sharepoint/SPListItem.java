@@ -55,6 +55,11 @@ public class SPListItem {
         this.listName = listName;
     }
 
+    /**
+     * Initialize from XML
+     * @param rootElement
+     * @throws ParseException 
+     */
     public void loadFromXml(Element rootElement) throws ParseException {
         // Parse XML file                            
         if (StringUtils.contains(rootElement.getLocalName(), "row")) {
