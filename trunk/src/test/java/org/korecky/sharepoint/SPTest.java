@@ -29,11 +29,12 @@ public class SPTest {
     @Test
     public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException, URISyntaxException, SAXException, JAXBException, ParserConfigurationException, TransformerConfigurationException, TransformerException {
         // SPSite test
-        NetworkCredentials credentials = new NetworkCredentials("SP20130", "sp_adminuser", "sp13123!@#");
+        NTLMAuthenticator credentials = new NTLMAuthenticator("SP20130", "sp_adminuser", "sp13123!@#");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
 
         SPSite instance = new SPSite(new URL("http://sp2013/"), credentials, httpProxy, true);
-                
+        
+       
         List<SPWeb> result = instance.getAllWebs();
         assertNotNull(result);
         if ((result != null) && (result.size() > 0)) {

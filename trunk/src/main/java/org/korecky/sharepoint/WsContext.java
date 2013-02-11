@@ -34,7 +34,6 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingProvider;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -44,7 +43,7 @@ import org.xml.sax.SAXException;
  */
 class WsContext {
     
-    private static Authenticator credentials;
+    private static Authenticator authenticator;
     private static HttpProxy httpProxy;
     private static boolean trustAllSSLs = false;
 
@@ -58,7 +57,7 @@ class WsContext {
      */
     protected static AlertsSoap getAlertsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Alerts.asmx");
-        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        URL wsdlURL = WsContext.class.getResource("/wsdl/Alerts.asmx");
         Alerts service = new Alerts(wsdlURL);
         AlertsSoap alertsPort = service.getAlertsSoap();
         ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -75,7 +74,7 @@ class WsContext {
      */
     protected static ListsSoap getListsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Lists.asmx");
-        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        URL wsdlURL = WsContext.class.getResource("/wsdl/Lists.asmx");
         Lists service = new Lists(wsdlURL);
         ListsSoap listsPort = service.getListsSoap();
         ((BindingProvider) listsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -92,7 +91,7 @@ class WsContext {
      */
     protected static SiteDataSoap getSiteDataPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/SiteData.asmx");
-        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        URL wsdlURL = WsContext.class.getResource("/wsdl/SiteData.asmx");
         SiteData service = new SiteData(wsdlURL);
         SiteDataSoap siteDataPort = service.getSiteDataSoap();
         ((BindingProvider) siteDataPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -109,7 +108,7 @@ class WsContext {
      */
     protected static ViewsSoap getViewsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Views.asmx");
-        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        URL wsdlURL = WsContext.class.getResource("/wsdl/Views.asmx");
         Views service = new Views(wsdlURL);
         ViewsSoap websPort = service.getViewsSoap();
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -126,7 +125,7 @@ class WsContext {
      */
     protected static WebsSoap getWebsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Webs.asmx");
-        URL wsdlURL = new URL(wsURL.toString() + "?WSDL");
+        URL wsdlURL = WsContext.class.getResource("/wsdl/Webs.asmx");
         Webs service = new Webs(wsdlURL);
         WebsSoap websPort = service.getWebsSoap();
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -152,7 +151,7 @@ class WsContext {
         }
 
         // Authentication        
-        Authenticator.setDefault(credentials);
+        Authenticator.setDefault(authenticator);
 
         // SSL settings        
         if (trustAllSSLs) {
@@ -197,12 +196,12 @@ class WsContext {
         return writer.getBuffer().toString();
     }
     
-    protected static Authenticator getCredentials() {
-        return credentials;
+    protected static Authenticator getAuthenticator() {
+        return authenticator;
     }
     
-    protected static void setCredentials(Authenticator credentials) {
-        WsContext.credentials = credentials;
+    protected static void setAuthenticator(Authenticator authenticator) {
+        WsContext.authenticator = authenticator;
     }
     
     protected static HttpProxy getHttpProxy() {
