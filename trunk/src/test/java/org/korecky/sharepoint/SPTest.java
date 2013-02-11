@@ -9,8 +9,13 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import static org.junit.Assert.*;
 import org.junit.Test;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -22,15 +27,16 @@ public class SPTest {
     }
 
     @Test
-    public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException, URISyntaxException {
+    public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException, URISyntaxException, SAXException, JAXBException, ParserConfigurationException, TransformerConfigurationException, TransformerException {
         // SPSite test
         NetworkCredentials credentials = new NetworkCredentials("SP20130", "sp_adminuser", "sp13123!@#");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
 
         SPSite instance = new SPSite(new URL("http://sp2013/"), credentials, httpProxy, true);
+                
         List<SPWeb> result = instance.getAllWebs();
         assertNotNull(result);
-        if ((result != null) && (result.size() > 1)) {
+        if ((result != null) && (result.size() > 0)) {
             SPWeb web = result.get(0);
             System.out.println(web.getUrl());
             // SPAlert                
@@ -44,18 +50,21 @@ public class SPTest {
             assertNotNull(lists);
             for (SPList list : lists) {
                 System.out.println(list.getTitle());
+                // List items in list
+                System.out.println(list.getTitle());
+                List<SPListItem> items = list.getItems(null, null, 0);
+                if (items != null) {
+                    for (SPListItem item : items) {
+                        System.out.println(item.getTitle());
+                    }
+                }
             }
-            if ((lists != null) && (lists.size() > 1)) {
+            if ((lists != null) && (lists.size() > 0)) {
                 SPList list = lists.get(0);
                 // List views
                 List<SPView> views = list.getViews();                
 
-                // List items in list
-//                System.out.println(list.getTitle());
-//                List<SPListItem> items = list.getItems(null, null);
-//                for (SPListItem item : items) {
-//                    System.out.println(item.getTitle());
-//                }
+
 //
 //                // List items in document library
 //                list = lists.get(3);

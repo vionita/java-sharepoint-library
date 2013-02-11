@@ -11,6 +11,8 @@ import com.microsoft.schemas.sharepoint.soap.views.ViewsSoap;
 import com.microsoft.schemas.sharepoint.soap.webs.Webs;
 import com.microsoft.schemas.sharepoint.soap.webs.WebsSoap;
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -20,9 +22,20 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingProvider;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -30,7 +43,7 @@ import org.xml.sax.SAXException;
  * @author vkorecky
  */
 class WsContext {
-
+    
     private static Authenticator credentials;
     private static HttpProxy httpProxy;
     private static boolean trustAllSSLs = false;
@@ -119,7 +132,7 @@ class WsContext {
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         return websPort;
     }
-
+    
     protected static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {
         // Set httpProxy        
         if (httpProxy != null) {
@@ -149,12 +162,12 @@ class WsContext {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
-
+            
             @Override
             public void checkClientTrusted(
                     java.security.cert.X509Certificate[] certs, String authType) {
             }
-
+            
             @Override
             public void checkServerTrusted(
                     java.security.cert.X509Certificate[] certs, String authType) {
@@ -166,38 +179,44 @@ class WsContext {
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         }
     }
-
-    protected static Element stringToXmlElement(String xml) throws ParserConfigurationException, SAXException, IOException {
-        java.io.InputStream sbis = new java.io.StringBufferInputStream(xml);
-        javax.xml.parsers.DocumentBuilderFactory b = javax.xml.parsers.DocumentBuilderFactory.newInstance();
-        b.setNamespaceAware(false);
-        org.w3c.dom.Document doc = null;
-        javax.xml.parsers.DocumentBuilder db = null;
-        db = b.newDocumentBuilder();
-        doc = db.parse(sbis);
-        return doc.getDocumentElement();
+    
+    public static Document stringToDom(String xmlSource)
+            throws SAXException, ParserConfigurationException, IOException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        return builder.parse(new InputSource(new StringReader(xmlSource)));
     }
-
+    
+    public static String domToString(Document doc) throws TransformerConfigurationException, TransformerException {
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        StringWriter writer = new StringWriter();
+        transformer.transform(new DOMSource(doc), new StreamResult(writer));
+        return writer.getBuffer().toString();
+    }
+    
     protected static Authenticator getCredentials() {
         return credentials;
     }
-
+    
     protected static void setCredentials(Authenticator credentials) {
         WsContext.credentials = credentials;
     }
-
+    
     protected static HttpProxy getHttpProxy() {
         return httpProxy;
     }
-
+    
     protected static void setHttpProxy(HttpProxy httpProxy) {
         WsContext.httpProxy = httpProxy;
     }
-
+    
     protected static boolean isTrustAllSSLs() {
         return trustAllSSLs;
     }
-
+    
     protected static void setTrustAllSSLs(boolean trustAllSSLs) {
         WsContext.trustAllSSLs = trustAllSSLs;
     }
