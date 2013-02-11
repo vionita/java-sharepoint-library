@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<xs:schema targetNamespace="PortalTemplate.xsd" 
+			xmlns:mstns="PortalTemplate.xsd" 
+			xmlns="PortalTemplate.xsd" 
+			xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+			elementFormDefault="qualified">
+	<xs:complexType name="websType">	
+		<xs:sequence>
+			<xs:element name="web" type="webType"  minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>	
+	</xs:complexType>
+	<xs:complexType name="webType">
+		<xs:sequence>
+			<xs:element name="webs" type="websType"  minOccurs="0" maxOccurs="1"/>
+		</xs:sequence>
+		<xs:attribute name="name" use="required" type="xs:string"/>
+		<xs:attribute name="siteDefinition" use="required" type="xs:string"/>
+		<xs:attribute name="displayName" use="optional" type="xs:string"/>
+		<xs:attribute name="description" use="optional" type="xs:string"/>
+	</xs:complexType>
+  <xs:element name="portal">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="web" type="webType" minOccurs="1" maxOccurs="1" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

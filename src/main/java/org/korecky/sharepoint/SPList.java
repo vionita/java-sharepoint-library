@@ -1,8 +1,6 @@
 package org.korecky.sharepoint;
 
-import com.microsoft.schemas.sharepoint.soap.lists.GetListItemChanges;
-import com.microsoft.schemas.sharepoint.soap.lists.GetListItems.Query;
-import com.microsoft.schemas.sharepoint.soap.lists.GetListItemsResponse;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListContentTypesResponse.GetListContentTypesResult;
 import com.microsoft.schemas.sharepoint.soap.views.GetViewCollectionResponse.GetViewCollectionResult;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -14,8 +12,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.xml.bind.JAXBException;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
@@ -232,7 +234,7 @@ public class SPList {
         }
         return viewsCollection;
     }
-
+    
     /**
      * Returns a collection of list items from the list based on the specified
      * view.
@@ -243,25 +245,35 @@ public class SPList {
      * @throws MalformedURLException
      * @throws ParseException
      */
-    public List<SPListItem> getItems(String strQuery, String strViewFields, int rowLimit) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException {
+    public List<SPListItem> getItems(CamlQueryRoot query, FieldRefDefinitions viewFields, int rowLimit) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
         List<SPListItem> itemsCollection = null;
-        String strResult = WsContext.getSiteDataPort(new URL(webAbsluteUrl)).getListItems(name, strQuery, strViewFields, rowLimit);
-        Element rootElement = WsContext.stringToXmlElement(strResult);
-        if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
-            NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
-            for (int i = 0; i < dataNodeList.getLength(); i++) {
-                Element dataElement = (Element) dataNodeList.item(i);
-                itemsCollection = new ArrayList<SPListItem>();
-                NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
-                for (int j = 0; j < rowNodeList.getLength(); j++) {
-                    Element rowElement = (Element) rowNodeList.item(j);
-                    SPListItem item = new SPListItem(name, webAbsluteUrl);
-                    item.loadFromXml(rowElement);
-                    itemsCollection.add(item);
-                }
-
-            }
+        String strQuery = null;
+        String strFieldDefs = null;
+        if (query != null) {
+            JaxbFactory<CamlQueryRoot> camlFactory = new JaxbFactory<CamlQueryRoot>();
+            strQuery = camlFactory.objectToXml(query, CamlQueryRoot.class);
         }
+        if (viewFields != null) {
+            JaxbFactory<FieldRefDefinitions> fieldFactory = new JaxbFactory<FieldRefDefinitions>();
+            strFieldDefs = fieldFactory.objectToXml(viewFields, FieldRefDefinitions.class);
+        }
+        String strResult = WsContext.getSiteDataPort(new URL(webAbsluteUrl)).getListItems(name, strQuery, strFieldDefs, rowLimit);
+        Document document = WsContext.stringToDom(strResult);        
+        Element rootElement = document.getDocumentElement();
+        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");        
+        for (int i = 0; i < dataNodeList.getLength(); i++) {
+            Element dataElement = (Element) dataNodeList.item(i);
+            itemsCollection = new ArrayList<SPListItem>();
+            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+            for (int j = 0; j < rowNodeList.getLength(); j++) {
+                Element rowElement = (Element) rowNodeList.item(j);
+                SPListItem item = new SPListItem(name, webAbsluteUrl);
+                item.loadFromXml(rowElement);
+                itemsCollection.add(item);
+            }
+
+        }
+
         return itemsCollection;
     }
 

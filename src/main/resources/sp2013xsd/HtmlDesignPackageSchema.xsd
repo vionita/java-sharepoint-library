@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="ElementManifest-2011-08.xsd"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns="http://schemas.microsoft.com/sharepoint/"
+    xmlns:mstns="http://schemas.microsoft.com/sharepoint/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    targetNamespace="http://schemas.microsoft.com/sharepoint/"
+    elementFormDefault="qualified"
+    attributeFormDefault="unqualified" >
+
+    <!-- Elements -->
+    <xs:element name="Module" type="ModuleType" />
+    <xs:element name="Elements" type="ElementsType" />
+    <xs:element name="Feature" type="FeatureType" />
+    <xs:element name="Solution" type="SolutionType" />
+    <xs:element name="ElementManifests" type="ElementManifestsType" />
+    <xs:element name="ElementManifest" type="ManifestReferenceType" />
+    <xs:element name="ElementFile" type="ElementFileType" />
+    <xs:element name="FeatureManifests" type="FeatureManifestsType" />
+    <xs:element name="FeatureManifest" type="ManifestReferenceType" />
+    <xs:element name="File" type="FileType" />
+    <xs:element name="Property" type="PropertyType" />
+    <xs:element name="PropertyBag" type="PropertyBagType" />
+    <xs:element name="ListInstance" type="ListInstanceType" />
+    <xs:element name="DataSource" type="DataSourceType" />
+    <xs:element name="Data" type="DataType" />
+    <xs:element name="Rows" type="RowsType" />
+    <xs:element name="Row" type="RowType" />
+    <xs:element name="Field" type="FieldType" />
+
+    <!-- Type Definitions -->
+
+    <xs:simpleType name="RestrictedRelativeUrl" final="restriction">
+        <xs:restriction base="xs:normalizedString">
+            <xs:pattern
+                value="^(_[cC][aA][tT][aA][lL][oO][gG][sS]\/[mM][aA][sS][tT][eE][rR][pP][aA][gG][eE]\/[II][nN][sS][tT][aA][lL][lL][eE][dD]\s[DD][eE][sS][iI][gG][nN][sS]|_[cC][aA][tT][aA][lL][oO][gG][sS]\/[tT][hH][eE][mM][eE]\/[II][nN][sS][tT][aA][lL][lL][eE][dD]\s[DD][eE][sS][iI][gG][nN][sS]|[SS][tT][yY][lL][eE]\s[LL][iI][bB][rR][aA][rR][yY]\/[II][nN][sS][tT][aA][lL][lL][eE][dD]\s[DD][eE][sS][iI][gG][nN][sS]|_[tT][hH][eE][mM][eE][sS]\/[II][nN][sS][tT][aA][lL][lL][eE][dD]\s[DD][eE][sS][iI][gG][nN][sS]|_[cC][aA][tT][aA][lL][oO][gG][sS]\/[dD][eE][sS][iI][gG][nN]|[sS][iI][tT][eE][aA][sS][sS][eE][tT][sS]\/[II][nN][sS][tT][aA][lL][lL][eE][dD]\s[DD][eE][sS][iI][gG][nN][sS]).*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="RestrictedFileTypeUrl" final="restriction">
+        <xs:restriction base="xs:normalizedString">
+            <xs:pattern
+                value="^.+\.xml"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FileTypeEnum">
+        <xs:restriction base="xs:normalizedString">
+            <xs:enumeration value="GhostableInLibrary" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="FileLevelEnum">
+        <xs:restriction base="xs:normalizedString">
+            <xs:enumeration value="Checkout" />
+            <xs:enumeration value="Draft" />
+            <xs:enumeration value="Published" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ScopeTypeEnum">
+        <xs:restriction base="xs:normalizedString">
+            <xs:enumeration value="Site" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="TrueFalseTypeEnum">
+        <xs:restriction base="xs:normalizedString">
+            <xs:enumeration value="TRUE" />
+            <xs:enumeration value="FALSE" />
+            <xs:enumeration value="true" />
+            <xs:enumeration value="false" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="PropertyType">
+        <xs:attribute name="Name" type="xs:normalizedString" use="required" />
+        <xs:attribute name="Value" type="xs:normalizedString" use="required" />
+        <xs:attribute name="Type" type="xs:normalizedString" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="FileType">
+        <xs:sequence>
+            <xs:sequence>
+                <xs:element ref="Property" minOccurs="0" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="Url" type="xs:normalizedString" use="required" />
+        <xs:attribute name="Type" type="FileTypeEnum" use="required" />
+        <xs:attribute name="Level" type="FileLevelEnum" use="optional" />
+        <xs:attribute name="Path" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="ReplaceContent" type="TrueFalseTypeEnum" use="optional" />        
+    </xs:complexType>
+
+    <xs:complexType name="FeatureManifestsType">
+        <xs:sequence>
+            <xs:sequence>
+                <xs:element ref="FeatureManifest" minOccurs="1" maxOccurs="unbounded" />
+            </xs:sequence>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="SolutionType">
+        <xs:sequence>
+            <xs:element ref="FeatureManifests" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="SolutionId" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="Description" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="Title" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="SharePointProductVersion" type="xs:normalizedString" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="ModuleType">
+        <xs:sequence>
+            <xs:element ref="File" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="Name" type="xs:normalizedString" use="required" />
+        <xs:attribute name="Url" type="xs:normalizedString" use="required" />
+        <xs:attribute name="Path" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="RootWebOnly" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="HyperlinkBaseUrl" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="IncludeFolders" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="SetupPath" type="xs:normalizedString" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="PropertyBagType">
+        <xs:sequence>
+            <xs:element ref="Property" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+        <xs:attribute name="Url" type="xs:normalizedString" use="required" />
+        <xs:attribute name="RootWebOnly" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="HyperlinkBaseUrl" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="ItemIndex" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="ParentType" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="AlwaysCreateFolder" type="TrueFalseTypeEnum" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="ElementsType" final="#all">
+        <xs:sequence minOccurs="0">
+            <xs:element ref="Module" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element ref="PropertyBag" minOccurs="0" maxOccurs="unbounded" />
+            <xs:element ref="ListInstance" minOccurs="0" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ManifestReferenceType">
+        <xs:attribute name="Location" type="RestrictedFileTypeUrl" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="ElementFileType">
+        <xs:attribute name="Location" type="xs:normalizedString" use="required" />
+    </xs:complexType>
+
+    <xs:complexType name="FeatureType" final="#all">
+        <xs:sequence minOccurs="0">
+            <xs:sequence>
+                <xs:element ref="ElementManifests" minOccurs="0" maxOccurs="1" />
+            </xs:sequence>
+        </xs:sequence>
+        <xs:attribute name="ActivateOnDefault" type="xs:normalizedString" />
+        <xs:attribute name="AlwaysForceInstall" type="xs:normalizedString" />
+        <xs:attribute name="Creator" type="xs:normalizedString" />
+        <xs:attribute name="DefaultResourceFile" type="xs:normalizedString" use="optional"  />
+        <xs:attribute name="Description" type="xs:normalizedString" use="optional"  />
+        <xs:attribute name="Hidden" type="TrueFalseTypeEnum" use="optional"  />
+        <xs:attribute name="Id" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="ImageUrl " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="ImageUrlAltText " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="RequireResources " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="Scope " type="ScopeTypeEnum" use="optional" />
+        <xs:attribute name="Title" type="xs:normalizedString" use="optional"  />
+        <xs:attribute name="SolutionId " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="UIVersion " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="Version" type="xs:normalizedString" use="optional"  />
+    </xs:complexType>
+
+    <xs:complexType name="ElementManifestsType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element ref="ElementManifest" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="ElementFile" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ListInstanceType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element ref="Data" minOccurs="0" maxOccurs="unbounded" />
+                <xs:element ref="DataSource" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="CustomSchema" type="xs:normalizedString" />
+        <xs:attribute name="Description" type="xs:normalizedString" />
+        <xs:attribute name="DocumentTemplate" type="xs:normalizedString" />
+        <xs:attribute name="FeatureId" type="xs:normalizedString" use="optional"  />
+        <xs:attribute name="Hidden" type="xs:normalizedString" use="optional"  />
+        <xs:attribute name="HyperlinkBaseUrl" type="xs:normalizedString" use="optional"  />
+        <xs:attribute name="Id" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="OnQuickLaunch " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="QuickLaunchUrl " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="RootWebOnly " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="TemplateType " type="xs:normalizedString" use="optional" />
+        <xs:attribute name="Title" type="xs:normalizedString" use="optional"  />
+        <xs:attribute name="Url" type="xs:normalizedString" use="optional" />
+        <xs:attribute name="VersioningEnabled " type="xs:normalizedString" use="optional" />
+    </xs:complexType>
+
+    <xs:complexType name="DataType">
+        <xs:sequence minOccurs="0" maxOccurs="unbounded">
+            <xs:choice>
+                <xs:element ref="Rows" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RowsType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:choice>
+                <xs:element ref="Row" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="RowType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:choice>
+                <xs:element ref="Field" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="FieldType">
+        <xs:simpleContent>
+            <xs:extension base="xs:normalizedString">
+                <xs:attribute name="Name" type="xs:normalizedString" use="optional" />
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="DataSourceType">
+        <xs:sequence minOccurs="0" maxOccurs="1">
+            <xs:choice>
+                <xs:element ref="Property" minOccurs="0" maxOccurs="unbounded" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,331 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:bdc="http://schemas.microsoft.com/windows/2007/BusinessDataCatalog/Resources" 
+           targetNamespace="http://schemas.microsoft.com/windows/2007/BusinessDataCatalog/Resources" 
+           elementFormDefault="qualified">
+  <xs:element name="Model" type ="bdc:Model"/>
+  <xs:complexType name="Model">
+    <xs:complexContent>
+      <xs:extension base="bdc:IndividuallySecurableMetadataObject">
+        <xs:sequence>
+          <xs:element name="LobSystems" type="bdc:LobSystems" minOccurs="0" maxOccurs="1">
+            <xs:unique name="LobSystemNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Name" type="bdc:NameString" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LobSystems">
+    <xs:sequence>
+      <xs:element name="LobSystem" type="bdc:LobSystem" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="MetadataObject" abstract="true">
+    <xs:sequence>
+      <xs:element name="LocalizedDisplayNames" type="bdc:LocalizedDisplayNames" minOccurs="0" maxOccurs="1">
+        <xs:unique name="LocalizedDisplayNameLCIDKey">
+          <xs:selector xpath="*"/>
+          <xs:field xpath="@LCID"/>
+        </xs:unique>
+      </xs:element>
+      <xs:element name="Properties" type="bdc:Properties" minOccurs="0" maxOccurs="1">
+        <xs:unique name="PropertyNameKey">
+          <xs:selector xpath="*"/>
+          <xs:field xpath="@Name"/>
+        </xs:unique>
+      </xs:element>
+    </xs:sequence>
+    <xs:attribute name="Name" type="bdc:NameString" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="IndividuallySecurableMetadataObject" abstract="true">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject">
+        <xs:sequence>
+          <xs:element name="AccessControlList" type="bdc:AccessControlList" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LocalizedDisplayNames">
+    <xs:sequence>
+      <xs:element name="LocalizedDisplayName" type="bdc:LocalizedDisplayName" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LocalizedDisplayName" mixed="true">
+    <xs:attribute name="LCID" type="xs:integer" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="LobSystem">
+    <xs:complexContent>
+      <xs:extension base="bdc:IndividuallySecurableMetadataObject">
+        <xs:sequence>
+          <xs:element name="LobSystemInstances" type="bdc:LobSystemInstances" minOccurs="0" maxOccurs="1">
+            <xs:unique name="LobSystemInstanceNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+          <xs:element name="Entities" type="bdc:Entities" minOccurs="0" maxOccurs="1">
+            <xs:unique name="EntityNameNamespaceVersionKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+              <xs:field xpath="@Namespace"/>
+              <xs:field xpath="@Version"/>
+            </xs:unique>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="LobSystemInstances">
+    <xs:sequence>
+      <xs:element name="LobSystemInstance" type="bdc:LobSystemInstance" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="LobSystemInstance">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Entities">
+    <xs:sequence>
+      <xs:element name="Entity" type="bdc:Entity" minOccurs="1" maxOccurs="unbounded">
+        <xs:unique name="MethodInstanceNameKey">
+          <xs:selector xpath=".//bdc:MethodInstances/*"/>
+          <xs:field xpath="@Name"/>
+        </xs:unique>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name ="Entity">
+    <xs:complexContent>
+      <xs:extension base="bdc:IndividuallySecurableMetadataObject">
+        <xs:sequence>
+          <xs:element name="Identifiers" type="bdc:Identifiers" minOccurs="0">
+            <xs:unique name="IdentifierNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+          <xs:element name="Methods" type="bdc:Methods" minOccurs="0">
+            <xs:unique name="MethodNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+          <xs:element name="AssociationGroups" type="bdc:AssociationGroups" minOccurs="0">
+            <xs:unique name="AssociationGroupNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+          <xs:element name="Actions" type="bdc:Actions" minOccurs="0">
+            <xs:unique name="ActionNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Namespace" type="bdc:NameString" use="required"/>
+        <xs:attribute name="Version" type="bdc:VersionString" use="required"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="AssociationGroups">
+    <xs:sequence>
+      <xs:element name ="AssociationGroup" type="bdc:AssociationGroup" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name ="AssociationGroup">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject"/>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Identifiers">
+    <xs:sequence>
+      <xs:element name="Identifier" type="bdc:Identifier" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Identifier">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Methods">
+    <xs:sequence>
+      <xs:element name="Method" type="bdc:Method" minOccurs="1" maxOccurs="unbounded">
+        <xs:key name="ParameterNameKey">
+          <xs:selector xpath=".//bdc:Parameter"/>
+          <xs:field xpath="@Name"/>
+        </xs:key>
+        <xs:key name="MethodMethodInstanceNameKey">
+          <xs:selector xpath=".//bdc:MethodInstances/*"/>
+          <xs:field xpath="@Name"/>
+        </xs:key>
+      </xs:element>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Method">
+    <xs:complexContent>
+      <xs:extension base="bdc:IndividuallySecurableMetadataObject">
+        <xs:sequence>
+          <xs:element name="FilterDescriptors" type="bdc:FilterDescriptors" minOccurs="0" maxOccurs="1">
+            <xs:unique name="FilterDescriptorNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+          <xs:element name="Parameters" type="bdc:Parameters"	minOccurs="0" maxOccurs="1"/>
+          <xs:element name ="MethodInstances" type="bdc:MethodInstances" minOccurs="0" maxOccurs="1"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="FilterDescriptors">
+    <xs:sequence>
+      <xs:element name="FilterDescriptor" type="bdc:FilterDescriptor" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FilterDescriptor">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+
+  <xs:complexType name="MethodInstances">
+    <xs:choice minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="Association" type="bdc:Association" />
+      <xs:element name="MethodInstance" type="bdc:MethodInstance" />
+    </xs:choice>
+  </xs:complexType>
+
+  <xs:complexType name="MethodInstance">
+    <xs:complexContent>
+      <xs:extension base="bdc:IndividuallySecurableMetadataObject">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Parameters">
+    <xs:sequence>
+      <xs:element name="Parameter" type="bdc:Parameter" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Parameter">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject">
+        <xs:sequence>
+          <xs:element name="TypeDescriptor" type="bdc:TypeDescriptor"/>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TypeDescriptor">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject">
+        <xs:sequence>
+          <xs:element name="TypeDescriptors" type="bdc:TypeDescriptors" minOccurs="0">
+            <xs:unique name="TypeDescriptorNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="TypeDescriptors">
+    <xs:sequence>
+      <xs:element name="TypeDescriptor" type="bdc:TypeDescriptor" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Actions">
+    <xs:sequence>
+      <xs:element name="Action" type="bdc:Action" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="Action">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject">
+        <xs:sequence>
+          <xs:element name="ActionParameters" type="bdc:ActionParameters" minOccurs="0">
+            <xs:unique name="ActionParameterNameKey">
+              <xs:selector xpath="*"/>
+              <xs:field xpath="@Name"/>
+            </xs:unique>
+          </xs:element>
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="ActionParameters">
+    <xs:sequence>
+      <xs:element name="ActionParameter" type="bdc:ActionParameter" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="ActionParameter">
+    <xs:complexContent>
+      <xs:extension base="bdc:MetadataObject">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Association">
+    <xs:complexContent>
+      <xs:extension base="bdc:IndividuallySecurableMetadataObject">
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:complexType name="Property" mixed="true">
+    <xs:attribute name="Name" type="bdc:NameString" use="required"/>
+    <xs:attribute name="Type" type="bdc:TypeNameString" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="Properties">
+    <xs:sequence>
+      <xs:element name="Property" type="bdc:Property" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AccessControlList">
+    <xs:sequence>
+      <xs:element name="AccessControlEntry" type="bdc:AccessControlEntry" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AccessControlEntry">
+    <xs:sequence>
+      <xs:element name="Right" type="bdc:Right" minOccurs="1" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="Principal" type="xs:string" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="Right">
+    <xs:attribute name="BdcRight" type="bdc:BdcRightName" use="required"/>
+  </xs:complexType>
+  <xs:simpleType name="BdcRightName">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="None"/>
+      <xs:enumeration value="Execute"/>
+      <xs:enumeration value="Edit"/>
+      <xs:enumeration value="SetPermissions"/>
+      <xs:enumeration value="SelectableInClients"/>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:simpleType name="NameString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>  
+  <xs:simpleType name="TypeNameString">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="1"/>
+      <xs:maxLength value="255"/>
+    </xs:restriction>
+  </xs:simpleType>  
+  <xs:simpleType name="VersionString">
+    <xs:restriction base="xs:string">
+      <xs:pattern value="[0-9]+(\.[0-9]+){1,3}"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

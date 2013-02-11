@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="WSS" targetNamespace="http://schemas.microsoft.com/sharepoint/" elementFormDefault="qualified" xmlns="http://schemas.microsoft.com/sharepoint/" xmlns:mstns="http://schemas.microsoft.com/sharepoint/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" attributeFormDefault="unqualified">  
+  <xs:include id="CoreDefinitions" schemaLocation="coredefinitions.xsd" />  
+
+  <xs:complexType name="BindingRedirectDefinition">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="OldVersion" type="xs:string" />
+  </xs:complexType>
+  <xs:complexType name="BindingRedirectDefinitions">
+    <xs:sequence>
+      <xs:element name="BindingRedirect" type="BindingRedirectDefinition" minOccurs="0" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Solution" type="SolutionDefinition">
+  </xs:element>
+  <xs:complexType name="SolutionDefinition">
+    <xs:all>
+      <xs:element name="FeatureManifests" type="FeatureFileReferences" minOccurs="0" maxOccurs="1" />
+      <xs:element name="Assemblies" type="AssemblyFileReferences" minOccurs="0" maxOccurs="1" />
+      <xs:element name="ActivationDependencies" type="SolutionDependencyReferences" minOccurs="0" maxOccurs="1"/>
+    </xs:all>
+    <xs:attribute name="SolutionId" type="UniqueIdentifier" />
+    <xs:attribute name="SharePointProductVersion" type="xs:string" use="optional" />
+    <xs:attribute name="Title" type="LocalizableString" />
+    <xs:attribute name="Description" type="LocalizableString" />
+  </xs:complexType>  
+  <xs:complexType name="FeatureFileReferences">
+    <xs:sequence>
+      <xs:element name="FeatureManifest" type="FeatureManifestReference" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="FeatureManifestReference">
+    <xs:sequence />
+    <xs:attribute name="Location" type="RelativeFilePath" use="required" />
+  </xs:complexType>
+  <xs:complexType name="AssemblyFileReferences">
+    <xs:sequence>
+      <xs:element name="Assembly" type="AssemblyFileReference" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="AssemblyFileReference">
+    <xs:all>
+      <xs:element name="SafeControls" type="SafeControlDefinitions" minOccurs="0" maxOccurs="1" />
+      <xs:element name="BindingRedirects" type="BindingRedirectDefinitions" minOccurs="0" maxOccurs="1" />
+    </xs:all>
+    <xs:attribute name="Location" type="RelativeFilePath" use="required" />
+    <xs:attribute name="DeploymentTarget" type="SolutionDeploymentTargetType" use="required"/>
+  </xs:complexType>
+  <xs:complexType name="SafeControlDefinitions">
+    <xs:sequence>
+      <xs:element name="SafeControl" type="SafeControlDefinition" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="SafeControlDefinition">
+    <xs:sequence>
+    </xs:sequence>
+    <xs:attribute name="Assembly" type="AssemblyStrongName" use="required"/>
+    <xs:attribute name="Namespace" type="xs:string" use="required"/>
+    <xs:attribute name="TypeName" type="AssemblyClass" use="required"/>
+    <xs:attribute name="Safe" type="TrueFalseMixed" />
+    <xs:attribute name="SafeAgainstScript" type="TrueFalseMixed" />
+    <xs:attribute name="SafeForAppWeb" type="TrueFalseMixed" use="optional" />
+  </xs:complexType>
+  <xs:simpleType name="SolutionDeploymentTargetType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="GlobalAssemblyCache" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:complexType name="SolutionDependencyReferences">
+    <xs:sequence>
+      <xs:element name="ActivationDependency" type="SolutionDependencyManifestReference" minOccurs="1" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+    <xs:complexType name="SolutionDependencyManifestReference">
+    <xs:sequence />
+    <xs:attribute name="SolutionId" type="UniqueIdentifier" use="required" />
+    <xs:attribute name="SolutionName" type="xs:string" use="optional" />
+    <xs:attribute name="SolutionTitle" type="xs:string" use="optional" />
+    <xs:attribute name="SolutionUrl" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  </xs:schema>

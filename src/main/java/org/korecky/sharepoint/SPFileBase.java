@@ -9,7 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.apache.commons.httpclient.util.URIUtil;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  *
@@ -68,35 +67,7 @@ abstract class SPFileBase {
         fout.write(saveBinary());
         fout.flush();
         fout.close();
-    }
-
-    /**
-     * Gets the Web site where the file is located.
-     *
-     * @return
-     */
-    public SPWeb getWeb() {
-        throw new NotImplementedException();
-    }
-
-    /**
-     * Gets the parent library of the SPFile.
-     *
-     * @return
-     */
-    public SPList getDocumentLibrary() {
-        throw new NotImplementedException();
-    }
-
-    /**
-     * Gets the list item object that corresponds to the file if the file
-     * belongs to a document library.
-     *
-     * @return
-     */
-    public SPListItem getItem() {
-        throw new NotImplementedException();
-    }
+    }   
 
     /**
      * Gets the site-relative URL of the file.

@@ -15,10 +15,12 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -32,8 +34,8 @@ import org.w3c.dom.NodeList;
  */
 public class SPListItem {
 
-    private final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
-    private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PATTERN);
+//    private final String DATE_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+//    private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PATTERN);
     private int id;
     private int level;
     private String title;
@@ -57,8 +59,9 @@ public class SPListItem {
 
     /**
      * Initialize from XML
+     *
      * @param rootElement
-     * @throws ParseException 
+     * @throws ParseException
      */
     public void loadFromXml(Element rootElement) throws ParseException {
         // Parse XML file                            
@@ -87,9 +90,12 @@ public class SPListItem {
                         uniqueId = uniqueIdArray[1];
                     }
                 } else if ((StringUtils.equals(attribute.getName(), "ows_Created")) && (StringUtils.isNotBlank(attribute.getValue()))) {
-                    created = formatter.parse(attribute.getValue());
+                    Calendar calendar = DatatypeConverter.parseDateTime(attribute.getValue());
+                    created = calendar.getTime();
                 } else if ((StringUtils.equals(attribute.getName(), "ows_Modified")) && (StringUtils.isNotBlank(attribute.getValue()))) {
-                    created = formatter.parse(attribute.getValue());
+//                    created = formatter.parse(attribute.getValue());
+                    Calendar calendar = DatatypeConverter.parseDateTime(attribute.getValue());
+                    modified = calendar.getTime();
                 } else if ((StringUtils.equals(attribute.getName(), "ows_MetaInfo")) && (StringUtils.isNotBlank(attribute.getValue()))) {
                     String[] metaInfoArray = attribute.getValue().split("#");
                     if (metaInfoArray.length > 1) {
@@ -210,7 +216,7 @@ public class SPListItem {
                 // swallow, since not that important
             }
         }
-        return addAttachment(localFile.getName(), ous.toByteArray());        
+        return addAttachment(localFile.getName(), ous.toByteArray());
     }
 
     public int getId() {

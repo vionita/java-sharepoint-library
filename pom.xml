@@ -42,7 +42,28 @@
                     <source>1.6</source>
                     <target>1.6</target>
                 </configuration>
-            </plugin>                        
+            </plugin>  
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>1.5</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>                    
+                    <outputDirectory>${project.build.directory}/generated-sources/jaxb</outputDirectory>
+                    <schemaDirectory>${basedir}/src/main/resources/xsd</schemaDirectory>
+                    <bindingDirectory>${basedir}/src/main/resources/xsd</bindingDirectory>
+                    <packageName>org.korecky.sharepoint</packageName>
+                    <schemaFiles>CamlView.xsd</schemaFiles>
+                    <extension>true</extension>
+                </configuration>
+            </plugin>                      
             <plugin>
                 <groupId>org.jvnet.jax-ws-commons</groupId>
                 <artifactId>jaxws-maven-plugin</artifactId>

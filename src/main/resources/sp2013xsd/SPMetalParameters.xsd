@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="Parameters" targetNamespace="http://schemas.microsoft.com/SharePoint/2009/spmetal" elementFormDefault="qualified" xmlns="http://schemas.microsoft.com/SharePoint/2009/spmetal" xmlns:mstns="http://schemas.microsoft.com/SharePoint/2009/spmetal" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:element name="Web" type="PRWeb">
+	</xs:element>
+	<!-- Elements that are simply flags, i.e. have no content. Would prefer to map to bool but how? -->
+	<xs:complexType name="PRFlagElement" mixed="false">
+	</xs:complexType>
+	<xs:simpleType name="PRAccessModifier">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="Public">
+			</xs:enumeration>
+			<xs:enumeration value="Internal">
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PRWeb">
+		<xs:sequence>
+			<xs:element name="List" type="PRList" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ExcludeList" type="PRExcludeList" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ExcludeOtherLists" type="PRFlagElement" minOccurs="0" maxOccurs="1">
+			</xs:element>
+			<xs:element name="IncludeHiddenLists" type="PRFlagElement" minOccurs="0" maxOccurs="1">
+			</xs:element>
+			<xs:element name="ContentType" type="PRContentType" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ExcludeContentType" type="PRExcludeContentType" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ExcludeOtherContentTypes" type="PRFlagElement" minOccurs="0" maxOccurs="1">
+			</xs:element>
+			<xs:element name="IncludeHiddenContentTypes" type="PRFlagElement" minOccurs="0" maxOccurs="1">
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Class" type="xs:string" />
+		<xs:attribute name="AccessModifier" type="PRAccessModifier" default="Public" />
+	</xs:complexType>
+	<xs:complexType name="PRContentType">
+		<xs:sequence>
+			<xs:element name="Column" type="PRColumn" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ExcludeColumn" type="PRExcludeColumn" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ExcludeOtherColumns" type="PRFlagElement" minOccurs="0" maxOccurs="1">
+			</xs:element>
+			<xs:element name="IncludeHiddenColumns" type="PRFlagElement" minOccurs="0" maxOccurs="1">
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute name="Class" type="xs:string" />
+	</xs:complexType>
+	<xs:simpleType name="PRType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="String" />
+			<xs:enumeration value="Enum" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="PRColumn">
+		<xs:sequence>
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute name="Member" type="xs:string" />
+		<xs:attribute name="Type" type="PRType" />
+	</xs:complexType>
+	<xs:complexType name="PRExcludeColumn">
+		<xs:sequence />
+		<xs:attribute name="Name" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="PRExcludeContentType">
+		<xs:sequence />
+		<xs:attribute name="Name" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="PRExcludeList">
+		<xs:sequence />
+		<xs:attribute name="Name" type="xs:string" />
+	</xs:complexType>
+	<xs:complexType name="PRList">
+		<xs:sequence>
+			<xs:element name="ContentType" type="PRContentType" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+			<xs:element name="ExcludeContentType" type="PRExcludeContentType" minOccurs="0" maxOccurs="unbounded">
+			</xs:element>
+		</xs:sequence>
+		<xs:attribute name="Name" type="xs:string" />
+		<xs:attribute name="Member" type="xs:string" />
+		<xs:attribute name="Type" type="xs:string" />
+	</xs:complexType>
+</xs:schema>
