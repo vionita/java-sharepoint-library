@@ -2,6 +2,9 @@ package org.korecky.sharepoint;
 
 import com.microsoft.schemas.sharepoint.soap.alerts.Alerts;
 import com.microsoft.schemas.sharepoint.soap.alerts.AlertsSoap;
+import com.microsoft.schemas.sharepoint.soap.authentication.Authentication;
+import com.microsoft.schemas.sharepoint.soap.authentication.AuthenticationSoap;
+import com.microsoft.schemas.sharepoint.soap.authentication.LoginResult;
 import com.microsoft.schemas.sharepoint.soap.lists.Lists;
 import com.microsoft.schemas.sharepoint.soap.lists.ListsSoap;
 import com.microsoft.schemas.sharepoint.soap.sitedata.SiteData;
@@ -42,11 +45,29 @@ import org.xml.sax.SAXException;
  * @author vkorecky
  */
 class WsContext {
-    
-    private static Authenticator authenticator;
+
+    private static AbstractAuthenticator authenticator;
     private static HttpProxy httpProxy;
     private static boolean trustAllSSLs = false;
+    private static URL siteUrl;
 
+     /**
+     * Get instance of authentication web service
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     */
+    protected static AuthenticationSoap getAuthenticationPort() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+        URL wsURL = new URL(siteUrl, "/_vti_bin/Authentication.asmx");
+        URL wsdlURL = WsContext.class.getResource("/wsdl/authentication.asmx");
+        Authentication service = new Authentication(wsdlURL);
+        AuthenticationSoap alertsPort = service.getAuthenticationSoap();
+        ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
+        return alertsPort;
+    }
+    
     /**
      * Get instance of alerts web service
      *
@@ -60,6 +81,7 @@ class WsContext {
         URL wsdlURL = WsContext.class.getResource("/wsdl/Alerts.asmx");
         Alerts service = new Alerts(wsdlURL);
         AlertsSoap alertsPort = service.getAlertsSoap();
+        authenticate((BindingProvider) alertsPort);
         ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         return alertsPort;
     }
@@ -131,7 +153,7 @@ class WsContext {
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         return websPort;
     }
-    
+
     protected static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {
         // Set httpProxy        
         if (httpProxy != null) {
@@ -161,12 +183,12 @@ class WsContext {
             public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                 return null;
             }
-            
+
             @Override
             public void checkClientTrusted(
                     java.security.cert.X509Certificate[] certs, String authType) {
             }
-            
+
             @Override
             public void checkServerTrusted(
                     java.security.cert.X509Certificate[] certs, String authType) {
@@ -178,7 +200,7 @@ class WsContext {
             HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
         }
     }
-    
+
     public static Document stringToDom(String xmlSource)
             throws SAXException, ParserConfigurationException, IOException {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -186,7 +208,7 @@ class WsContext {
         DocumentBuilder builder = factory.newDocumentBuilder();
         return builder.parse(new InputSource(new StringReader(xmlSource)));
     }
-    
+
     public static String domToString(Document doc) throws TransformerConfigurationException, TransformerException {
         TransformerFactory tf = TransformerFactory.newInstance();
         Transformer transformer = tf.newTransformer();
@@ -195,28 +217,47 @@ class WsContext {
         transformer.transform(new DOMSource(doc), new StreamResult(writer));
         return writer.getBuffer().toString();
     }
-    
-    protected static Authenticator getAuthenticator() {
+
+    protected static AbstractAuthenticator getAuthenticator() {
         return authenticator;
     }
-    
-    protected static void setAuthenticator(Authenticator authenticator) {
+
+    protected static void setAuthenticator(AbstractAuthenticator authenticator) {
         WsContext.authenticator = authenticator;
     }
-    
+
     protected static HttpProxy getHttpProxy() {
         return httpProxy;
     }
-    
+
     protected static void setHttpProxy(HttpProxy httpProxy) {
         WsContext.httpProxy = httpProxy;
     }
-    
+
     protected static boolean isTrustAllSSLs() {
         return trustAllSSLs;
     }
-    
+
     protected static void setTrustAllSSLs(boolean trustAllSSLs) {
         WsContext.trustAllSSLs = trustAllSSLs;
+    }
+
+    protected static URL getSiteUrl() {
+        return siteUrl;
+    }
+
+    protected static void setSiteUrl(URL siteUrl) {
+        WsContext.siteUrl = siteUrl;
+    }
+    
+    
+
+    private static void authenticate(BindingProvider prov) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+        if (authenticator instanceof BasicAuthenticator) {
+            prov.getRequestContext().put(BindingProvider.USERNAME_PROPERTY, authenticator.getUserName());
+            prov.getRequestContext().put(BindingProvider.PASSWORD_PROPERTY, authenticator.getPassword());
+        } else if (authenticator instanceof FormAuthenticator) {
+            LoginResult result = getAuthenticationPort().login(authenticator.getUserName(), authenticator.getPassword());
+        }
     }
 }
