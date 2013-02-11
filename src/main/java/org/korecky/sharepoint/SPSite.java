@@ -30,53 +30,53 @@ public class SPSite {
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param credentials
+     * @param authenticator
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator credentials) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, credentials, null, false);
+    public SPSite(URL url, Authenticator authenticator) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, authenticator, null, false);
     }
 
     /**
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param credentials
+     * @param authenticator
      * @param trustAllSSLs
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator credentials, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, credentials, null, trustAllSSLs);
+    public SPSite(URL url, Authenticator authenticator, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, authenticator, null, trustAllSSLs);
     }
 
     /**
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param credentials
+     * @param authenticator
      * @param httpProxy
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator credentials, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, credentials, httpProxy, false);
+    public SPSite(URL url, Authenticator authenticator, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, authenticator, httpProxy, false);
     }
 
     /**
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param credentials
+     * @param authenticator
      * @param httpProxy
      * @param trustAllSSLs
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator credentials, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, Authenticator authenticator, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
         this.url = url;
-        WsContext.setCredentials(credentials);
+        WsContext.setAuthenticator(authenticator);
         WsContext.setHttpProxy(httpProxy);
         WsContext.setTrustAllSSLs(trustAllSSLs);
         WsContext.configureEnviroment();

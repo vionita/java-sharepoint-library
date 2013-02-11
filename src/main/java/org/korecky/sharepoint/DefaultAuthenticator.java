@@ -9,9 +9,9 @@ import java.net.PasswordAuthentication;
  * @author vkorecky
  *
  */
-public class DefaultCredentials extends Authenticator {
+public class DefaultAuthenticator extends Authenticator {
 
-    public DefaultCredentials() {
+    public DefaultAuthenticator() {
         super();
     }
 

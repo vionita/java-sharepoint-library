@@ -9,20 +9,20 @@ import java.net.PasswordAuthentication;
  * @author vkorecky
  *
  */
-public class NetworkCredentials extends Authenticator {
+public class NTLMAuthenticator extends Authenticator {
 
     String domain;
     String user;
     String password;
 
-    public NetworkCredentials(String user, String password) {
+    public NTLMAuthenticator(String user, String password) {
         super();
         this.domain = null;
         this.user = user;
         this.password = password;
     }
 
-    public NetworkCredentials(String domain, String user, String password) {
+    public NTLMAuthenticator(String domain, String user, String password) {
         super();
         this.domain = domain;
         this.user = user;
