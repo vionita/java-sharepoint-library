@@ -13,7 +13,6 @@ import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -49,6 +48,7 @@ public class SPListItem {
     private Map<String, String> properties;
     private String fileRef;
     private String fileName;
+    private String contentTypeId;
     private final String webAbsluteUrl;
     private final String listName;
 
@@ -75,6 +75,8 @@ public class SPListItem {
                     id = Integer.valueOf(attribute.getValue());
                 } else if (StringUtils.equals(attribute.getName(), "ows_Title")) {
                     title = attribute.getValue();
+                } else if (StringUtils.equals(attribute.getName(), "ows_ContentTypeId")) {
+                    contentTypeId = attribute.getValue();
                 } else if (StringUtils.equals(attribute.getName(), "ows_LinkTitle")) {
                     linkTitle = attribute.getValue();
                 } else if (StringUtils.equals(attribute.getName(), "ows_Attachments")) {
@@ -270,4 +272,16 @@ public class SPListItem {
     public String getFileRef() {
         return fileRef;
     }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public String getContentTypeId() {
+        return contentTypeId;
+    }
+
+    public String getListName() {
+        return listName;
+    }    
 }
