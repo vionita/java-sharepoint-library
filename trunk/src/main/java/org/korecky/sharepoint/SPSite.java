@@ -2,7 +2,6 @@ package org.korecky.sharepoint;
 
 import com.microsoft.schemas.sharepoint.soap.webs.GetAllSubWebCollectionResponse.GetAllSubWebCollectionResult;
 import com.microsoft.schemas.sharepoint.soap.webs.GetWebResponse.GetWebResult;
-import java.net.Authenticator;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -34,7 +33,7 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator authenticator) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, AbstractAuthenticator authenticator) throws NoSuchAlgorithmException, KeyManagementException {
         this(url, authenticator, null, false);
     }
 
@@ -47,7 +46,7 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator authenticator, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, AbstractAuthenticator authenticator, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
         this(url, authenticator, null, trustAllSSLs);
     }
 
@@ -60,7 +59,7 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator authenticator, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
         this(url, authenticator, httpProxy, false);
     }
 
@@ -74,8 +73,9 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, Authenticator authenticator, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
         this.url = url;
+        WsContext.setSiteUrl(url);
         WsContext.setAuthenticator(authenticator);
         WsContext.setHttpProxy(httpProxy);
         WsContext.setTrustAllSSLs(trustAllSSLs);
