@@ -1,6 +1,9 @@
 package org.korecky.sharepoint;
 
-import com.microsoft.schemas.sharepoint.soap.lists.GetListContentTypesResponse.GetListContentTypesResult;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItems;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItems.Query;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItems.ViewFields;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItemsResponse.GetListItemsResult;
 import com.microsoft.schemas.sharepoint.soap.views.GetViewCollectionResponse.GetViewCollectionResult;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -234,7 +237,7 @@ public class SPList {
         }
         return viewsCollection;
     }
-    
+
     /**
      * Returns a collection of list items from the list based on the specified
      * view.
@@ -258,9 +261,9 @@ public class SPList {
             strFieldDefs = fieldFactory.objectToXml(viewFields, FieldRefDefinitions.class);
         }
         String strResult = WsContext.getSiteDataPort(new URL(webAbsluteUrl)).getListItems(name, strQuery, strFieldDefs, rowLimit);
-        Document document = WsContext.stringToDom(strResult);        
+        Document document = WsContext.stringToDom(strResult);
         Element rootElement = document.getDocumentElement();
-        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");        
+        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
         for (int i = 0; i < dataNodeList.getLength(); i++) {
             Element dataElement = (Element) dataNodeList.item(i);
             itemsCollection = new ArrayList<SPListItem>();
@@ -277,45 +280,217 @@ public class SPList {
         return itemsCollection;
     }
 
-//    /**
-//     * Returns a collection of list items from the list based on the specified
-//     * view.
-//     *
-//     * @return
-//     * @throws NoSuchAlgorithmException
-//     * @throws KeyManagementException
-//     * @throws MalformedURLException
-//     * @throws ParseException
-//     */
-//    public List<SPListItem> getItems(SPView view, Query query, GetListItemChanges.ViewFields String rowLimit, ) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
-//        List<SPListItem> itemsCollection = null;        
-//        GetListItemsResponse.GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(title, view.getName(), query, rowLimit, null, null, webId);
-//        if (result.getContent() != null) {
-//            for (Object content : result.getContent()) {
-//                if (content instanceof Element) {
-//                    // Parse XML file                    
-//                    Element rootElement = (Element) content;
-//                    if (StringUtils.equals(rootElement.getLocalName(), "listitems")) {
-//                        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
-//                        for (int i = 0; i < dataNodeList.getLength(); i++) {
-//                            Element dataElement = (Element) dataNodeList.item(i);
-//                            itemsCollection = new ArrayList<SPListItem>();
-//                            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
-//                            for (int j = 0; j < rowNodeList.getLength(); j++) {
-//                                Element rowElement = (Element) rowNodeList.item(j);
-//                                SPListItem item = new SPListItem(name, webAbsluteUrl);
-//                                item.loadFromXml(rowElement);
-//                                itemsCollection.add(item);
-//                            }
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        return itemsCollection;
-//    }
-//    Delete
+    /**
+     * Returns a collection of list items include folders from all levels
+     * (recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPListItem> getItems() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" Scope=\"RecursiveAll\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getItems(null, null, null, 0, options);
+    }
+
+    /**
+     * Returns a collection of list items include folders from first level (no
+     * recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPListItem> getItemsFromRoot() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\"/><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getItems(null, null, null, 0, options);
+    }
+
+    /**
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    private List<SPListItem> getItems(String viewName, Query query, ViewFields viewFields, int rowLimit, GetListItems.QueryOptions queryOptions) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        List<SPListItem> itemsCollection = null;
+        GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(name, viewName, query, viewFields, String.valueOf(rowLimit), queryOptions, webId);
+        for (Object content : result.getContent()) {
+            if (content instanceof Element) {
+                Element rootElement = (Element)content;
+                NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+                for (int i = 0; i < dataNodeList.getLength(); i++) {
+                    Element dataElement = (Element) dataNodeList.item(i);
+                    itemsCollection = new ArrayList<SPListItem>();
+                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                    for (int j = 0; j < rowNodeList.getLength(); j++) {
+                        Element rowElement = (Element) rowNodeList.item(j);
+                        SPListItem item = new SPListItem(name, webAbsluteUrl);
+                        item.loadFromXml(rowElement);
+                        itemsCollection.add(item);
+                    }
+                }
+            }
+        }
+        return itemsCollection;
+    }
+    
+    /**
+     * Gets the collection of folder for the list (recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPFolder> getFolders() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">1</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" Scope=\"RecursiveAll\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFolders(null, query, null, 0, options);
+    }
+
+    /**
+     * Gets the collection of folder for the list from first level (no
+     * recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPFolder> getFoldersFromRoot() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">1</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFolders(null, query, null, 0, options);
+    }
+
+    /**
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    private List<SPFolder> getFolders(String viewName, Query query, ViewFields viewFields, int rowLimit, GetListItems.QueryOptions queryOptions) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        List<SPFolder> folderCollection = null;
+        GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(name, viewName, query, viewFields, String.valueOf(rowLimit), queryOptions, webId);
+        for (Object content : result.getContent()) {
+            if (content instanceof Element) {
+                Element rootElement = (Element)content;
+                NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+                for (int i = 0; i < dataNodeList.getLength(); i++) {
+                    Element dataElement = (Element) dataNodeList.item(i);
+                    folderCollection = new ArrayList<SPFolder>();
+                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                    for (int j = 0; j < rowNodeList.getLength(); j++) {
+                        Element rowElement = (Element) rowNodeList.item(j);
+                        SPFolder folder = new SPFolder(name, webAbsluteUrl, webId);
+                        folder.loadFromXml(rowElement);
+                        folderCollection.add(folder);
+                    }
+                }
+            }
+        }
+        return folderCollection;
+    }
+    
+    /**
+     * Gets the collection of files for the list (recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPFile> getFiles() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">0</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" Scope=\"RecursiveAll\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFiles(null, query, null, 0, options);
+    }
+
+    /**
+     * Gets the collection of files for the list from first level (no
+     * recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPFile> getFilesFromRoot() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">0</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFiles(null, query, null, 0, options);
+    }       
+
+    /**
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    private List<SPFile> getFiles(String viewName, Query query, ViewFields viewFields, int rowLimit, GetListItems.QueryOptions queryOptions) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        List<SPFile> filesCollection = null;
+        GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(name, viewName, query, viewFields, String.valueOf(rowLimit), queryOptions, webId);
+        for (Object content : result.getContent()) {
+            if (content instanceof Element) {
+                Element rootElement = (Element)content;
+                NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+                for (int i = 0; i < dataNodeList.getLength(); i++) {
+                    Element dataElement = (Element) dataNodeList.item(i);
+                    filesCollection = new ArrayList<SPFile>();
+                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                    for (int j = 0; j < rowNodeList.getLength(); j++) {
+                        Element rowElement = (Element) rowNodeList.item(j);
+                        SPFile file = new SPFile(name, webAbsluteUrl);
+                        file.loadFromXml(rowElement);
+                        filesCollection.add(file);
+                    }
+                }
+            }
+        }
+        return filesCollection;
+    }
+
     public String getId() {
         return id;
     }
