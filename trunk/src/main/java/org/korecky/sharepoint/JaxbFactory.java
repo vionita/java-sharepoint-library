@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.validation.SchemaFactory;
+import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 /**
@@ -24,13 +25,26 @@ public class JaxbFactory<T> {
      * @throws SAXException
      * @throws JAXBException 
      */
-    public T xmlToObject(String xml, Class<T> objectClass) throws SAXException, JAXBException {
-        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    public T xmlToObject(String xml, Class<T> objectClass) throws SAXException, JAXBException {        
         JAXBContext jc = JAXBContext.newInstance(objectClass);
         Unmarshaller unmarshaller = jc.createUnmarshaller();
         return (T) unmarshaller.unmarshal(new StringReader(xml));
     }
 
+    /**
+     * Converts xml to jaxb object
+     * @param xml
+     * @param objectClass
+     * @return
+     * @throws SAXException
+     * @throws JAXBException 
+     */
+    public T documentToObject(Document document, Class<T> objectClass) throws SAXException, JAXBException {        
+        JAXBContext jc = JAXBContext.newInstance(objectClass);        
+        Unmarshaller unmarshaller = jc.createUnmarshaller();        
+        return (T) unmarshaller.unmarshal(document);
+    }
+    
     /**
      * Converts jaxb object to XML
      * @param object
@@ -38,8 +52,7 @@ public class JaxbFactory<T> {
      * @return
      * @throws JAXBException 
      */
-    public String objectToXml(T object, Class<T> objectClass) throws JAXBException {
-        SchemaFactory sf = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+    public String objectToXml(T object, Class<T> objectClass) throws JAXBException {        
         JAXBContext jc = JAXBContext.newInstance(objectClass);
         Marshaller marshaller = jc.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);

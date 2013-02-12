@@ -19,9 +19,11 @@ abstract class SPFileBase {
     protected String name;
     protected String url;
     protected final String webAbsluteUrl;
+    protected final String listName;
 
-    protected SPFileBase(String webAbsluteUrl) {
+    protected SPFileBase(String listName, String webAbsluteUrl) {
         this.webAbsluteUrl = webAbsluteUrl;
+        this.listName = listName;
     }
 
     /**
@@ -67,7 +69,8 @@ abstract class SPFileBase {
         fout.write(saveBinary());
         fout.flush();
         fout.close();
-    }   
+    }
+
 
     /**
      * Gets the site-relative URL of the file.
@@ -104,5 +107,13 @@ abstract class SPFileBase {
 
     protected void setUrl(String url) {
         this.url = url;
+    }
+    
+    public String getWebAbsluteUrl() {
+        return webAbsluteUrl;
+    }
+
+    public String getListName() {
+        return listName;
     }
 }

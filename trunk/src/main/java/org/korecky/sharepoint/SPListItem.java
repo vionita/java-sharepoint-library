@@ -121,7 +121,7 @@ public class SPListItem {
      * @return
      */
     public SPFile getFile() {
-        SPFile file = new SPFile(webAbsluteUrl);
+        SPFile file = new SPFile(listName, webAbsluteUrl);
         file.setName(fileName);
         file.setUrl(fileRef);
         if (fileRef.endsWith("_.000")) {
@@ -152,7 +152,7 @@ public class SPListItem {
                         NodeList attachmentNodeList = rootElement.getElementsByTagName("Attachment");
                         for (int i = 0; i < attachmentNodeList.getLength(); i++) {
                             Element attachmentElement = (Element) attachmentNodeList.item(i);
-                            SPAttachment attachment = new SPAttachment(webAbsluteUrl);
+                            SPAttachment attachment = new SPAttachment(listName, webAbsluteUrl);
                             attachment.loadFromXml(attachmentElement);
                             attachmentCollection.add(attachment);
                         }
@@ -175,7 +175,7 @@ public class SPListItem {
      */
     public SPAttachment addAttachment(String fileName, byte[] fileContent) throws MalformedURLException, KeyManagementException, NoSuchAlgorithmException {
         String result = WsContext.getListsPort(new URL(webAbsluteUrl)).addAttachment(listName, String.valueOf(id), fileName, fileContent);
-        SPAttachment attachment = new SPAttachment(webAbsluteUrl);
+        SPAttachment attachment = new SPAttachment(listName, webAbsluteUrl);
         attachment.setUrl(result);
         return attachment;
     }

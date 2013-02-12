@@ -9,11 +9,11 @@ import org.w3c.dom.Element;
  * @author vkorecky
  */
 public class SPAttachment extends SPFileBase {
-    
-    protected SPAttachment(String webAbsluteUrl) {
-        super(webAbsluteUrl);
+
+    public SPAttachment(String listName, String webAbsluteUrl) {
+        super(listName, webAbsluteUrl);
     }
-    
+
     public void loadFromXml(Element rootElement) throws URISyntaxException {
         // Parse XML file                            
         if (StringUtils.contains(rootElement.getLocalName(), "Attachment")) {

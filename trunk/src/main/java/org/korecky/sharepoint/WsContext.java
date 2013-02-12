@@ -61,7 +61,7 @@ class WsContext {
      */
     protected static AuthenticationSoap getAuthenticationPort() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(siteUrl, "/_vti_bin/Authentication.asmx");
-        URL wsdlURL = WsContext.class.getResource("/wsdl/authentication.asmx");
+        URL wsdlURL = WsContext.class.getClassLoader().getResource("/wsdl/authentication.wsdl");
         Authentication service = new Authentication(wsdlURL);
         AuthenticationSoap alertsPort = service.getAuthenticationSoap();
         ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -78,7 +78,7 @@ class WsContext {
      */
     protected static AlertsSoap getAlertsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Alerts.asmx");
-        URL wsdlURL = WsContext.class.getResource("/wsdl/Alerts.asmx");
+        URL wsdlURL = WsContext.class.getClassLoader().getResource("/wsdl/Alerts.wsdl");
         Alerts service = new Alerts(wsdlURL);
         AlertsSoap alertsPort = service.getAlertsSoap();
         authenticate((BindingProvider) alertsPort);
@@ -96,7 +96,7 @@ class WsContext {
      */
     protected static ListsSoap getListsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Lists.asmx");
-        URL wsdlURL = WsContext.class.getResource("/wsdl/Lists.asmx");
+        URL wsdlURL = WsContext.class.getClassLoader().getResource("/wsdl/Lists.wsdl");
         Lists service = new Lists(wsdlURL);
         ListsSoap listsPort = service.getListsSoap();
         ((BindingProvider) listsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -113,7 +113,7 @@ class WsContext {
      */
     protected static SiteDataSoap getSiteDataPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/SiteData.asmx");
-        URL wsdlURL = WsContext.class.getResource("/wsdl/SiteData.asmx");
+        URL wsdlURL = WsContext.class.getClassLoader().getResource("/wsdl/SiteData.wsdl");
         SiteData service = new SiteData(wsdlURL);
         SiteDataSoap siteDataPort = service.getSiteDataSoap();
         ((BindingProvider) siteDataPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -130,7 +130,7 @@ class WsContext {
      */
     protected static ViewsSoap getViewsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Views.asmx");
-        URL wsdlURL = WsContext.class.getResource("/wsdl/Views.asmx");
+        URL wsdlURL = WsContext.class.getClassLoader().getResource("/wsdl/Views.wsdl");
         Views service = new Views(wsdlURL);
         ViewsSoap websPort = service.getViewsSoap();
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -147,7 +147,7 @@ class WsContext {
      */
     protected static WebsSoap getWebsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Webs.asmx");
-        URL wsdlURL = WsContext.class.getResource("/wsdl/Webs.asmx");
+        URL wsdlURL = WsContext.class.getClassLoader().getResource("/wsdl/Webs.wsdl");
         Webs service = new Webs(wsdlURL);
         WebsSoap websPort = service.getWebsSoap();
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
