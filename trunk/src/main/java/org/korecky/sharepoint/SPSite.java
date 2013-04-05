@@ -1,16 +1,18 @@
 package org.korecky.sharepoint;
 
-import com.microsoft.schemas.sharepoint.soap.webs.GetAllSubWebCollectionResponse.GetAllSubWebCollectionResult;
-import com.microsoft.schemas.sharepoint.soap.webs.GetWebResponse.GetWebResult;
+import java.io.IOException;
+import org.korecky.sharepoint.config.AbstractCredentials;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.rmi.RemoteException;
+import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
+import org.apache.axis2.AxisFault;
+import org.korecky.sharepoint.config.HttpProxy;
+import org.korecky.sharepoint.ws.WebsWS;
+import org.korecky.sharepoint.ws.WsContext;
 
 /**
  * Represents a collection of sites in a Web application, including a top-level
@@ -29,57 +31,56 @@ public class SPSite {
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param authenticator
+     * @param credentials
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, authenticator, null, false);
+    public SPSite(URL url, AbstractCredentials credentials) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, credentials, null, false);
     }
 
     /**
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param authenticator
+     * @param credentials
      * @param trustAllSSLs
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, authenticator, null, trustAllSSLs);
+    public SPSite(URL url, AbstractCredentials credentials, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, credentials, null, trustAllSSLs);
     }
 
     /**
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param authenticator
+     * @param credentials
      * @param httpProxy
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, authenticator, httpProxy, false);
+    public SPSite(URL url, AbstractCredentials credentials, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, credentials, httpProxy, false);
     }
 
     /**
      * Initializes a new instance of the SPSite
      *
      * @param url
-     * @param authenticator
+     * @param credentials
      * @param httpProxy
      * @param trustAllSSLs
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, AbstractCredentials credentials, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
         this.url = url;
-        WsContext.setSiteUrl(url);
-        WsContext.setAuthenticator(authenticator);
-        WsContext.setHttpProxy(httpProxy);
-        WsContext.setTrustAllSSLs(trustAllSSLs);
-        WsContext.configureEnviroment();
+        WsContext wsContext = WsContext.getInstance();
+        wsContext.setCredentials(credentials);
+        wsContext.setHttpProxy(httpProxy);
+        wsContext.setTrustAllSSLs(trustAllSSLs);
     }
 
     /**
@@ -87,21 +88,10 @@ public class SPSite {
      *
      * @return NodeList contains web elements
      */
-    public SPWeb getRootWeb() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
+    public SPWeb getRootWeb() throws AxisFault, MalformedURLException, RemoteException, GeneralSecurityException, IOException {
         SPWeb rootWeb = null;
-        GetWebResult result = WsContext.getWebsPort(url).getWeb(url.toString());
-        if (result.getContent() != null) {
-            for (Object content : result.getContent()) {
-                if (content instanceof Element) {
-                    // Parse XML file                                       
-                    Element webElement = (Element) content;
-                    if (StringUtils.equals(webElement.getLocalName(), "Web")) {
-                        rootWeb = new SPWeb();
-                        rootWeb.loadFromXml(webElement);
-                    }
-                }
-            }
-        }
+        WebsWS websWs = WebsWS.getInstance(url);
+        rootWeb = websWs.getWeb(url);
         return rootWeb;
     }
 
@@ -111,28 +101,10 @@ public class SPSite {
      *
      * @return NodeList contains web elements
      */
-    public List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
+    public List<SPWeb> getAllWebs() throws AxisFault, MalformedURLException, RemoteException, GeneralSecurityException, IOException {
         List<SPWeb> allWebs = null;
-        GetAllSubWebCollectionResult result = WsContext.getWebsPort(url).getAllSubWebCollection();
-
-        if (result.getContent() != null) {
-            for (Object content : result.getContent()) {
-                if (content instanceof Element) {
-                    // Parse XML file                    
-                    Element rootElement = (Element) content;
-                    if (StringUtils.equals(rootElement.getLocalName(), "Webs")) {
-                        allWebs = new ArrayList<SPWeb>();
-                        NodeList webNodeList = rootElement.getElementsByTagName("Web");
-                        for (int i = 0; i < webNodeList.getLength(); i++) {
-                            Element webElement = (Element) webNodeList.item(i);
-                            SPWeb web = new SPWeb();
-                            web.loadFromXml(webElement);
-                            allWebs.add(web);
-                        }
-                    }
-                }
-            }
-        }
+        WebsWS websWs = WebsWS.getInstance(url);
+        allWebs = websWs.getWebCollection();
         return allWebs;
     }
 }
