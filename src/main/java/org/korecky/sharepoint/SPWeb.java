@@ -16,6 +16,7 @@ import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import org.apache.axiom.om.OMElement;
 import org.korecky.sharepoint.ws.ListsWS;
+import org.korecky.sharepoint.ws.WebsWS;
 
 /**
  * Represents a SharePoint Foundation website.
@@ -34,7 +35,8 @@ public class SPWeb extends SpObject {
     /**
      * Initializes a new instance of the SPWeb
      */
-    public SPWeb() {
+    public SPWeb(URL url) {
+        this.url = url;
     }
 
     public SPWeb(String xmlString) throws XMLStreamException, MalformedURLException {
@@ -196,71 +198,36 @@ public class SPWeb extends SpObject {
         listsCollection = listsWS.getListCollection();
         return listsCollection;
     }
-//    /**
-//     * Gets the collection of all lists that are contained in the website.
-//     *
-//     * @return
-//     * @throws NoSuchAlgorithmException
-//     * @throws KeyManagementException
-//     * @throws MalformedURLException
-//     */
-//    public List<SPList> addList(String listName, String description, SPListTemplate listTemplate) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
-//        List<SPList> listsCollection = null;
-//        AddListResult result = WsContext.getListsStub(new URL(url)).addList(listName, description, listTemplate.getType());
-////        if (result.getContent() != null) {
-////            for (Object content : result.getContent()) {
-////                if (content instanceof Element) {
-////                    // Parse XML file
-////                    Element rootElement = (Element) content;
-////                    if (StringUtils.equals(rootElement.getLocalName(), "Lists")) {
-////                        listTemplatesCollection = new ArrayList<SPList>();
-////                        NodeList listTemplateNodeList = rootElement.getElementsByTagName("List");
-////                        for (int i = 0; i < listTemplateNodeList.getLength(); i++) {
-////                            Element listTemplateElement = (Element) listTemplateNodeList.item(i);
-////                            SPList listTemplate = new SPList(url);
-////                            listTemplate.loadFromXml(listTemplateElement);
-////                            listTemplatesCollection.add(listTemplate);
-////                        }
-////
-////                    }
-////                }
-////            }
-////        }
-//        return listsCollection;
-//    }
-//
-//    /**
-//     * Gets the collection of all lists that are contained in the website.
-//     *
-//     * @return
-//     * @throws NoSuchAlgorithmException
-//     * @throws KeyManagementException
-//     * @throws MalformedURLException
-//     */
-//    public List<SPListTemplate> getListTemplates() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
-//        List<SPListTemplate> listTemplatesCollection = null;
-//        GetListTemplatesResult result = WsContext.getWebsStub(new URL(url)).getListTemplates();
-//        if (result.getContent() != null) {
-//            for (Object content : result.getContent()) {
-//                if (content instanceof Element) {
-//                    // Parse XML file
-//                    Element rootElement = (Element) content;
-//                    if (StringUtils.equals(rootElement.getLocalName(), "ListTemplates")) {
-//                        listTemplatesCollection = new ArrayList<SPListTemplate>();
-//                        NodeList listTemplateNodeList = rootElement.getElementsByTagName("ListTemplate");
-//                        for (int i = 0; i < listTemplateNodeList.getLength(); i++) {
-//                            Element listTemplateElement = (Element) listTemplateNodeList.item(i);
-//                            SPListTemplate listTemplate = new SPListTemplate(url);
-//                            listTemplate.loadFromXml(listTemplateElement);
-//                            listTemplatesCollection.add(listTemplate);
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-//        return listTemplatesCollection;
-//    }
+
+    /**
+     * Gets the collection of all lists that are contained in the website.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     */
+    public SPList addList(String listName, String description, SPListTemplate listTemplate) throws GeneralSecurityException, IOException {
+        SPList list = null;
+        ListsWS listsWS = ListsWS.getInstance(url);
+        list = listsWS.addList(listName, description, listTemplate.getType());
+        return list;
+    }
+
+    /**
+     * Gets the collection of all lists that are contained in the website.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     */
+    public List<SPListTemplate> getListTemplates() throws GeneralSecurityException, IOException {
+        List<SPListTemplate> listTemplatesCollection = null;
+        WebsWS websWs = WebsWS.getInstance(url);
+        listTemplatesCollection = websWs.getListTemplates();
+        return listTemplatesCollection;
+    }
 
     /**
      * Update current object properties from web

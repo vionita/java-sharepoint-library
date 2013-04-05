@@ -18,6 +18,7 @@ import org.korecky.sharepoint.SPQueryOptions;
 import org.korecky.sharepoint.SPViewField;
 import org.korecky.sharepoint.Support;
 import com.microsoft.schemas.sharepoint.ListsStub;
+import com.microsoft.schemas.sharepoint.ListsStub.AddListResult_type0;
 import com.microsoft.schemas.sharepoint.ListsStub.GetListCollectionResult_type0;
 import com.microsoft.schemas.sharepoint.ListsStub.GetListItemsResult_type0;
 import com.microsoft.schemas.sharepoint.ListsStub.GetListResult_type0;
@@ -26,6 +27,7 @@ import com.microsoft.schemas.sharepoint.ListsStub.Query_type0;
 import com.microsoft.schemas.sharepoint.ListsStub.ViewFields_type0;
 import java.net.MalformedURLException;
 import org.korecky.sharepoint.SPList;
+import org.korecky.sharepoint.SPListTemplate;
 
 /**
  * Object for communication with Lists web service
@@ -38,6 +40,7 @@ public class ListsWS extends BaseWebService {
     private static final Logger logger = Logger.getLogger(ListsWS.class);
     private static volatile ListsWS instance;
     private ListsStub webServiceStub = null;
+    private URL url;
 
     private ListsWS() {
     }
@@ -50,6 +53,7 @@ public class ListsWS extends BaseWebService {
         } else {
             instance.changeWebServiceUrl(instance.webServiceStub, getWsUrl(url));
         }
+        instance.url = url;
         return instance;
     }
 
@@ -59,13 +63,17 @@ public class ListsWS extends BaseWebService {
 
     public SPList getList(final String listName) throws RemoteException {
         SPList list = null;
+        GetListResult_type0 result = webServiceStub.getList(listName);
+        OMElement element = result.getExtraElement();
+        list = new SPList(element, url);
+        return list;
+    }
 
-        // GetList
-        final GetListResult_type0 result = webServiceStub.getList(listName);
-
-        final OMElement element = result.getExtraElement();
-        list = new SPList(element);
-
+    public SPList addList(String listName, String description, int listTemplateID) throws RemoteException {
+        SPList list = null;
+        AddListResult_type0 result = webServiceStub.addList(listName, description, listTemplateID);
+        OMElement element = result.getExtraElement();
+        list = new SPList(element, url);
         return list;
     }
 
@@ -78,7 +86,7 @@ public class ListsWS extends BaseWebService {
         final Iterator children = result.getExtraElement().getChildElements();
         while (children.hasNext()) {
             final OMElement element = (OMElement) children.next();
-            final SPList newList = new SPList(element);
+            final SPList newList = new SPList(element, url);
             listCollection.add(newList);
         }
 

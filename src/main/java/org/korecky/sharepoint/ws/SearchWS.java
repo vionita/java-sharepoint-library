@@ -24,6 +24,7 @@ public class SearchWS extends BaseWebService {
     private static final Logger logger = Logger.getLogger(SearchWS.class);
     private static volatile SearchWS instance;
     private QueryServiceStub webServiceStub = null;
+    private URL url;
 
     private SearchWS() {
     }
@@ -36,6 +37,7 @@ public class SearchWS extends BaseWebService {
         } else {
             instance.changeWebServiceUrl(instance.webServiceStub, getWsUrl(url));
         }
+        instance.url = url;
         return instance;
     }
 

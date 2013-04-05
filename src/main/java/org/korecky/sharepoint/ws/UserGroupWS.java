@@ -26,6 +26,7 @@ public class UserGroupWS extends BaseWebService {
     private static final Logger logger = Logger.getLogger(ListsWS.class);
     private static volatile UserGroupWS instance;
     private UserGroupStub webServiceStub = null;
+    private URL url;
 
     private UserGroupWS() {
     }
@@ -38,6 +39,7 @@ public class UserGroupWS extends BaseWebService {
         } else {
             instance.changeWebServiceUrl(instance.webServiceStub, getWsUrl(url));
         }
+        instance.url = url;
         return instance;
     }
 

@@ -1,7 +1,13 @@
 package org.korecky.sharepoint;
 
-import org.apache.commons.lang3.StringUtils;
-import org.w3c.dom.Element;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
+import org.apache.axiom.om.OMElement;
 
 /**
  * Represents a list definition or a list template, which defines the fields and
@@ -13,7 +19,7 @@ import org.w3c.dom.Element;
  *
  * @author vkorecky
  */
-public class SPListTemplate {
+public class SPListTemplate extends SpObject {
 
     private String name;
     private int type;
@@ -26,45 +32,97 @@ public class SPListTemplate {
     private String image;
     private int documentTemplate;
     private String featureId;
-    private final String webAbsluteUrl;
+    private final URL webAbsluteUrl;
 
-    protected SPListTemplate(String webAbsluteUrl) {
+    public SPListTemplate(URL webAbsluteUrl) {
         this.webAbsluteUrl = webAbsluteUrl;
     }
 
-    /**
-     * Initialize object form XML
-     *
-     * @param listTemplateElement
-     */
-    void loadFromXml(Element listTemplateElement) {
-        // Parse XML file                            
-        if (StringUtils.equals(listTemplateElement.getLocalName(), "ListTemplate")) {
-            name = listTemplateElement.getAttribute("Name");
-            name = listTemplateElement.getAttribute("Name");
-            description = listTemplateElement.getAttribute("Description");
-            displayName = listTemplateElement.getAttribute("DisplayName");
-            image = listTemplateElement.getAttribute("Image");
-            featureId = listTemplateElement.getAttribute("FeatureId");
-            if (StringUtils.isNotBlank(listTemplateElement.getAttribute("Type"))) {
-                type = Integer.valueOf(listTemplateElement.getAttribute("Type"));
-            }
-            if (StringUtils.isNotBlank(listTemplateElement.getAttribute("BaseType"))) {
-                baseType = Integer.valueOf(listTemplateElement.getAttribute("BaseType"));
-            }
-            if (StringUtils.isNotBlank(listTemplateElement.getAttribute("OnQuickLaunch"))) {
-                onQuickLaunch = Boolean.valueOf(listTemplateElement.getAttribute("OnQuickLaunch"));
-            }
-            if (StringUtils.isNotBlank(listTemplateElement.getAttribute("SecurityBits"))) {
-                securityBits = Integer.valueOf(listTemplateElement.getAttribute("SecurityBits"));
-            }
-            if (StringUtils.isNotBlank(listTemplateElement.getAttribute("Sequence"))) {
-                sequence = Integer.valueOf(listTemplateElement.getAttribute("Sequence"));
-            }
-            if (StringUtils.isNotBlank(listTemplateElement.getAttribute("DocumentTemplate"))) {
-                documentTemplate = Integer.valueOf(listTemplateElement.getAttribute("DocumentTemplate"));
+    public SPListTemplate(String xmlString, URL webAbsluteUrl) throws XMLStreamException, MalformedURLException {
+        this.webAbsluteUrl = webAbsluteUrl;
+        OMElement xmlElement = null;
+        xmlElement = Support.stringToOmElement(xmlString);
+
+        if (xmlElement != null) {
+            try {
+                parse(xmlElement);
+            } catch (ParseException ex) {
+                Logger.getLogger(SPList.class.getName()).log(Level.SEVERE,
+                        null, ex);
             }
         }
+    }
+
+    public SPListTemplate(OMElement xmlElement, URL webAbsluteUrl) throws MalformedURLException {
+        this.webAbsluteUrl = webAbsluteUrl;
+        try {
+            parse(xmlElement);
+        } catch (ParseException ex) {
+            Logger.getLogger(SPList.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    public void parse(OMElement xmlElement) throws ParseException, MalformedURLException {
+        String tempAttributeValue = null;
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("Name"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.name = tempAttributeValue;
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("Description"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.description = tempAttributeValue;
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("DisplayName"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.displayName = tempAttributeValue;
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("Image"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.image = tempAttributeValue;
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("FeatureId"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.featureId = tempAttributeValue;
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("Type"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.type = Integer.valueOf(tempAttributeValue);
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("BaseType"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.baseType = Integer.valueOf(tempAttributeValue);
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("OnQuickLaunch"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.onQuickLaunch = Boolean.valueOf(tempAttributeValue);
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("SecurityBits"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.securityBits = Integer.valueOf(tempAttributeValue);
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("Sequence"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.sequence = Integer.valueOf(tempAttributeValue);
+        tempAttributeValue = null;
+
+        tempAttributeValue = xmlElement.getAttributeValue(new QName("DocumentTemplate"));
+        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
+            this.documentTemplate = Integer.valueOf(tempAttributeValue);
+        tempAttributeValue = null;
+    }
+
+    @Override
+    public String getAsXmlString() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     public String getName() {
@@ -111,7 +169,7 @@ public class SPListTemplate {
         return featureId;
     }
 
-    public String getWebAbsluteUrl() {
+    public URL getWebAbsluteUrl() {
         return webAbsluteUrl;
-    }    
+    }
 }
