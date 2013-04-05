@@ -12,9 +12,11 @@ import org.apache.axiom.om.OMElement;
 import org.apache.log4j.Logger;
 
 import com.microsoft.schemas.sharepoint.WebsStub;
+import com.microsoft.schemas.sharepoint.WebsStub.GetListTemplatesResult_type0;
 import com.microsoft.schemas.sharepoint.WebsStub.GetWebCollectionResult_type0;
 import com.microsoft.schemas.sharepoint.WebsStub.GetWebResult_type0;
 import java.net.MalformedURLException;
+import org.korecky.sharepoint.SPListTemplate;
 import org.korecky.sharepoint.SPWeb;
 
 /**
@@ -28,6 +30,7 @@ public class WebsWS extends BaseWebService {
     private static final Logger logger = Logger.getLogger(WebsWS.class);
     private static volatile WebsWS instance;
     private WebsStub webServiceStub = null;
+    private URL url;
 
     private WebsWS() {
     }
@@ -40,6 +43,7 @@ public class WebsWS extends BaseWebService {
         } else {
             instance.changeWebServiceUrl(instance.webServiceStub, getWsUrl(url));
         }
+        instance.url = url;
         return instance;
     }
 
@@ -58,6 +62,18 @@ public class WebsWS extends BaseWebService {
         }
 
         return listCollection;
+    }
+
+    public List<SPListTemplate> getListTemplates() throws RemoteException, MalformedURLException {
+        List<SPListTemplate> listTemplatesCollection = new ArrayList<SPListTemplate>();
+        GetListTemplatesResult_type0 result = webServiceStub.getListTemplates();
+        Iterator children = result.getExtraElement().getChildElements();
+        while (children.hasNext()) {
+            OMElement element = (OMElement) children.next();
+            SPListTemplate newListTemplate = new SPListTemplate(element, url);
+            listTemplatesCollection.add(newListTemplate);
+        }
+        return listTemplatesCollection;
     }
 
     public SPWeb getWeb(URL webUrl) throws RemoteException, MalformedURLException {

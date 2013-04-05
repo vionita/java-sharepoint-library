@@ -4,6 +4,7 @@
  */
 package org.korecky.sharepoint;
 
+import java.net.URL;
 import org.korecky.sharepoint.SpObject;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -108,11 +109,14 @@ public final class SPList extends SpObject {
     private SPFields fields = null;
     private SPRegionalSettings regionalSettings = null;
     private SPServerSettings serverSettings = null;
+    private final URL webAbsluteUrl;
 
-    public SPList() {
+    public SPList(URL webAbsluteUrl) {
+        this.webAbsluteUrl = webAbsluteUrl;
     }
 
-    public SPList(String xmlString) throws XMLStreamException {
+    public SPList(String xmlString, URL webAbsluteUrl) throws XMLStreamException {
+        this.webAbsluteUrl = webAbsluteUrl;
         OMElement xmlElement = null;
         xmlElement = Support.stringToOmElement(xmlString);
 
@@ -126,12 +130,12 @@ public final class SPList extends SpObject {
         }
     }
 
-    public SPList(OMElement xmlElement) {
+    public SPList(OMElement xmlElement, URL webAbsluteUrl) {
+        this.webAbsluteUrl = webAbsluteUrl;
         try {
             parse(xmlElement);
         } catch (ParseException ex) {
-            Logger.getLogger(SPList.class.getName())
-                    .log(Level.SEVERE, null, ex);
+            Logger.getLogger(SPList.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
