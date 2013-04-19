@@ -1,0 +1,1941 @@
+
+
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService" xmlns:s1="http://microsoft.com/wsdl/types/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Social Data Service</wsdl:documentation>
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService">
+      <s:import namespace="http://microsoft.com/wsdl/types/" />
+      <s:element name="CountCommentsOfUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountCommentsOfUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CountCommentsOfUserResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountCommentsOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountCommentsOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CountCommentsOnUrlResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountCommentsOfUserOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountCommentsOfUserOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CountCommentsOfUserOnUrlResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCommentsOfUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" nillable="true" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="startIndex" nillable="true" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCommentsOfUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCommentsOfUserResult" type="tns:ArrayOfSocialCommentDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfSocialCommentDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SocialCommentDetail" nillable="true" type="tns:SocialCommentDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SocialCommentDetail">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:SocialDataDetail">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Comment" type="s:string" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsHighPriority" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="SocialDataDetail" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Owner" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastModifiedTime" type="s:dateTime" />
+          <s:element minOccurs="0" maxOccurs="1" name="Title" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetCommentsOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" nillable="true" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="startIndex" nillable="true" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="excludeItemsTime" nillable="true" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCommentsOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCommentsOnUrlResult" type="tns:ArrayOfSocialCommentDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCommentsOfUserOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetCommentsOfUserOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetCommentsOfUserOnUrlResult" type="tns:ArrayOfSocialCommentDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddComment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="comment" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="isHighPriority" nillable="true" type="s:boolean" />
+            <s:element minOccurs="0" maxOccurs="1" name="title" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddCommentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddCommentResult" type="tns:SocialCommentDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateComment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="lastModifiedTime" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="comment" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="isHighPriority" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="UpdateCommentResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="UpdateCommentResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteComment">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="lastModifiedTime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteCommentResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="CountRatingsOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountRatingsOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CountRatingsOnUrlResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRatingsOfUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRatingsOfUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRatingsOfUserResult" type="tns:ArrayOfSocialRatingDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfSocialRatingDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SocialRatingDetail" nillable="true" type="tns:SocialRatingDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SocialRatingDetail">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:SocialDataDetail">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="Rating" type="s:int" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="GetRatingsOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRatingsOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRatingsOnUrlResult" type="tns:ArrayOfSocialRatingDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRatingOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRatingOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRatingOnUrlResult" type="tns:SocialRatingDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRatingOfUserOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetRatingOfUserOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRatingOfUserOnUrlResult" type="tns:SocialRatingDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="SetRating">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="rating" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="title" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="analysisDataEntry" type="tns:FeedbackData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="FeedbackData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="BrowserSessionId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="CustomData" />
+          <s:element minOccurs="1" maxOccurs="1" name="FeedbackAnswerId" type="s1:guid" />
+          <s:element minOccurs="1" maxOccurs="1" name="FeedbackAnswerNumericEquivalent" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="FeedbackAnswerText" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FeedbackControlCulture" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="FeedbackIdentifier" type="s1:guid" />
+          <s:element minOccurs="1" maxOccurs="1" name="FeedbackQuestionId" type="s1:guid" />
+          <s:element minOccurs="0" maxOccurs="1" name="FeedbackQuestionText" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsUserSatisfactionAnswer" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="QueryId" type="s1:guid" />
+          <s:element minOccurs="0" maxOccurs="1" name="RatedAssetId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="RatedAssetTitle" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="SampleRate" type="s:unsignedByte" />
+          <s:element minOccurs="1" maxOccurs="1" name="RatedAssetWebId" type="s1:guid" />
+          <s:element minOccurs="1" maxOccurs="1" name="SiteId" type="s1:guid" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserId" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserDepartment" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserTitle" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserVerbatim" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="SetRatingResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="SetRatingResult" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteRating">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteRatingResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetRatingAverageOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SocialRatingAverageDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Average" type="s:float" />
+          <s:element minOccurs="1" maxOccurs="1" name="LastModifiedTime" type="s:dateTime" />
+          <s:element minOccurs="1" maxOccurs="1" name="Count" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="CurrentUserRating" type="s:int" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetRatingAverageOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetRatingAverageOnUrlResult" type="tns:SocialRatingAverageDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PropagateRating">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PropagateRatingResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="CountTagsOfUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="CountTagsOfUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="CountTagsOfUserResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagTerms">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" nillable="true" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SocialTermDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Term" type="tns:TermDetail" />
+          <s:element minOccurs="1" maxOccurs="1" name="Count" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="TermDetail">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Id" type="s1:guid" />
+          <s:element minOccurs="0" maxOccurs="1" name="Name" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSocialTermDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SocialTermDetail" nillable="true" type="tns:SocialTermDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTagTermsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagTermsResult" type="tns:ArrayOfSocialTermDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagTermsOfUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" nillable="true" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagTermsOfUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagTermsOfUserResult" type="tns:ArrayOfSocialTermDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagTermsOnUrl">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" nillable="true" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagTermsOnUrlResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagTermsOnUrlResult" type="tns:ArrayOfSocialTermDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTagTerms">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" nillable="true" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTagTermsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllTagTermsResult" type="tns:ArrayOfSocialTermDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTagTermsForUrlFolder">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="urlFolder" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTagTermsForUrlFolderResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllTagTermsForUrlFolderResult" type="tns:ArrayOfSocialTermDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTags">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfSocialTagDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SocialTagDetail" nillable="true" type="tns:SocialTagDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="SocialTagDetail">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:SocialDataDetail">
+            <s:sequence>
+              <s:element minOccurs="0" maxOccurs="1" name="Term" type="tns:TermDetail" />
+              <s:element minOccurs="1" maxOccurs="1" name="IsPrivate" type="s:boolean" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:element name="GetTagsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagsResult" type="tns:ArrayOfSocialTagDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagsOfUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="maximumItemsToReturn" nillable="true" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="startIndex" nillable="true" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagsOfUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagsOfUserResult" type="tns:ArrayOfSocialTagDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagUrls">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="termID" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetTagUrlsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagUrlsResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagUrlsByKeyword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagUrlsByKeywordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagUrlsByKeywordResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagUrlsOfUser">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="termID" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagUrlsOfUserResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagUrlsOfUserResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagUrlsOfUserByKeyword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTagUrlsOfUserByKeywordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTagUrlsOfUserByKeywordResult" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTagUrls">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="termID" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SocialUrlDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Count" type="s:long" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfSocialUrlDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="SocialUrlDetail" nillable="true" type="tns:SocialUrlDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetAllTagUrlsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllTagUrlsResult" type="tns:ArrayOfSocialUrlDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTagUrlsByKeyword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetAllTagUrlsByKeywordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetAllTagUrlsByKeywordResult" type="tns:ArrayOfSocialUrlDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddTag">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="termID" type="s1:guid" />
+            <s:element minOccurs="0" maxOccurs="1" name="title" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="isPrivate" nillable="true" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddTagResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddTagResult" type="tns:SocialTagDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddTagByKeyword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="title" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="isPrivate" nillable="true" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AddTagByKeywordResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="AddTagByKeywordResult" type="tns:SocialTagDetail" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteTag">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="termID" type="s1:guid" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteTagResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="DeleteTagByKeyword">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="keyword" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteTagByKeywordResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="DeleteTags">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="url" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteTagsResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetSocialDataForIncrementalReplication">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="startTime" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="endTime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SocialReplicationData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Tags" type="tns:ArrayOfSocialTagDetail" />
+          <s:element minOccurs="0" maxOccurs="1" name="Comments" type="tns:ArrayOfSocialCommentDetail" />
+          <s:element minOccurs="0" maxOccurs="1" name="Ratings" type="tns:ArrayOfSocialRatingDetail" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeletedTags" type="tns:ArrayOfDeletedSocialTagDetail" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeletedComments" type="tns:ArrayOfDeletedSocialCommentDetail" />
+          <s:element minOccurs="0" maxOccurs="1" name="DeletedRatings" type="tns:ArrayOfDeletedSocialRatingDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDeletedSocialTagDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DeletedSocialTagDetail" nillable="true" type="tns:DeletedSocialTagDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DeletedSocialTagDetail">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DeletedSocialDataDetail">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="TermID" type="s1:guid" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="DeletedSocialDataDetail" abstract="true">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Owner" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DeletedTime" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="DeletedSocialRatingDetail">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DeletedSocialDataDetail" />
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="DeletedSocialCommentDetail">
+        <s:complexContent mixed="false">
+          <s:extension base="tns:DeletedSocialDataDetail">
+            <s:sequence>
+              <s:element minOccurs="1" maxOccurs="1" name="LastModifiedTime" type="s:dateTime" />
+            </s:sequence>
+          </s:extension>
+        </s:complexContent>
+      </s:complexType>
+      <s:complexType name="ArrayOfDeletedSocialCommentDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DeletedSocialCommentDetail" nillable="true" type="tns:DeletedSocialCommentDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ArrayOfDeletedSocialRatingDetail">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="DeletedSocialRatingDetail" nillable="true" type="tns:DeletedSocialRatingDetail" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetSocialDataForIncrementalReplicationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSocialDataForIncrementalReplicationResult" type="tns:SocialReplicationData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSocialDataForFullReplication">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetSocialDataForFullReplicationResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetSocialDataForFullReplicationResult" type="tns:SocialReplicationData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReplicateIncrementalSocialData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="changes" type="tns:SocialReplicationData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReplicateIncrementalSocialDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ReplicateIncrementalSocialDataResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReplicateFullSocialData">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userAccountName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="changes" type="tns:SocialReplicationData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ReplicateFullSocialDataResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="ReplicateFullSocialDataResult" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/wsdl/types/">
+      <s:simpleType name="guid">
+        <s:restriction base="s:string">
+          <s:pattern value="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}" />
+        </s:restriction>
+      </s:simpleType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="CountCommentsOfUserSoapIn">
+    <wsdl:part name="parameters" element="tns:CountCommentsOfUser" />
+  </wsdl:message>
+  <wsdl:message name="CountCommentsOfUserSoapOut">
+    <wsdl:part name="parameters" element="tns:CountCommentsOfUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="CountCommentsOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:CountCommentsOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="CountCommentsOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:CountCommentsOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="CountCommentsOfUserOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:CountCommentsOfUserOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="CountCommentsOfUserOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:CountCommentsOfUserOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCommentsOfUserSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCommentsOfUser" />
+  </wsdl:message>
+  <wsdl:message name="GetCommentsOfUserSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCommentsOfUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCommentsOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCommentsOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetCommentsOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCommentsOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetCommentsOfUserOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetCommentsOfUserOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetCommentsOfUserOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetCommentsOfUserOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddCommentSoapIn">
+    <wsdl:part name="parameters" element="tns:AddComment" />
+  </wsdl:message>
+  <wsdl:message name="AddCommentSoapOut">
+    <wsdl:part name="parameters" element="tns:AddCommentResponse" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCommentSoapIn">
+    <wsdl:part name="parameters" element="tns:UpdateComment" />
+  </wsdl:message>
+  <wsdl:message name="UpdateCommentSoapOut">
+    <wsdl:part name="parameters" element="tns:UpdateCommentResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCommentSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteComment" />
+  </wsdl:message>
+  <wsdl:message name="DeleteCommentSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteCommentResponse" />
+  </wsdl:message>
+  <wsdl:message name="CountRatingsOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:CountRatingsOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="CountRatingsOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:CountRatingsOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingsOfUserSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRatingsOfUser" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingsOfUserSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRatingsOfUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingsOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRatingsOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingsOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRatingsOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRatingOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRatingOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingOfUserOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRatingOfUserOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingOfUserOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRatingOfUserOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="SetRatingSoapIn">
+    <wsdl:part name="parameters" element="tns:SetRating" />
+  </wsdl:message>
+  <wsdl:message name="SetRatingSoapOut">
+    <wsdl:part name="parameters" element="tns:SetRatingResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRatingSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteRating" />
+  </wsdl:message>
+  <wsdl:message name="DeleteRatingSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteRatingResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingAverageOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetRatingAverageOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetRatingAverageOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetRatingAverageOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="PropagateRatingSoapIn">
+    <wsdl:part name="parameters" element="tns:PropagateRating" />
+  </wsdl:message>
+  <wsdl:message name="PropagateRatingSoapOut">
+    <wsdl:part name="parameters" element="tns:PropagateRatingResponse" />
+  </wsdl:message>
+  <wsdl:message name="CountTagsOfUserSoapIn">
+    <wsdl:part name="parameters" element="tns:CountTagsOfUser" />
+  </wsdl:message>
+  <wsdl:message name="CountTagsOfUserSoapOut">
+    <wsdl:part name="parameters" element="tns:CountTagsOfUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagTermsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagTerms" />
+  </wsdl:message>
+  <wsdl:message name="GetTagTermsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagTermsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagTermsOfUserSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagTermsOfUser" />
+  </wsdl:message>
+  <wsdl:message name="GetTagTermsOfUserSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagTermsOfUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagTermsOnUrlSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagTermsOnUrl" />
+  </wsdl:message>
+  <wsdl:message name="GetTagTermsOnUrlSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagTermsOnUrlResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagTermsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllTagTerms" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagTermsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllTagTermsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagTermsForUrlFolderSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllTagTermsForUrlFolder" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagTermsForUrlFolderSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllTagTermsForUrlFolderResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTags" />
+  </wsdl:message>
+  <wsdl:message name="GetTagsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagsOfUserSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagsOfUser" />
+  </wsdl:message>
+  <wsdl:message name="GetTagsOfUserSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagsOfUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagUrls" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagUrlsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsByKeywordSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagUrlsByKeyword" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsByKeywordSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagUrlsByKeywordResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsOfUserSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagUrlsOfUser" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsOfUserSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagUrlsOfUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsOfUserByKeywordSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTagUrlsOfUserByKeyword" />
+  </wsdl:message>
+  <wsdl:message name="GetTagUrlsOfUserByKeywordSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTagUrlsOfUserByKeywordResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagUrlsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllTagUrls" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagUrlsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllTagUrlsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagUrlsByKeywordSoapIn">
+    <wsdl:part name="parameters" element="tns:GetAllTagUrlsByKeyword" />
+  </wsdl:message>
+  <wsdl:message name="GetAllTagUrlsByKeywordSoapOut">
+    <wsdl:part name="parameters" element="tns:GetAllTagUrlsByKeywordResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddTagSoapIn">
+    <wsdl:part name="parameters" element="tns:AddTag" />
+  </wsdl:message>
+  <wsdl:message name="AddTagSoapOut">
+    <wsdl:part name="parameters" element="tns:AddTagResponse" />
+  </wsdl:message>
+  <wsdl:message name="AddTagByKeywordSoapIn">
+    <wsdl:part name="parameters" element="tns:AddTagByKeyword" />
+  </wsdl:message>
+  <wsdl:message name="AddTagByKeywordSoapOut">
+    <wsdl:part name="parameters" element="tns:AddTagByKeywordResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteTagSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteTag" />
+  </wsdl:message>
+  <wsdl:message name="DeleteTagSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteTagResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteTagByKeywordSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteTagByKeyword" />
+  </wsdl:message>
+  <wsdl:message name="DeleteTagByKeywordSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteTagByKeywordResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteTagsSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteTags" />
+  </wsdl:message>
+  <wsdl:message name="DeleteTagsSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteTagsResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSocialDataForIncrementalReplicationSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSocialDataForIncrementalReplication" />
+  </wsdl:message>
+  <wsdl:message name="GetSocialDataForIncrementalReplicationSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSocialDataForIncrementalReplicationResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetSocialDataForFullReplicationSoapIn">
+    <wsdl:part name="parameters" element="tns:GetSocialDataForFullReplication" />
+  </wsdl:message>
+  <wsdl:message name="GetSocialDataForFullReplicationSoapOut">
+    <wsdl:part name="parameters" element="tns:GetSocialDataForFullReplicationResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReplicateIncrementalSocialDataSoapIn">
+    <wsdl:part name="parameters" element="tns:ReplicateIncrementalSocialData" />
+  </wsdl:message>
+  <wsdl:message name="ReplicateIncrementalSocialDataSoapOut">
+    <wsdl:part name="parameters" element="tns:ReplicateIncrementalSocialDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="ReplicateFullSocialDataSoapIn">
+    <wsdl:part name="parameters" element="tns:ReplicateFullSocialData" />
+  </wsdl:message>
+  <wsdl:message name="ReplicateFullSocialDataSoapOut">
+    <wsdl:part name="parameters" element="tns:ReplicateFullSocialDataResponse" />
+  </wsdl:message>
+  <wsdl:portType name="SocialDataServiceSoap">
+    <wsdl:operation name="CountCommentsOfUser">
+      <wsdl:input message="tns:CountCommentsOfUserSoapIn" />
+      <wsdl:output message="tns:CountCommentsOfUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CountCommentsOnUrl">
+      <wsdl:input message="tns:CountCommentsOnUrlSoapIn" />
+      <wsdl:output message="tns:CountCommentsOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CountCommentsOfUserOnUrl">
+      <wsdl:input message="tns:CountCommentsOfUserOnUrlSoapIn" />
+      <wsdl:output message="tns:CountCommentsOfUserOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOfUser">
+      <wsdl:input message="tns:GetCommentsOfUserSoapIn" />
+      <wsdl:output message="tns:GetCommentsOfUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOnUrl">
+      <wsdl:input message="tns:GetCommentsOnUrlSoapIn" />
+      <wsdl:output message="tns:GetCommentsOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOfUserOnUrl">
+      <wsdl:input message="tns:GetCommentsOfUserOnUrlSoapIn" />
+      <wsdl:output message="tns:GetCommentsOfUserOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddComment">
+      <wsdl:input message="tns:AddCommentSoapIn" />
+      <wsdl:output message="tns:AddCommentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateComment">
+      <wsdl:input message="tns:UpdateCommentSoapIn" />
+      <wsdl:output message="tns:UpdateCommentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteComment">
+      <wsdl:input message="tns:DeleteCommentSoapIn" />
+      <wsdl:output message="tns:DeleteCommentSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CountRatingsOnUrl">
+      <wsdl:input message="tns:CountRatingsOnUrlSoapIn" />
+      <wsdl:output message="tns:CountRatingsOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingsOfUser">
+      <wsdl:input message="tns:GetRatingsOfUserSoapIn" />
+      <wsdl:output message="tns:GetRatingsOfUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingsOnUrl">
+      <wsdl:input message="tns:GetRatingsOnUrlSoapIn" />
+      <wsdl:output message="tns:GetRatingsOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingOnUrl">
+      <wsdl:input message="tns:GetRatingOnUrlSoapIn" />
+      <wsdl:output message="tns:GetRatingOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingOfUserOnUrl">
+      <wsdl:input message="tns:GetRatingOfUserOnUrlSoapIn" />
+      <wsdl:output message="tns:GetRatingOfUserOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="SetRating">
+      <wsdl:input message="tns:SetRatingSoapIn" />
+      <wsdl:output message="tns:SetRatingSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRating">
+      <wsdl:input message="tns:DeleteRatingSoapIn" />
+      <wsdl:output message="tns:DeleteRatingSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingAverageOnUrl">
+      <wsdl:input message="tns:GetRatingAverageOnUrlSoapIn" />
+      <wsdl:output message="tns:GetRatingAverageOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PropagateRating">
+      <wsdl:input message="tns:PropagateRatingSoapIn" />
+      <wsdl:output message="tns:PropagateRatingSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="CountTagsOfUser">
+      <wsdl:input message="tns:CountTagsOfUserSoapIn" />
+      <wsdl:output message="tns:CountTagsOfUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTerms">
+      <wsdl:input message="tns:GetTagTermsSoapIn" />
+      <wsdl:output message="tns:GetTagTermsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTermsOfUser">
+      <wsdl:input message="tns:GetTagTermsOfUserSoapIn" />
+      <wsdl:output message="tns:GetTagTermsOfUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTermsOnUrl">
+      <wsdl:input message="tns:GetTagTermsOnUrlSoapIn" />
+      <wsdl:output message="tns:GetTagTermsOnUrlSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagTerms">
+      <wsdl:input message="tns:GetAllTagTermsSoapIn" />
+      <wsdl:output message="tns:GetAllTagTermsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagTermsForUrlFolder">
+      <wsdl:input message="tns:GetAllTagTermsForUrlFolderSoapIn" />
+      <wsdl:output message="tns:GetAllTagTermsForUrlFolderSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTags">
+      <wsdl:input message="tns:GetTagsSoapIn" />
+      <wsdl:output message="tns:GetTagsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagsOfUser">
+      <wsdl:input message="tns:GetTagsOfUserSoapIn" />
+      <wsdl:output message="tns:GetTagsOfUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrls">
+      <wsdl:input message="tns:GetTagUrlsSoapIn" />
+      <wsdl:output message="tns:GetTagUrlsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsByKeyword">
+      <wsdl:input message="tns:GetTagUrlsByKeywordSoapIn" />
+      <wsdl:output message="tns:GetTagUrlsByKeywordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsOfUser">
+      <wsdl:input message="tns:GetTagUrlsOfUserSoapIn" />
+      <wsdl:output message="tns:GetTagUrlsOfUserSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsOfUserByKeyword">
+      <wsdl:input message="tns:GetTagUrlsOfUserByKeywordSoapIn" />
+      <wsdl:output message="tns:GetTagUrlsOfUserByKeywordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagUrls">
+      <wsdl:input message="tns:GetAllTagUrlsSoapIn" />
+      <wsdl:output message="tns:GetAllTagUrlsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagUrlsByKeyword">
+      <wsdl:input message="tns:GetAllTagUrlsByKeywordSoapIn" />
+      <wsdl:output message="tns:GetAllTagUrlsByKeywordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddTag">
+      <wsdl:input message="tns:AddTagSoapIn" />
+      <wsdl:output message="tns:AddTagSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AddTagByKeyword">
+      <wsdl:input message="tns:AddTagByKeywordSoapIn" />
+      <wsdl:output message="tns:AddTagByKeywordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTag">
+      <wsdl:input message="tns:DeleteTagSoapIn" />
+      <wsdl:output message="tns:DeleteTagSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTagByKeyword">
+      <wsdl:input message="tns:DeleteTagByKeywordSoapIn" />
+      <wsdl:output message="tns:DeleteTagByKeywordSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTags">
+      <wsdl:input message="tns:DeleteTagsSoapIn" />
+      <wsdl:output message="tns:DeleteTagsSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialDataForIncrementalReplication">
+      <wsdl:input message="tns:GetSocialDataForIncrementalReplicationSoapIn" />
+      <wsdl:output message="tns:GetSocialDataForIncrementalReplicationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialDataForFullReplication">
+      <wsdl:input message="tns:GetSocialDataForFullReplicationSoapIn" />
+      <wsdl:output message="tns:GetSocialDataForFullReplicationSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplicateIncrementalSocialData">
+      <wsdl:input message="tns:ReplicateIncrementalSocialDataSoapIn" />
+      <wsdl:output message="tns:ReplicateIncrementalSocialDataSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ReplicateFullSocialData">
+      <wsdl:input message="tns:ReplicateFullSocialDataSoapIn" />
+      <wsdl:output message="tns:ReplicateFullSocialDataSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SocialDataServiceSoap" type="tns:SocialDataServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CountCommentsOfUser">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountCommentsOfUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountCommentsOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountCommentsOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountCommentsOfUserOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountCommentsOfUserOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOfUser">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetCommentsOfUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetCommentsOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOfUserOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetCommentsOfUserOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddComment">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/AddComment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateComment">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/UpdateComment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteComment">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteComment" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountRatingsOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountRatingsOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingsOfUser">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingsOfUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingsOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingsOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingOfUserOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingOfUserOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetRating">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/SetRating" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRating">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteRating" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingAverageOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingAverageOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PropagateRating">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/PropagateRating" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountTagsOfUser">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountTagsOfUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTerms">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagTerms" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTermsOfUser">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagTermsOfUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTermsOnUrl">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagTermsOnUrl" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagTerms">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagTerms" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagTermsForUrlFolder">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagTermsForUrlFolder" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTags">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTags" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagsOfUser">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagsOfUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrls">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrls" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsByKeyword">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrlsByKeyword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsOfUser">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrlsOfUser" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsOfUserByKeyword">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrlsOfUserByKeyword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagUrls">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagUrls" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagUrlsByKeyword">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagUrlsByKeyword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTag">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/AddTag" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTagByKeyword">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/AddTagByKeyword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTag">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteTag" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTagByKeyword">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteTagByKeyword" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTags">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteTags" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialDataForIncrementalReplication">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetSocialDataForIncrementalReplication" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialDataForFullReplication">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetSocialDataForFullReplication" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplicateIncrementalSocialData">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/ReplicateIncrementalSocialData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplicateFullSocialData">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/ReplicateFullSocialData" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="SocialDataServiceSoap12" type="tns:SocialDataServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="CountCommentsOfUser">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountCommentsOfUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountCommentsOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountCommentsOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountCommentsOfUserOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountCommentsOfUserOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOfUser">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetCommentsOfUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetCommentsOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCommentsOfUserOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetCommentsOfUserOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddComment">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/AddComment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateComment">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/UpdateComment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteComment">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteComment" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountRatingsOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountRatingsOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingsOfUser">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingsOfUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingsOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingsOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingOfUserOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingOfUserOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetRating">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/SetRating" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteRating">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteRating" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetRatingAverageOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetRatingAverageOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PropagateRating">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/PropagateRating" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CountTagsOfUser">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/CountTagsOfUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTerms">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagTerms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTermsOfUser">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagTermsOfUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagTermsOnUrl">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagTermsOnUrl" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagTerms">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagTerms" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagTermsForUrlFolder">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagTermsForUrlFolder" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTags">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTags" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagsOfUser">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagsOfUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrls">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrls" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsByKeyword">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrlsByKeyword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsOfUser">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrlsOfUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTagUrlsOfUserByKeyword">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetTagUrlsOfUserByKeyword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagUrls">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagUrls" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetAllTagUrlsByKeyword">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetAllTagUrlsByKeyword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTag">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/AddTag" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddTagByKeyword">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/AddTagByKeyword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTag">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteTag" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTagByKeyword">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteTagByKeyword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteTags">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/DeleteTags" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialDataForIncrementalReplication">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetSocialDataForIncrementalReplication" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetSocialDataForFullReplication">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/GetSocialDataForFullReplication" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplicateIncrementalSocialData">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/ReplicateIncrementalSocialData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ReplicateFullSocialData">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/SocialDataService/ReplicateFullSocialData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SocialDataService">
+    <wsdl:documentation xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">Social Data Service</wsdl:documentation>
+    <wsdl:port name="SocialDataServiceSoap" binding="tns:SocialDataServiceSoap">
+      <soap:address location="" />
+    </wsdl:port>
+    <wsdl:port name="SocialDataServiceSoap12" binding="tns:SocialDataServiceSoap12">
+      <soap12:address location="" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
+
