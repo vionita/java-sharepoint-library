@@ -1,0 +1,76 @@
+
+
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://microsoft.com/webservices/SharePointPortalServer/PublishedLinksService" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://microsoft.com/webservices/SharePointPortalServer/PublishedLinksService" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://microsoft.com/webservices/SharePointPortalServer/PublishedLinksService">
+      <s:element name="GetLinks">
+        <s:complexType />
+      </s:element>
+      <s:element name="GetLinksResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetLinksResult" type="tns:ArrayOfServerLink" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfServerLink">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="ServerLink" nillable="true" type="tns:ServerLink" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ServerLink">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="Title" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="Url" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="LinkType" type="s:long" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsMember" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsPublished" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="GetLinksSoapIn">
+    <wsdl:part name="parameters" element="tns:GetLinks" />
+  </wsdl:message>
+  <wsdl:message name="GetLinksSoapOut">
+    <wsdl:part name="parameters" element="tns:GetLinksResponse" />
+  </wsdl:message>
+  <wsdl:portType name="PublishedLinksServiceSoap">
+    <wsdl:operation name="GetLinks">
+      <wsdl:input message="tns:GetLinksSoapIn" />
+      <wsdl:output message="tns:GetLinksSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PublishedLinksServiceSoap" type="tns:PublishedLinksServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="GetLinks">
+      <soap:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/PublishedLinksService/GetLinks" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="PublishedLinksServiceSoap12" type="tns:PublishedLinksServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <wsdl:operation name="GetLinks">
+      <soap12:operation soapAction="http://microsoft.com/webservices/SharePointPortalServer/PublishedLinksService/GetLinks" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PublishedLinksService">
+    <wsdl:port name="PublishedLinksServiceSoap" binding="tns:PublishedLinksServiceSoap">
+      <soap:address location="" />
+    </wsdl:port>
+    <wsdl:port name="PublishedLinksServiceSoap12" binding="tns:PublishedLinksServiceSoap12">
+      <soap12:address location="" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
