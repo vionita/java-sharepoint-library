@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLStreamException;
 import org.apache.axiom.om.OMElement;
+import org.korecky.sharepoint.ws.AlertsWS;
 import org.korecky.sharepoint.ws.ListsWS;
 import org.korecky.sharepoint.ws.WebsWS;
 
@@ -144,27 +145,21 @@ public class SPWeb extends SpObject {
         return theme;
     }
 
-//    /**
-//     * Gets the collection of alerts for the site or subsite.
-//     *
-//     * @return
-//     * @throws NoSuchAlgorithmException
-//     * @throws KeyManagementException
-//     * @throws MalformedURLException
-//     */
-//    public List<SPAlert> getAlerts() {
-//        List<SPAlert> alertCollection = null;
-//        AlertInfo alertInfo = WsContext.getAlertsStub(new URL(url)).getAlerts();
-//        if (alertInfo != null) {
-//            alertCollection = new ArrayList<SPAlert>();
-//            for (Alert tmpAlert : alertInfo.getAlerts().getAlert()) {
-//                SPAlert alert = new SPAlert(url);
-//                alert.loadFromAlert(tmpAlert);
-//                alertCollection.add(alert);
-//            }
-//        }
-//        return alertCollection;
-//    }
+    /**
+     * Gets the collection of alerts for the site or subsite.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     */
+    public List<SPAlert> getAlerts() throws GeneralSecurityException, IOException {
+        List<SPAlert> alertCollection = null;
+        AlertsWS alertsWS = AlertsWS.getInstance(url);
+        alertCollection = alertsWS.getAlerts();
+        return alertCollection;
+    }
+
     /**
      * Gets a hash map that contains metadata for the website.
      *
@@ -238,25 +233,18 @@ public class SPWeb extends SpObject {
      * @throws MalformedURLException
      */
     private void updateProperties() {
-//        try {
-//            GetWebResponse.GetWebResult result = WsContext.getWebsStub(new URL(url)).getWeb(url);
-//            if (result.getContent() != null) {
-//                for (Object content : result.getContent()) {
-//                    if (content instanceof Element) {
-//                        // Parse XML file
-//                        Element webElement = (Element) content;
-//                        if (StringUtils.equals(webElement.getLocalName(), "Web")) {
-//                            loadFromXml(webElement);
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (NoSuchAlgorithmException ex) {
-//            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (KeyManagementException ex) {
-//            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
-//        } catch (MalformedURLException ex) {
-//            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            WebsWS websWs = WebsWS.getInstance(url);
+            SPWeb web = websWs.getWeb(url);
+            this.title = web.getTitle();
+            this.description = web.getDescription();
+            this.theme = web.getTheme();
+            this.language = web.getLanguage();
+        } catch (GeneralSecurityException ex) {
+            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 }

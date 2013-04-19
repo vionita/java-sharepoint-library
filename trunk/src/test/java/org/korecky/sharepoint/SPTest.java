@@ -33,11 +33,11 @@ public class SPTest {
     @Test
     public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException, URISyntaxException, SAXException, JAXBException, ParserConfigurationException, TransformerConfigurationException, TransformerException, AxisFault, RemoteException, GeneralSecurityException {
         // SPSite test
-        NtlmCredentials credentials = new NtlmCredentials("dfg", "dfg", "dfg");
+        NtlmCredentials credentials = new NtlmCredentials("GORDIC", "vkorecky", "ykorec01");
         HttpProxy httpProxy = null;
         httpProxy = new HttpProxy("127.0.0.1", 8888);
 
-        SPSite site = new SPSite(new URL("https://dfgdfg"), credentials, httpProxy, true);
+        SPSite site = new SPSite(new URL("https://devport2.gordic.cz"), credentials, httpProxy, true);
         // Get sites web collection
         List<SPWeb> webCollection = site.getAllWebs();
         assertNotNull(webCollection);
@@ -48,11 +48,14 @@ public class SPTest {
         List<SPListTemplate> listTemplates = rootWeb.getListTemplates();
         assertNotNull(listTemplates);
         // Add list
-        SPList newList = rootWeb.addList("test", "delete this list", listTemplates.get(0));
-        assertNotNull(newList);
+//        SPList newList = rootWeb.addList("test", "delete this list", listTemplates.get(0));
+//        assertNotNull(newList);
         // Get root web lists
         List<SPList> listCollection = rootWeb.getLists();
         assertNotNull(listCollection);
+        // Get root web alerts
+        List<SPAlert> alertCollection = rootWeb.getAlerts();
+        assertNotNull(alertCollection);
 
 //        if ((webCollection != null) && (webCollection.size() > 0)) {
 //            SPWeb web = result.get(0);
