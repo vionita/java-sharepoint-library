@@ -35,10 +35,10 @@ public class SPTest {
 //
 //        SPSite instance = new SPSite(new URL("http://sp2013/"), credentials, httpProxy, true);
         
-        NtlmAuthenticator credentials = new NtlmAuthenticator("aaa", "aaa", "aaa");
+        NtlmAuthenticator credentials = new NtlmAuthenticator("DOMAIN", "user", "password");
         HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
 
-        SPSite instance = new SPSite(new URL("https://aaa/"), credentials, httpProxy, true);
+        SPSite instance = new SPSite(new URL("https://server/"), credentials, httpProxy, true);
        
         List<SPWeb> result = instance.getAllWebs();
         assertNotNull(result);
