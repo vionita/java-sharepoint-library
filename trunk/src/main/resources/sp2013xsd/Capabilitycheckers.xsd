@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema
+  targetNamespace="http://schemas.microsoft.com/sharepoint/2012/app/prerequisiteschecking"
+  xmlns="http://schemas.microsoft.com/sharepoint/2012/app/prerequisiteschecking"
+  xmlns:xs="http://www.w3.org/2001/XMLSchema"
+  attributeFormDefault="qualified"
+  elementFormDefault="qualified">
+
+  <xs:element name="CapabilityCheckers" type="CapabilityCheckersDefinition" />
+
+  <xs:complexType name="CapabilityCheckersDefinition">
+    <xs:sequence>
+      <xs:element name="CapabilityChecker" type="CapabilityCheckerDefinition" minOccurs="0" maxOccurs="100" />
+      <xs:element name="ServiceCapabilityChecker" type="ServiceCapabilityCheckerDefinition" minOccurs="0" maxOccurs="100" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name ="CapabilityCheckerDefinition">
+    <xs:sequence>
+      <xs:element name="Type" type="xs:string" minOccurs="1" maxOccurs="1"/>
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ServiceCapabilityCheckerDefinition">
+    <xs:attribute name="CapabilityID" form="unqualified" type="GUID" use="required"/>
+    <xs:attribute name="CapabilityName" form="unqualified" type="xs:string" use="required"/>
+    <xs:attribute name="ServiceProxyType" form="unqualified" type="xs:string" use="required"/>
+    <xs:attribute name="UserLicenseID" form="unqualified" type="xs:string" use="optional"/>
+  </xs:complexType>
+
+  <xs:simpleType name="GUID">
+    <xs:annotation>
+      <xs:documentation>A Guid in the form of XXXXXXXX-XXXX-XXXX-XXXXXXXXXXXX. It may be surrounded by {}'s.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:string">
+      <xs:pattern value="(\{[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}\})|([a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})"/>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>
