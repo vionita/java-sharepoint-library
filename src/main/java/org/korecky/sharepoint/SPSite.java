@@ -1,5 +1,8 @@
 package org.korecky.sharepoint;
 
+import org.korecky.sharepoint.support.WsContext;
+import org.korecky.sharepoint.net.HttpProxy;
+import org.korecky.sharepoint.authentication.AbstractAuthenticator;
 import com.microsoft.schemas.sharepoint.soap.webs.GetAllSubWebCollectionResponse.GetAllSubWebCollectionResult;
 import com.microsoft.schemas.sharepoint.soap.webs.GetWebResponse.GetWebResult;
 import java.net.MalformedURLException;
@@ -89,7 +92,8 @@ public class SPSite {
      */
     public SPWeb getRootWeb() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
         SPWeb rootWeb = null;
-        GetWebResult result = WsContext.getWebsPort(url).getWeb(url.toString());
+        String rootWebUrl = StringUtils.removeEndIgnoreCase(url.toString(), "/");
+        GetWebResult result = WsContext.getWebsPort(url).getWeb(rootWebUrl);
         if (result.getContent() != null) {
             for (Object content : result.getContent()) {
                 if (content instanceof Element) {

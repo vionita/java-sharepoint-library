@@ -1,5 +1,9 @@
-package org.korecky.sharepoint;
+package org.korecky.sharepoint.support;
 
+import org.korecky.sharepoint.net.HttpProxy;
+import org.korecky.sharepoint.authentication.AbstractAuthenticator;
+import org.korecky.sharepoint.authentication.FormAuthenticator;
+import org.korecky.sharepoint.authentication.BasicAuthenticator;
 import com.microsoft.schemas.sharepoint.soap.alerts.Alerts;
 import com.microsoft.schemas.sharepoint.soap.alerts.AlertsSoap;
 import com.microsoft.schemas.sharepoint.soap.authentication.Authentication;
@@ -44,7 +48,7 @@ import org.xml.sax.SAXException;
  *
  * @author vkorecky
  */
-class WsContext {
+public class WsContext {
 
     private static AbstractAuthenticator authenticator;
     private static HttpProxy httpProxy;
@@ -59,7 +63,7 @@ class WsContext {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected static AuthenticationSoap getAuthenticationPort() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public static AuthenticationSoap getAuthenticationPort() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(siteUrl, "/_vti_bin/Authentication.asmx");
         URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/authentication.wsdl").toExternalForm());
         Authentication service = new Authentication(wsdlURL);
@@ -76,7 +80,7 @@ class WsContext {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected static AlertsSoap getAlertsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public static AlertsSoap getAlertsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Alerts.asmx");
         URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Alerts.wsdl").toExternalForm());
         Alerts service = new Alerts(wsdlURL);
@@ -94,7 +98,7 @@ class WsContext {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected static ListsSoap getListsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public static ListsSoap getListsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Lists.asmx");
         URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Lists.wsdl").toExternalForm());
         Lists service = new Lists(wsdlURL);
@@ -111,7 +115,7 @@ class WsContext {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected static SiteDataSoap getSiteDataPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public static SiteDataSoap getSiteDataPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/SiteData.asmx");
         URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/SiteData.wsdl").toExternalForm());
         SiteData service = new SiteData(wsdlURL);
@@ -128,7 +132,7 @@ class WsContext {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected static ViewsSoap getViewsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public static ViewsSoap getViewsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Views.asmx");
         URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Views.wsdl").toExternalForm());
         Views service = new Views(wsdlURL);
@@ -145,7 +149,7 @@ class WsContext {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    protected static WebsSoap getWebsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
+    public static WebsSoap getWebsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Webs.asmx");
         URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Webs.wsdl").toExternalForm());
         Webs service = new Webs(wsdlURL);
@@ -154,7 +158,7 @@ class WsContext {
         return websPort;
     }
 
-    protected static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {
+    public static void configureEnviroment() throws NoSuchAlgorithmException, KeyManagementException {
         // Set httpProxy        
         if (httpProxy != null) {
             // Proxy            
@@ -218,35 +222,35 @@ class WsContext {
         return writer.getBuffer().toString();
     }
 
-    protected static AbstractAuthenticator getAuthenticator() {
+    public static AbstractAuthenticator getAuthenticator() {
         return authenticator;
     }
 
-    protected static void setAuthenticator(AbstractAuthenticator authenticator) {
+    public static void setAuthenticator(AbstractAuthenticator authenticator) {
         WsContext.authenticator = authenticator;
     }
 
-    protected static HttpProxy getHttpProxy() {
+    public static HttpProxy getHttpProxy() {
         return httpProxy;
     }
 
-    protected static void setHttpProxy(HttpProxy httpProxy) {
+    public static void setHttpProxy(HttpProxy httpProxy) {
         WsContext.httpProxy = httpProxy;
     }
 
-    protected static boolean isTrustAllSSLs() {
+    public static boolean isTrustAllSSLs() {
         return trustAllSSLs;
     }
 
-    protected static void setTrustAllSSLs(boolean trustAllSSLs) {
+    public static void setTrustAllSSLs(boolean trustAllSSLs) {
         WsContext.trustAllSSLs = trustAllSSLs;
     }
 
-    protected static URL getSiteUrl() {
+    public static URL getSiteUrl() {
         return siteUrl;
     }
 
-    protected static void setSiteUrl(URL siteUrl) {
+    public static void setSiteUrl(URL siteUrl) {
         WsContext.siteUrl = siteUrl;
     }
     

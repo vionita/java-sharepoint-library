@@ -1,10 +1,9 @@
 package org.korecky.sharepoint;
 
+import org.korecky.sharepoint.support.WsContext;
 import com.microsoft.schemas.sharepoint.soap.alerts.Alert;
-import com.microsoft.schemas.sharepoint.soap.alerts.AlertInfo;
 import com.microsoft.schemas.sharepoint.soap.alerts.ArrayOfDeleteFailure;
 import com.microsoft.schemas.sharepoint.soap.alerts.ArrayOfString;
-import com.microsoft.schemas.sharepoint.soap.alerts.DeleteFailure;
 import com.microsoft.schemas.sharepoint.soap.alerts.DeliveryChannel;
 import com.microsoft.schemas.sharepoint.soap.alerts.EmailChannel;
 import com.microsoft.schemas.sharepoint.soap.alerts.ErrorType;

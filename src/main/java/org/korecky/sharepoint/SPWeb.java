@@ -1,5 +1,6 @@
 package org.korecky.sharepoint;
 
+import org.korecky.sharepoint.support.WsContext;
 import com.microsoft.schemas.sharepoint.soap.alerts.Alert;
 import com.microsoft.schemas.sharepoint.soap.alerts.AlertInfo;
 import com.microsoft.schemas.sharepoint.soap.lists.AddListResponse.AddListResult;
@@ -184,31 +185,22 @@ public class SPWeb {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public List<SPList> addList(String listName, String description, SPListTemplate listTemplate) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
-        List<SPList> listsCollection = null;
+    public SPList addList(String listName, String description, SPListTemplate listTemplate) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+        SPList newList = null;
         AddListResult result = WsContext.getListsPort(new URL(url)).addList(listName, description, listTemplate.getType());
-//        if (result.getContent() != null) {
-//            for (Object content : result.getContent()) {
-//                if (content instanceof Element) {
-//                    // Parse XML file                    
-//                    Element rootElement = (Element) content;
-//                    if (StringUtils.equals(rootElement.getLocalName(), "Lists")) {
-//                        listTemplatesCollection = new ArrayList<SPList>();
-//                        NodeList listTemplateNodeList = rootElement.getElementsByTagName("List");
-//                        for (int i = 0; i < listTemplateNodeList.getLength(); i++) {
-//                            Element listTemplateElement = (Element) listTemplateNodeList.item(i);
-//                            SPList listTemplate = new SPList(url);
-//                            listTemplate.loadFromXml(listTemplateElement);
-//                            listTemplatesCollection.add(listTemplate);
-//                        }
-//
-//                    }
-//                }
-//            }
-//        }
-        return listsCollection;
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof Element) {
+                    // Parse XML file                    
+                    Element listElement = (Element) content;
+                    newList = new SPList(url);
+                    newList.loadFromXml(listElement);
+                }
+            }
+        }
+        return newList;
     }
-    
+
     /**
      * Gets the collection of all lists that are contained in the website.
      *
@@ -240,8 +232,8 @@ public class SPWeb {
             }
         }
         return listTemplatesCollection;
-    }    
-            
+    }
+
     /**
      * Update current object properties from web
      *
@@ -260,16 +252,27 @@ public class SPWeb {
                         Element webElement = (Element) content;
                         if (StringUtils.equals(webElement.getLocalName(), "Web")) {
                             loadFromXml(webElement);
+
+
+
+
+
+
+
+
                         }
                     }
                 }
             }
         } catch (NoSuchAlgorithmException ex) {
-            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SPWeb.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (KeyManagementException ex) {
-            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SPWeb.class
+                    .getName()).log(Level.SEVERE, null, ex);
         } catch (MalformedURLException ex) {
-            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(SPWeb.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
