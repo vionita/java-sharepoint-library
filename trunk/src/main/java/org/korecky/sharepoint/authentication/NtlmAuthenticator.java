@@ -1,4 +1,4 @@
-package org.korecky.sharepoint;
+package org.korecky.sharepoint.authentication;
 
 import java.net.PasswordAuthentication;
 
@@ -17,9 +17,9 @@ public class NtlmAuthenticator extends AbstractAuthenticator {
     public NtlmAuthenticator(String domain, String user, String password) {
         super(domain, user, password);
     }
-  
+
     @Override
-    public PasswordAuthentication getPasswordAuthentication() {            
+    public PasswordAuthentication getPasswordAuthentication() {
         return new PasswordAuthentication(getUserName(), password.toCharArray());
     }
 }

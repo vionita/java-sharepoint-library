@@ -1,5 +1,6 @@
 package org.korecky.sharepoint;
 
+import org.korecky.sharepoint.support.WsContext;
 import com.microsoft.schemas.sharepoint.soap.lists.GetListItems;
 import com.microsoft.schemas.sharepoint.soap.lists.GetListItemsResponse;
 import java.io.IOException;

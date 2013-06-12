@@ -1,13 +1,11 @@
-package org.korecky.sharepoint;
+package org.korecky.sharepoint.support;
 
 import java.io.StringReader;
 import java.io.StringWriter;
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.validation.SchemaFactory;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 

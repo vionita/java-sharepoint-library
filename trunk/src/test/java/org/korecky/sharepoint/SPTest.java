@@ -1,5 +1,8 @@
 package org.korecky.sharepoint;
 
+import org.korecky.sharepoint.net.HttpProxy;
+import java.io.File;
+import org.korecky.sharepoint.authentication.NtlmAuthenticator;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
@@ -29,50 +32,38 @@ public class SPTest {
 
     @Test
     public void complexTest() throws MalformedURLException, NoSuchAlgorithmException, KeyManagementException, ParseException, IOException, URISyntaxException, SAXException, JAXBException, ParserConfigurationException, TransformerConfigurationException, TransformerException {
-        // SPSite test
-//        NtlmAuthenticator credentials = new NtlmAuthenticator("SP20130", "sp_adminuser", "sp13123!@#");
-//        HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
-//
-//        SPSite instance = new SPSite(new URL("http://sp2013/"), credentials, httpProxy, true);
         
-        NtlmAuthenticator credentials = new NtlmAuthenticator("DOMAIN", "user", "password");
-        HttpProxy httpProxy = new HttpProxy("127.0.0.1", 8888);
-
-        SPSite instance = new SPSite(new URL("https://server/"), credentials, httpProxy, true);
-       
-        List<SPWeb> result = instance.getAllWebs();
-        assertNotNull(result);
-        if ((result != null) && (result.size() > 0)) {
-            SPWeb web = result.get(0);
-            System.out.println(web.getUrl());
-            // SPAlert                
-            List<SPAlert> alertCollection = web.getAlerts();
-            assertNotNull(alertCollection);
-            // Web properties
-            Map<String, String> webProperties = web.getAllProperties();
-            assertNotNull(webProperties);
-            // Lists
-            List<SPList> lists = web.getLists();
-            assertNotNull(lists);
-            for (SPList list : lists) {
-                System.out.println(list.getTitle());
+//        if ((result != null) && (result.size() > 0)) {
+//            SPWeb web = result.get(0);
+//            System.out.println(web.getUrl());
+//            // SPAlert                
+//            List<SPAlert> alertCollection = web.getAlerts();
+//            assertNotNull(alertCollection);
+//            // Web properties
+//            Map<String, String> webProperties = web.getAllProperties();
+//            assertNotNull(webProperties);
+//            // Lists
+//            List<SPList> lists = web.getLists();
+//            assertNotNull(lists);
+//            for (SPList list : lists) {
+//                System.out.println(list.getTitle());
 //                // List items in list
-                if (StringUtils.equals(list.getTitle(), "test2")) {
-                    System.out.println(list.getTitle());
-                    List<SPFile> items = list.getFiles();
-                    if (items != null) {
-                        for (SPFile item : items) {
-                            System.out.println(item.getCreated() + " " + item.getName());
-                        }
-                    }
-                }
-            }
+//                if (StringUtils.equals(list.getTitle(), "test2")) {
+//                    System.out.println(list.getTitle());
+//                    List<SPFile> items = list.getFiles();
+//                    if (items != null) {
+//                        for (SPFile item : items) {
+//                            System.out.println(item.getCreated() + " " + item.getName());
+//                        }
+//                    }
+//                }
+//            }
+//            
+//            
 //            if ((lists != null) && (lists.size() > 0)) {
 //                SPList list = lists.get(0);
 //                // List views
-//                List<SPView> views = list.getViews();                
-
-
+//                List<SPView> views = list.getViews();
 //
 //                // List items in document library
 //                list = lists.get(3);
@@ -94,16 +85,16 @@ public class SPTest {
 //                        File file = new File("c:\\Users\\vkorecky\\workspace\\" + attachement.getName());
 //                        attachement.saveBinary(file);
 //                    }
-//                    
+//
 //                    SPAttachment attachment = item.addAttachment(savedFile);
 //                    System.out.println(attachment.getAbsoluteUrl());
 //                }
 //            }
-
-            // ListTemplates
-            List<SPListTemplate> templates = web.getListTemplates();
-            assertNotNull(templates);
-            // web.addList("test3", "pokus", templates.get(1));                                 
-        }
+//
+//            // ListTemplates
+//            List<SPListTemplate> templates = web.getListTemplates();
+//            assertNotNull(templates);
+//            // web.addList("test3", "pokus", templates.get(1));                                 
+//        }
     }
 }

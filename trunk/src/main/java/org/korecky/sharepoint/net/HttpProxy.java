@@ -1,4 +1,4 @@
-package org.korecky.sharepoint;
+package org.korecky.sharepoint.net;
 
 /**
  * HttpProxy configuration object

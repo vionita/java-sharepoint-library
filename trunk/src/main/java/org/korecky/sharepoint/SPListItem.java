@@ -1,5 +1,6 @@
 package org.korecky.sharepoint;
 
+import org.korecky.sharepoint.support.WsContext;
 import com.microsoft.schemas.sharepoint.soap.lists.GetAttachmentCollectionResponse.GetAttachmentCollectionResult;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
