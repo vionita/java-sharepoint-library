@@ -1,23 +1,25 @@
 package org.korecky.sharepoint;
 
-import java.io.IOException;
+import com.microsoft.schemas.sharepoint.soap.alerts.Alert;
+import com.microsoft.schemas.sharepoint.soap.alerts.AlertInfo;
+import com.microsoft.schemas.sharepoint.soap.lists.AddListResponse.AddListResult;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListCollectionResponse;
+import com.microsoft.schemas.sharepoint.soap.webs.GetListTemplatesResponse.GetListTemplatesResult;
+import com.microsoft.schemas.sharepoint.soap.webs.GetWebResponse;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.GeneralSecurityException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamException;
-import org.apache.axiom.om.OMElement;
-import org.korecky.sharepoint.ws.AlertsWS;
-import org.korecky.sharepoint.ws.ListsWS;
-import org.korecky.sharepoint.ws.WebsWS;
+import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
  * Represents a SharePoint Foundation website.
@@ -25,10 +27,10 @@ import org.korecky.sharepoint.ws.WebsWS;
  * @author Vladislav Korecký [vladislav@korecky.org] - http://www.korecky.org
  *
  */
-public class SPWeb extends SpObject {
+public class SPWeb {
 
     String title;
-    URL url;
+    String url;
     String description;
     int language = -1;
     String theme;
@@ -36,65 +38,20 @@ public class SPWeb extends SpObject {
     /**
      * Initializes a new instance of the SPWeb
      */
-    public SPWeb(URL url) {
-        this.url = url;
+    protected SPWeb() {
     }
 
-    public SPWeb(String xmlString) throws XMLStreamException, MalformedURLException {
-        OMElement xmlElement = null;
-        xmlElement = Support.stringToOmElement(xmlString);
-
-        if (xmlElement != null) {
-            try {
-                parse(xmlElement);
-            } catch (ParseException ex) {
-                Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE,
-                        null, ex);
+    public void loadFromXml(Element rootElement) {
+        // Parse XML file                            
+        if (StringUtils.equals(rootElement.getLocalName(), "Web")) {
+            title = rootElement.getAttribute("Title");
+            url = rootElement.getAttribute("Url");
+            description = rootElement.getAttribute("Description");
+            theme = rootElement.getAttribute("Theme");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("Language"))) {
+                language = Integer.valueOf(rootElement.getAttribute("Language"));
             }
         }
-    }
-
-    public SPWeb(OMElement xmlElement) throws MalformedURLException {
-        try {
-            parse(xmlElement);
-        } catch (ParseException ex) {
-            Logger.getLogger(SPWeb.class.getName())
-                    .log(Level.SEVERE, null, ex);
-        }
-    }
-
-    public void parse(OMElement xmlElement) throws ParseException, MalformedURLException {
-        String tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Title"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.title = tempAttributeValue;
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Url"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.url = new URL(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Description"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.description = tempAttributeValue;
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Theme"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.theme = tempAttributeValue;
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Language"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.language = Integer.valueOf(tempAttributeValue);
-        tempAttributeValue = null;
-    }
-
-    @Override
-    public String getAsXmlString() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -111,7 +68,7 @@ public class SPWeb extends SpObject {
      * @return Gets the absolute URL for the website.
      */
     public String getUrl() {
-        return url.toString();
+        return url;
     }
 
     /**
@@ -153,10 +110,17 @@ public class SPWeb extends SpObject {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public List<SPAlert> getAlerts() throws GeneralSecurityException, IOException {
+    public List<SPAlert> getAlerts() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         List<SPAlert> alertCollection = null;
-        AlertsWS alertsWS = AlertsWS.getInstance(url);
-        alertCollection = alertsWS.getAlerts();
+        AlertInfo alertInfo = WsContext.getAlertsPort(new URL(url)).getAlerts();
+        if (alertInfo != null) {
+            alertCollection = new ArrayList<SPAlert>();
+            for (Alert tmpAlert : alertInfo.getAlerts().getAlert()) {
+                SPAlert alert = new SPAlert(url);
+                alert.loadFromAlert(tmpAlert);
+                alertCollection.add(alert);
+            }
+        }
         return alertCollection;
     }
 
@@ -187,10 +151,28 @@ public class SPWeb extends SpObject {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public List<SPList> getLists() throws GeneralSecurityException, IOException {
+    public List<SPList> getLists() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
         List<SPList> listsCollection = null;
-        ListsWS listsWS = ListsWS.getInstance(url);
-        listsCollection = listsWS.getListCollection();
+        GetListCollectionResponse.GetListCollectionResult result = WsContext.getListsPort(new URL(url)).getListCollection();
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof Element) {
+                    // Parse XML file                    
+                    Element rootElement = (Element) content;
+                    if (StringUtils.equals(rootElement.getLocalName(), "Lists")) {
+                        listsCollection = new ArrayList<SPList>();
+                        NodeList listNodeList = rootElement.getElementsByTagName("List");
+                        for (int i = 0; i < listNodeList.getLength(); i++) {
+                            Element listElement = (Element) listNodeList.item(i);
+                            SPList list = new SPList(url);
+                            list.loadFromXml(listElement);
+                            listsCollection.add(list);
+                        }
+
+                    }
+                }
+            }
+        }
         return listsCollection;
     }
 
@@ -202,13 +184,31 @@ public class SPWeb extends SpObject {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public SPList addList(String listName, String description, SPListTemplate listTemplate) throws GeneralSecurityException, IOException {
-        SPList list = null;
-        ListsWS listsWS = ListsWS.getInstance(url);
-        list = listsWS.addList(listName, description, listTemplate.getType());
-        return list;
+    public List<SPList> addList(String listName, String description, SPListTemplate listTemplate) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+        List<SPList> listsCollection = null;
+        AddListResult result = WsContext.getListsPort(new URL(url)).addList(listName, description, listTemplate.getType());
+//        if (result.getContent() != null) {
+//            for (Object content : result.getContent()) {
+//                if (content instanceof Element) {
+//                    // Parse XML file                    
+//                    Element rootElement = (Element) content;
+//                    if (StringUtils.equals(rootElement.getLocalName(), "Lists")) {
+//                        listTemplatesCollection = new ArrayList<SPList>();
+//                        NodeList listTemplateNodeList = rootElement.getElementsByTagName("List");
+//                        for (int i = 0; i < listTemplateNodeList.getLength(); i++) {
+//                            Element listTemplateElement = (Element) listTemplateNodeList.item(i);
+//                            SPList listTemplate = new SPList(url);
+//                            listTemplate.loadFromXml(listTemplateElement);
+//                            listTemplatesCollection.add(listTemplate);
+//                        }
+//
+//                    }
+//                }
+//            }
+//        }
+        return listsCollection;
     }
-
+    
     /**
      * Gets the collection of all lists that are contained in the website.
      *
@@ -217,13 +217,31 @@ public class SPWeb extends SpObject {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public List<SPListTemplate> getListTemplates() throws GeneralSecurityException, IOException {
+    public List<SPListTemplate> getListTemplates() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
         List<SPListTemplate> listTemplatesCollection = null;
-        WebsWS websWs = WebsWS.getInstance(url);
-        listTemplatesCollection = websWs.getListTemplates();
-        return listTemplatesCollection;
-    }
+        GetListTemplatesResult result = WsContext.getWebsPort(new URL(url)).getListTemplates();
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof Element) {
+                    // Parse XML file                    
+                    Element rootElement = (Element) content;
+                    if (StringUtils.equals(rootElement.getLocalName(), "ListTemplates")) {
+                        listTemplatesCollection = new ArrayList<SPListTemplate>();
+                        NodeList listTemplateNodeList = rootElement.getElementsByTagName("ListTemplate");
+                        for (int i = 0; i < listTemplateNodeList.getLength(); i++) {
+                            Element listTemplateElement = (Element) listTemplateNodeList.item(i);
+                            SPListTemplate listTemplate = new SPListTemplate(url);
+                            listTemplate.loadFromXml(listTemplateElement);
+                            listTemplatesCollection.add(listTemplate);
+                        }
 
+                    }
+                }
+            }
+        }
+        return listTemplatesCollection;
+    }    
+            
     /**
      * Update current object properties from web
      *
@@ -234,17 +252,24 @@ public class SPWeb extends SpObject {
      */
     private void updateProperties() {
         try {
-            WebsWS websWs = WebsWS.getInstance(url);
-            SPWeb web = websWs.getWeb(url);
-            this.title = web.getTitle();
-            this.description = web.getDescription();
-            this.theme = web.getTheme();
-            this.language = web.getLanguage();
-        } catch (GeneralSecurityException ex) {
+            GetWebResponse.GetWebResult result = WsContext.getWebsPort(new URL(url)).getWeb(url);
+            if (result.getContent() != null) {
+                for (Object content : result.getContent()) {
+                    if (content instanceof Element) {
+                        // Parse XML file                                       
+                        Element webElement = (Element) content;
+                        if (StringUtils.equals(webElement.getLocalName(), "Web")) {
+                            loadFromXml(webElement);
+                        }
+                    }
+                }
+            }
+        } catch (NoSuchAlgorithmException ex) {
             Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
+        } catch (KeyManagementException ex) {
+            Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (MalformedURLException ex) {
             Logger.getLogger(SPWeb.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 }

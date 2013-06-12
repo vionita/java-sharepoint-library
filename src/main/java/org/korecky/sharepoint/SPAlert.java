@@ -1,8 +1,13 @@
 package org.korecky.sharepoint;
 
-import com.microsoft.schemas.sharepoint.AlertsStub;
-import com.microsoft.schemas.sharepoint.AlertsStub.Alert;
-import com.microsoft.schemas.sharepoint.AlertsStub.DeliveryChannel;
+import com.microsoft.schemas.sharepoint.soap.alerts.Alert;
+import com.microsoft.schemas.sharepoint.soap.alerts.AlertInfo;
+import com.microsoft.schemas.sharepoint.soap.alerts.ArrayOfDeleteFailure;
+import com.microsoft.schemas.sharepoint.soap.alerts.ArrayOfString;
+import com.microsoft.schemas.sharepoint.soap.alerts.DeleteFailure;
+import com.microsoft.schemas.sharepoint.soap.alerts.DeliveryChannel;
+import com.microsoft.schemas.sharepoint.soap.alerts.EmailChannel;
+import com.microsoft.schemas.sharepoint.soap.alerts.ErrorType;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
@@ -19,7 +24,7 @@ import java.util.Map;
  *
  * @author vkorecky
  */
-public class SPAlert extends SpObject {
+public class SPAlert {
 
     private String id;
     private String title;
@@ -30,48 +35,49 @@ public class SPAlert extends SpObject {
     private String editAlertUrl;
     private Map<String, String> properties;
     private List<SPDeliveryChannel> deliveryChanels;
-    private final URL webAbsluteUrl;
+    private final String webAbsluteUrl;
 
-    public SPAlert(URL webAbsluteUrl) {
+    protected SPAlert(String webAbsluteUrl) {
         this.webAbsluteUrl = webAbsluteUrl;
     }
 
-//    public void loadFromAlert() {
-//        id = tmpAlert.getId();
-//        title = tmpAlert.getTitle();
-//        alertForUrl = tmpAlert.getAlertForTitle();
-//        alertForUrl = tmpAlert.getAlertForUrl();
-//        editAlertUrl = tmpAlert.getEditAlertUrl();
-//        eventType = SPEventType.valueOf(tmpAlert.getEventType());
-//        active = tmpAlert.getActive();
-//        if (tmpAlert.getDeliveryChannels() != null) {
-//            deliveryChanels = new ArrayList<SPDeliveryChannel>();
-//            for (DeliveryChannel deliveryChanel : tmpAlert.getDeliveryChannels().getDeliveryChannel()) {
-//                if (deliveryChanel instanceof EmailChannel) {
-//                    SPEmailChannel emailChanel = new SPEmailChannel();
-//                    deliveryChanels.add(emailChanel);
-//                    emailChanel.address = ((EmailChannel) deliveryChanel).getAddress();
-//                    emailChanel.alertFrequency = SPAlertFrequency.valueOf(((EmailChannel) deliveryChanel).getFrequency());
-//                }
-//            }
-//        }
-//    }
-//
-//    /**
-//     * Delete current allert from Sharepoint
-//     *
-//     * @param tmpAlert
-//     * @return
-//     * @throws NoSuchAlgorithmException
-//     * @throws MalformedURLException
-//     * @throws KeyManagementException
-//     */
-//    public ErrorType delete(Alert tmpAlert) throws NoSuchAlgorithmException, MalformedURLException, KeyManagementException {
-//        ArrayOfString arrayStr = new ArrayOfString();
-//        arrayStr.getString().add(id);
-//        ArrayOfDeleteFailure failureArray = WsContext.getAlertsStub(new URL(webAbsluteUrl)).deleteAlerts(arrayStr);
-//        return failureArray.getDeleteFailure().get(0).getError();
-//    }
+    public void loadFromAlert(Alert tmpAlert) {
+        id = tmpAlert.getId();
+        title = tmpAlert.getTitle();
+        alertForUrl = tmpAlert.getAlertForTitle();
+        alertForUrl = tmpAlert.getAlertForUrl();
+        editAlertUrl = tmpAlert.getEditAlertUrl();
+        eventType = SPEventType.valueOf(tmpAlert.getEventType());
+        active = tmpAlert.isActive();
+        if (tmpAlert.getDeliveryChannels() != null) {
+            deliveryChanels = new ArrayList<SPDeliveryChannel>();
+            for (DeliveryChannel deliveryChanel : tmpAlert.getDeliveryChannels().getDeliveryChannel()) {
+                if (deliveryChanel instanceof EmailChannel) {
+                    SPEmailChannel emailChanel = new SPEmailChannel();
+                    deliveryChanels.add(emailChanel);
+                    emailChanel.address = ((EmailChannel) deliveryChanel).getAddress();
+                    emailChanel.alertFrequency = SPAlertFrequency.valueOf(((EmailChannel) deliveryChanel).getFrequency());
+                }
+            }
+        }
+    }
+
+    /**
+     * Delete current allert from Sharepoint
+     *
+     * @param tmpAlert
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws MalformedURLException
+     * @throws KeyManagementException
+     */
+    public ErrorType delete(Alert tmpAlert) throws NoSuchAlgorithmException, MalformedURLException, KeyManagementException {
+        ArrayOfString arrayStr = new ArrayOfString();
+        arrayStr.getString().add(id);
+        ArrayOfDeleteFailure failureArray = WsContext.getAlertsPort(new URL(webAbsluteUrl)).deleteAlerts(arrayStr);
+        return failureArray.getDeleteFailure().get(0).getError();
+    }
+
     /**
      * Gets the ID of the alert.
      *
