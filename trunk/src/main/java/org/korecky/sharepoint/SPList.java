@@ -1,1223 +1,697 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package org.korecky.sharepoint;
 
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItems;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItems.Query;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItems.ViewFields;
+import com.microsoft.schemas.sharepoint.soap.lists.GetListItemsResponse.GetListItemsResult;
+import com.microsoft.schemas.sharepoint.soap.views.GetViewCollectionResponse.GetViewCollectionResult;
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
-import org.korecky.sharepoint.SpObject;
-import java.text.DateFormat;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.xml.namespace.QName;
-import javax.xml.stream.XMLStreamException;
-
-import org.apache.axiom.om.OMElement;
+import java.util.List;
+import javax.xml.bind.JAXBException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import org.apache.commons.lang3.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 /**
+ * Represents a list on a Microsoft SharePoint Foundation Web site.
  *
- * @author vkorecky
+ * @author Vladislav Korecký [vladislav@korecky.org] - http://www.korecky.org
+ *
  */
-// <List
-// BaseType = "Integer" | "Text"
-// Default = "TRUE" | "FALSE"
-// DefaultItemOpen = "Integer"
-// Description = "Text"
-// Direction = "Text"
-// DisableAttachments = "TRUE" | "FALSE"
-// DraftVersionVisibility = "Integer"
-// EnableContentTypes = "TRUE" | "FALSE" EnableMinorVersions = "TRUE" | "FALSE"
-// EnableThumbnails = "TRUE" | "FALSE"
-// EventSinkAssembly = "Text"
-// EventSinkClass = "Text"
-// EventSinkData = "Text"
-// FolderCreation = "TRUE" | "FALSE"
-// Id = "GUID"
-// ModeratedList = "TRUE" | "FALSE"
-// ModerationType = "TRUE" | "FALSE"
-// Name = "Text"
-// OrderedList = "TRUE" | "FALSE"
-// PrivateList = "TRUE" | "FALSE"
-// QuickLaunchUrl = "URL"
-// RootWebOnly = "TRUE" | "FALSE"
-// ThumbnailSize = "Integer"
-// Title = "Text"
-// Type = "Integer"
-// Url = "URL"
-// URLEncode = "TRUE" | "FALSE"
-// VersioningEnabled = "TRUE" | "FALSE"
-// WebImageHeight = "Integer"
-// WebImageWidth = "Integer">
-// </List>
-public final class SPList extends SpObject {
+public class SPList {
 
-    private String docTemplateUrl = null;
-    private String defaultViewUrl = null;
-    private String mobileDefaultViewUrl = null;
-    private String featureId = null;
-    private String id = null;
-    private Integer majorVersionLimit = null;
-    private Integer majorWithMinorVersionsLimit = null;
-    private String workFlowId = null;
-    private Boolean hasUniqueScopes = null;
-    private Boolean enableMinorVersion = null;
-    private Boolean requireCheckout = null;
-    private String title = null;
-    private String description = null;
-    private String sendToLocation = null;
-    private String scopeId = null;
-    private String webFullUrl = null;
-    private String webId = null;
-    private String emailAlias = null;
-    private String imageUrl = null;
-    private String name = null;
-    private Integer baseType = null;
-    private Integer serverTemplate = null;
-    private Date created = null;
-    private Date modified = null;
-    private Date lastDeleted = null;
-    private Integer version = null;
-    private String direction = null;
-    private Integer thumbnailSize = null;
-    private Integer webImageWidth = null;
-    private Integer webImageHeight = null;
-    private Integer flags = null;
-    private Integer itemCount = null;
-    private String anonymousPermMask = null; // TODO check type
-    private String rootFolder = null;
-    private Integer readSecurity = null;
-    private Integer writeSecurity = null;
-    private Integer author = null;
-    private String eventSinkAssembly = null;
-    private String eventSinkClass = null;
-    private String eventSinkData = null;
-    private String emailInsertsFolder = null;
-    private Boolean allowDeletion = null;
-    private Boolean allowMultiResponses = null;
-    private Boolean enableAttachments = null;
-    private Boolean enableModeration = null;
-    private Boolean enableVersioning = null;
-    private Boolean hidden = null;
-    private Boolean multipleDataList = null;
-    private Boolean ordered = null;
-    private Boolean showUser = null;
-    private SPFields fields = null;
-    private SPRegionalSettings regionalSettings = null;
-    private SPServerSettings serverSettings = null;
-    private final URL webAbsluteUrl;
+    private final String DATE_TIME_PATTERN = "yyyyMMdd HH:mm:ss";
+    private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PATTERN);
+    private String id;
+    private String title;
+    private String name;
+    private String description;
+    private int baseType;
+    private String imageUrl;
+    private String docTemplateUrl;
+    private String defaultViewUrl;
+    private String mobileDefaultViewUrl;
+    private String featureId;
+    private int serverTemplate;
+    private Date created;
+    private Date modified;
+    private Date lastDeleted;
+    private int version;
+    private String direction;
+    private String thumbnailSize;
+    private int webImageWidth;
+    private int webImageHeight;
+    private String flags;
+    private int itemCount;
+    private int anonymousPermMask;
+    private String rootFolder;
+    private int readSecurity;
+    private int writeSecurity;
+    private int authorID;
+    private String eventSinkAssembly;
+    private String eventSinkClass;
+    private String eventSinkData;
+    private String emailInsertsFolder;
+    private String emailAlias;
+    private String webFullUrl;
+    private String webId;
+    private String sendToLocation;
+    private String scopeId;
+    private int majorVersionLimit;
+    private int majorWithMinorVersionsLimit;
+    private String workFlowId;
+    private boolean hasUniqueScopes;
+    private boolean allowDeletion;
+    private boolean allowMultiResponses;
+    private boolean enableAttachments;
+    private boolean enableModeration;
+    private boolean enableVersioning;
+    private boolean hidden;
+    private boolean multipleDataList;
+    private boolean ordered;
+    private boolean showUser;
+    private boolean enableMinorVersion;
+    private boolean requireCheckout;
+    private final String webAbsluteUrl;
 
-    public SPList(URL webAbsluteUrl) {
+    protected SPList(String webAbsluteUrl) {
         this.webAbsluteUrl = webAbsluteUrl;
     }
 
-    public SPList(String xmlString, URL webAbsluteUrl) throws XMLStreamException {
-        this.webAbsluteUrl = webAbsluteUrl;
-        OMElement xmlElement = null;
-        xmlElement = Support.stringToOmElement(xmlString);
-
-        if (xmlElement != null) {
-            try {
-                parse(xmlElement);
-            } catch (ParseException ex) {
-                Logger.getLogger(SPList.class.getName()).log(Level.SEVERE,
-                        null, ex);
+    /**
+     * Initialize object form XML
+     *
+     * @param rootElement
+     * @throws ParseException
+     */
+    public void loadFromXml(Element rootElement) throws ParseException {
+        // Parse XML file                            
+        if (StringUtils.equals(rootElement.getLocalName(), "List")) {
+            id = rootElement.getAttribute("Id");
+            title = rootElement.getAttribute("Title");
+            name = rootElement.getAttribute("Name");
+            description = rootElement.getAttribute("Description");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("BaseType"))) {
+                baseType = Integer.valueOf(rootElement.getAttribute("BaseType"));
+            }
+            imageUrl = rootElement.getAttribute("ImageUrl");
+            docTemplateUrl = rootElement.getAttribute("DocTemplateUrl");
+            defaultViewUrl = rootElement.getAttribute("DefaultViewUrl");
+            mobileDefaultViewUrl = rootElement.getAttribute("MobileDefaultViewUrl");
+            featureId = rootElement.getAttribute("FeatureId");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("ServerTemplate"))) {
+                serverTemplate = Integer.valueOf(rootElement.getAttribute("ServerTemplate"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("Created"))) {
+                created = formatter.parse(rootElement.getAttribute("Created"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("Modified"))) {
+                modified = formatter.parse(rootElement.getAttribute("Modified"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("Version"))) {
+                version = Integer.valueOf(rootElement.getAttribute("Version"));
+            }
+            direction = rootElement.getAttribute("Direction");
+            thumbnailSize = rootElement.getAttribute("ThumbnailSize");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("WebImageWidth"))) {
+                webImageWidth = Integer.valueOf(rootElement.getAttribute("WebImageWidth"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("WebImageHeight"))) {
+                webImageHeight = Integer.valueOf(rootElement.getAttribute("WebImageHeight"));
+            }
+            flags = rootElement.getAttribute("Flags");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("ItemCount"))) {
+                itemCount = Integer.valueOf(rootElement.getAttribute("ItemCount"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("AnonymousPermMask"))) {
+                anonymousPermMask = Integer.valueOf(rootElement.getAttribute("AnonymousPermMask"));
+            }
+            rootFolder = rootElement.getAttribute("RootFolder");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("ReadSecurity"))) {
+                readSecurity = Integer.valueOf(rootElement.getAttribute("ReadSecurity"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("WriteSecurity"))) {
+                writeSecurity = Integer.valueOf(rootElement.getAttribute("WriteSecurity"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("AuthorID"))) {
+                authorID = Integer.valueOf(rootElement.getAttribute("AuthorID"));
+            }
+            eventSinkAssembly = rootElement.getAttribute("EventSinkAssembly");
+            eventSinkClass = rootElement.getAttribute("EventSinkClass");
+            eventSinkData = rootElement.getAttribute("EventSinkData");
+            emailInsertsFolder = rootElement.getAttribute("EmailInsertsFolder");
+            emailAlias = rootElement.getAttribute("EmailAlias");
+            webFullUrl = rootElement.getAttribute("WebFullUrl");
+            webId = rootElement.getAttribute("WebId");
+            sendToLocation = rootElement.getAttribute("SendToLocation");
+            scopeId = rootElement.getAttribute("ScopeId");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("MajorVersionLimit"))) {
+                majorVersionLimit = Integer.valueOf(rootElement.getAttribute("MajorVersionLimit"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("MajorWithMinorVersionsLimit"))) {
+                majorWithMinorVersionsLimit = Integer.valueOf(rootElement.getAttribute("MajorWithMinorVersionsLimit"));
+            }
+            workFlowId = rootElement.getAttribute("WorkFlowId");
+            if (StringUtils.isNotBlank(rootElement.getAttribute("HasUniqueScopes"))) {
+                hasUniqueScopes = Boolean.valueOf(rootElement.getAttribute("HasUniqueScopes"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("AllowDeletion"))) {
+                allowDeletion = Boolean.valueOf(rootElement.getAttribute("AllowDeletion"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("AllowMultiResponses"))) {
+                allowMultiResponses = Boolean.valueOf(rootElement.getAttribute("AllowMultiResponses"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("EnableAttachments"))) {
+                enableAttachments = Boolean.valueOf(rootElement.getAttribute("EnableAttachments"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("EnableModeration"))) {
+                enableModeration = Boolean.valueOf(rootElement.getAttribute("EnableModeration"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("EnableVersioning"))) {
+                enableVersioning = Boolean.valueOf(rootElement.getAttribute("EnableVersioning"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("Hidden"))) {
+                hidden = Boolean.valueOf(rootElement.getAttribute("Hidden"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("MultipleDataList"))) {
+                multipleDataList = Boolean.valueOf(rootElement.getAttribute("MultipleDataList"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("Ordered"))) {
+                ordered = Boolean.valueOf(rootElement.getAttribute("Ordered"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("ShowUser"))) {
+                showUser = Boolean.valueOf(rootElement.getAttribute("ShowUser"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("EnableMinorVersion"))) {
+                enableMinorVersion = Boolean.valueOf(rootElement.getAttribute("EnableMinorVersion"));
+            }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("RequireCheckout"))) {
+                requireCheckout = Boolean.valueOf(rootElement.getAttribute("RequireCheckout"));
             }
         }
     }
 
-    public SPList(OMElement xmlElement, URL webAbsluteUrl) {
-        this.webAbsluteUrl = webAbsluteUrl;
-        try {
-            parse(xmlElement);
-        } catch (ParseException ex) {
-            Logger.getLogger(SPList.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    @Override
-    public void parse(OMElement xmlElement) throws ParseException {
-        DateFormat dateFormatter = new SimpleDateFormat("yyyyMMdd hh:mm:ss");
-        String tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "DocTemplateUrl"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setDocTemplateUrl(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "DefaultViewUrl"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setDefaultViewUrl(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "MobileDefaultViewUrl"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setMobileDefaultViewUrl(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement
-                .getAttributeValue(new QName("FeatureId"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setFeatureId(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("ID"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setId(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "MajorVersionLimit"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setMajorVersionLimit(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "MajorWithMinorVersionsLimit"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setMajorWithMinorVersionsLimit(Integer
-                    .valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "WorkFlowId"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setWorkFlowId(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "HasUniqueScopes"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setHasUniqueScopes(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EnableMinorVersion"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEnableMinorVersion(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "RequireCheckout"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setRequireCheckout(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Title"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setTitle(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "Description"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setDescription(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "SendToLocation"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setSendToLocation(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("ScopeId"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setScopeId(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "WebFullUrl"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setWebFullUrl(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("WebId"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setWebId(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EmailAlias"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEmailAlias(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement
-                .getAttributeValue(new QName("ImageUrl"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setImageUrl(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Name"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setName(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement
-                .getAttributeValue(new QName("BaseType"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setBaseType(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "ServerTemplate"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setServerTemplate(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Created"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setCreated((Date) dateFormatter.parse(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement
-                .getAttributeValue(new QName("Modified"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setModified((Date) dateFormatter.parse(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "LastDeleted"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setLastDeleted((Date) dateFormatter.parse(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Version"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setVersion(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement
-                .getAttributeValue(new QName("Direction"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setDirection(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "ThumbnailSize"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setThumbnailSize(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "WebImageWidth"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setWebImageWidth(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "WebImageHeight"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setWebImageHeight(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Flags"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setFlags(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement
-                .getAttributeValue(new QName("ItemCount"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setItemCount(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "AnonymousPermMask"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setAnonymousPermMask(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "RootFolder"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setRootFolder(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "ReadSecurity"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setReadSecurity(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "WriteSecurity"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setWriteSecurity(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Author"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setAuthor(Integer.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EventSinkAssembly"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEventSinkAssembly(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EventSinkClass"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEventSinkClass(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EventSinkData"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEventSinkData(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EmailInsertsFolder"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEmailInsertsFolder(tempAttributeValue);
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "AllowDeletion"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setAllowDeletion(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "AllowMultiResponses"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setAllowMultiResponses(Boolean
-                    .valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EnableAttachments"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEnableAttachments(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EnableModeration"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEnableModeration(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "EnableVersioning"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setEnableVersioning(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Hidden"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setHidden(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName(
-                "MultipleDataList"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setMultipleDataList(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement.getAttributeValue(new QName("Ordered"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setOrdered(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-        tempAttributeValue = xmlElement
-                .getAttributeValue(new QName("ShowUser"));
-        if ((tempAttributeValue != null) && (tempAttributeValue.length() > 0))
-            this.setShowUser(Boolean.valueOf(tempAttributeValue));
-        tempAttributeValue = null;
-
-
-        Iterator children = xmlElement.getChildElements();
-        while (children.hasNext()) {
-            OMElement childElement = (OMElement) children.next();
-            if (childElement.getQName().getLocalPart().equals("Fields")) {
-                this.setFields(new SPFields(childElement));
-            } else if (childElement.getQName().getLocalPart().equals("RegionalSettings")) {
-                this.setRegionalSettings(new SPRegionalSettings(childElement));
-            } else if (childElement.getQName().getLocalPart().equals("ServerSettings")) {
-                this.setServerSettings(new SPServerSettings(childElement));
+    /**
+     * Gets the collection of view objects that represents all the views of the
+     * list.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPView> getViews() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+        List<SPView> viewsCollection = null;
+        GetViewCollectionResult result = WsContext.getViewsPort(new URL(webAbsluteUrl)).getViewCollection(name);
+        if (result.getContent() != null) {
+            for (Object content : result.getContent()) {
+                if (content instanceof Element) {
+                    // Parse XML file                    
+                    Element rootElement = (Element) content;
+                    if (StringUtils.equals(rootElement.getLocalName(), "Views")) {
+                        NodeList viewNodeList = rootElement.getElementsByTagName("View");
+                        viewsCollection = new ArrayList<SPView>();
+                        for (int i = 0; i < viewNodeList.getLength(); i++) {
+                            Element viewElement = (Element) viewNodeList.item(i);
+                            SPView view = new SPView(name, webAbsluteUrl);
+                            view.loadFromXml(viewElement);
+                            viewsCollection.add(view);
+                        }
+                    }
+                }
             }
         }
-    }
-
-    @Override
-    public String getAsXmlString() {
-
-        // TODO: getAsXmlString
-
-        // <List DocTemplateUrl=
-        // "" DefaultViewUrl="/TestWeb1/Lists/Announcements/AllItems.aspx"
-        // ID="{8A98E2E5-B377-4D0E-931B-3AC25BD09926}" Title="Announcements"
-        // Description="Use the Announcements list to post messages on the
-        // home page of your site."
-        // ImageUrl="/_layouts/images/itann.gif"
-        // Name="{8A98E2E5-B377-4D0E-931B-3AC25BD09926}"
-        // BaseType="0" ServerTemplate="104"
-        // Created="20030613 18:47:12" Modified="20030613 18:47:12"
-        // LastDeleted="20030613 18:47:12" Version="0" Direction="none"
-        // ThumbnailSize="" WebImageWidth=""
-        // WebImageHeight="" Flags="4096" ItemCount="1"
-        // AnonymousPermMask="" RootFolder="" ReadSecurity="1"
-        // WriteSecurity="1" Author="1"
-        // EventSinkAssembly="" EventSinkClass=""
-        // EventSinkData="" EmailInsertsFolder=""
-        // AllowDeletion="True" AllowMultiResponses="False"
-        // EnableAttachments="True" EnableModeration="False"
-        // EnableVersioning="False" Hidden="False" MultipleDataList="False"
-        // Ordered="False" ShowUser="True" />
-
-        return null;
+        return viewsCollection;
     }
 
     /**
-     * @return the docTemplateUrl
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
      */
-    public String getDocTemplateUrl() {
-        return docTemplateUrl;
+    public List<SPListItem> getItems(CamlQueryRoot query, FieldRefDefinitions viewFields, int rowLimit) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        List<SPListItem> itemsCollection = null;
+        String strQuery = null;
+        String strFieldDefs = null;
+        if (query != null) {
+            JaxbFactory<CamlQueryRoot> camlFactory = new JaxbFactory<CamlQueryRoot>();
+            strQuery = camlFactory.objectToXml(query, CamlQueryRoot.class);
+        }
+        if (viewFields != null) {
+            JaxbFactory<FieldRefDefinitions> fieldFactory = new JaxbFactory<FieldRefDefinitions>();
+            strFieldDefs = fieldFactory.objectToXml(viewFields, FieldRefDefinitions.class);
+        }
+        String strResult = WsContext.getSiteDataPort(new URL(webAbsluteUrl)).getListItems(name, strQuery, strFieldDefs, rowLimit);
+        Document document = WsContext.stringToDom(strResult);
+        Element rootElement = document.getDocumentElement();
+        NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+        for (int i = 0; i < dataNodeList.getLength(); i++) {
+            Element dataElement = (Element) dataNodeList.item(i);
+            itemsCollection = new ArrayList<SPListItem>();
+            NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+            for (int j = 0; j < rowNodeList.getLength(); j++) {
+                Element rowElement = (Element) rowNodeList.item(j);
+                SPListItem item = new SPListItem(name, webAbsluteUrl);
+                item.loadFromXml(rowElement);
+                itemsCollection.add(item);
+            }
+
+        }
+
+        return itemsCollection;
     }
 
     /**
-     * @param docTemplateUrl the docTemplateUrl to set
+     * Returns a collection of list items include folders from all levels
+     * (recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
      */
-    public void setDocTemplateUrl(String docTemplateUrl) {
-        this.docTemplateUrl = docTemplateUrl;
+    public List<SPListItem> getItems() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" Scope=\"RecursiveAll\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getItems(null, null, null, 0, options);
     }
 
     /**
-     * @return the defaultViewUrl
+     * Returns a collection of list items include folders from first level (no
+     * recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
      */
-    public String getDefaultViewUrl() {
-        return defaultViewUrl;
+    public List<SPListItem> getItemsFromRoot() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\"/><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getItems(null, null, null, 0, options);
     }
 
     /**
-     * @param defaultViewUrl the defaultViewUrl to set
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
      */
-    public void setDefaultViewUrl(String defaultViewUrl) {
-        this.defaultViewUrl = defaultViewUrl;
+    private List<SPListItem> getItems(String viewName, Query query, ViewFields viewFields, int rowLimit, GetListItems.QueryOptions queryOptions) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        List<SPListItem> itemsCollection = null;
+        GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(name, viewName, query, viewFields, String.valueOf(rowLimit), queryOptions, webId);
+        for (Object content : result.getContent()) {
+            if (content instanceof Element) {
+                Element rootElement = (Element)content;
+                NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+                for (int i = 0; i < dataNodeList.getLength(); i++) {
+                    Element dataElement = (Element) dataNodeList.item(i);
+                    itemsCollection = new ArrayList<SPListItem>();
+                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                    for (int j = 0; j < rowNodeList.getLength(); j++) {
+                        Element rowElement = (Element) rowNodeList.item(j);
+                        SPListItem item = new SPListItem(name, webAbsluteUrl);
+                        item.loadFromXml(rowElement);
+                        itemsCollection.add(item);
+                    }
+                }
+            }
+        }
+        return itemsCollection;
+    }
+    
+    /**
+     * Gets the collection of folder for the list (recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPFolder> getFolders() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">1</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" Scope=\"RecursiveAll\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFolders(null, query, null, 0, options);
     }
 
     /**
-     * @return the id
+     * Gets the collection of folder for the list from first level (no
+     * recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
      */
+    public List<SPFolder> getFoldersFromRoot() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">1</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFolders(null, query, null, 0, options);
+    }
+
+    /**
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    private List<SPFolder> getFolders(String viewName, Query query, ViewFields viewFields, int rowLimit, GetListItems.QueryOptions queryOptions) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        List<SPFolder> folderCollection = null;
+        GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(name, viewName, query, viewFields, String.valueOf(rowLimit), queryOptions, webId);
+        for (Object content : result.getContent()) {
+            if (content instanceof Element) {
+                Element rootElement = (Element)content;
+                NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+                for (int i = 0; i < dataNodeList.getLength(); i++) {
+                    Element dataElement = (Element) dataNodeList.item(i);
+                    folderCollection = new ArrayList<SPFolder>();
+                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                    for (int j = 0; j < rowNodeList.getLength(); j++) {
+                        Element rowElement = (Element) rowNodeList.item(j);
+                        SPFolder folder = new SPFolder(name, webAbsluteUrl, webId);
+                        folder.loadFromXml(rowElement);
+                        folderCollection.add(folder);
+                    }
+                }
+            }
+        }
+        return folderCollection;
+    }
+    
+    /**
+     * Gets the collection of files for the list (recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPFile> getFiles() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">0</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" Scope=\"RecursiveAll\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFiles(null, query, null, 0, options);
+    }
+
+    /**
+     * Gets the collection of files for the list from first level (no
+     * recursivelly)
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    public List<SPFile> getFilesFromRoot() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        Query query = new Query();
+        Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">0</Value></Eq></Where></Query>");
+        query.getContent().add(docQuery.getDocumentElement());
+        GetListItems.QueryOptions options = new GetListItems.QueryOptions();
+        Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"True\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc></QueryOptions>");
+        options.getContent().add(doc.getDocumentElement());
+        return getFiles(null, query, null, 0, options);
+    }       
+
+    /**
+     * Returns a collection of list items from the list based on the specified
+     * view.
+     *
+     * @return
+     * @throws NoSuchAlgorithmException
+     * @throws KeyManagementException
+     * @throws MalformedURLException
+     * @throws ParseException
+     */
+    private List<SPFile> getFiles(String viewName, Query query, ViewFields viewFields, int rowLimit, GetListItems.QueryOptions queryOptions) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, ParserConfigurationException, IOException, SAXException, JAXBException, TransformerConfigurationException, TransformerException {
+        List<SPFile> filesCollection = null;
+        GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(name, viewName, query, viewFields, String.valueOf(rowLimit), queryOptions, webId);
+        for (Object content : result.getContent()) {
+            if (content instanceof Element) {
+                Element rootElement = (Element)content;
+                NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
+                for (int i = 0; i < dataNodeList.getLength(); i++) {
+                    Element dataElement = (Element) dataNodeList.item(i);
+                    filesCollection = new ArrayList<SPFile>();
+                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
+                    for (int j = 0; j < rowNodeList.getLength(); j++) {
+                        Element rowElement = (Element) rowNodeList.item(j);
+                        SPFile file = new SPFile(name, webAbsluteUrl);
+                        file.loadFromXml(rowElement);
+                        filesCollection.add(file);
+                    }
+                }
+            }
+        }
+        return filesCollection;
+    }
+
     public String getId() {
         return id;
     }
 
-    /**
-     * @param id the id to set
-     */
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the title
-     */
     public String getTitle() {
         return title;
     }
 
-    /**
-     * @param title the title to set
-     */
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
-     * @return the imageUrl
-     */
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    /**
-     * @param imageUrl the imageUrl to set
-     */
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
-    /**
-     * @return the name
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
+    public String getDescription() {
+        return description;
     }
 
-    /**
-     * @return the baseType
-     */
-    public Integer getBaseType() {
+    public int getBaseType() {
         return baseType;
     }
 
-    /**
-     * @param baseType the baseType to set
-     */
-    public void setBaseType(Integer baseType) {
-        this.baseType = baseType;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    /**
-     * @return the serverTemplate
-     */
-    public Integer getServerTemplate() {
-        return serverTemplate;
+    public String getDocTemplateUrl() {
+        return docTemplateUrl;
     }
 
-    /**
-     * @param serverTemplate the serverTemplate to set
-     */
-    public void setServerTemplate(Integer serverTemplate) {
-        this.serverTemplate = serverTemplate;
+    public String getDefaultViewUrl() {
+        return defaultViewUrl;
     }
 
-    /**
-     * @return the created
-     */
-    public Date getCreated() {
-        return created;
-    }
-
-    /**
-     * @param created the created to set
-     */
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    /**
-     * @return the modified
-     */
-    public Date getModified() {
-        return modified;
-    }
-
-    /**
-     * @param modified the modified to set
-     */
-    public void setModified(Date modified) {
-        this.modified = modified;
-    }
-
-    /**
-     * @return the lastDeleted
-     */
-    public Date getLastDeleted() {
-        return lastDeleted;
-    }
-
-    /**
-     * @param lastDeleted the lastDeleted to set
-     */
-    public void setLastDeleted(Date lastDeleted) {
-        this.lastDeleted = lastDeleted;
-    }
-
-    /**
-     * @return the version
-     */
-    public Integer getVersion() {
-        return version;
-    }
-
-    /**
-     * @param version the version to set
-     */
-    public void setVersion(Integer version) {
-        this.version = version;
-    }
-
-    /**
-     * @return the direction
-     */
-    public String getDirection() {
-        return direction;
-    }
-
-    /**
-     * @param direction the direction to set
-     */
-    public void setDirection(String direction) {
-        this.direction = direction;
-    }
-
-    /**
-     * @return the thumbnailSize
-     */
-    public Integer getThumbnailSize() {
-        return thumbnailSize;
-    }
-
-    /**
-     * @param thumbnailSize the thumbnailSize to set
-     */
-    public void setThumbnailSize(Integer thumbnailSize) {
-        this.thumbnailSize = thumbnailSize;
-    }
-
-    /**
-     * @return the webImageWidth
-     */
-    public Integer getWebImageWidth() {
-        return webImageWidth;
-    }
-
-    /**
-     * @param webImageWidth the webImageWidth to set
-     */
-    public void setWebImageWidth(Integer webImageWidth) {
-        this.webImageWidth = webImageWidth;
-    }
-
-    /**
-     * @return the webImageHeight
-     */
-    public Integer getWebImageHeight() {
-        return webImageHeight;
-    }
-
-    /**
-     * @param webImageHeight the webImageHeight to set
-     */
-    public void setWebImageHeight(Integer webImageHeight) {
-        this.webImageHeight = webImageHeight;
-    }
-
-    /**
-     * @return the flags
-     */
-    public Integer getFlags() {
-        return flags;
-    }
-
-    /**
-     * @param flags the flags to set
-     */
-    public void setFlags(Integer flags) {
-        this.flags = flags;
-    }
-
-    /**
-     * @return the itemCount
-     */
-    public Integer getItemCount() {
-        return itemCount;
-    }
-
-    /**
-     * @param itemCount the itemCount to set
-     */
-    public void setItemCount(Integer itemCount) {
-        this.itemCount = itemCount;
-    }
-
-    /**
-     * @return the anonymousPermMask
-     */
-    public String getAnonymousPermMask() {
-        return anonymousPermMask;
-    }
-
-    /**
-     * @param anonymousPermMask the anonymousPermMask to set
-     */
-    public void setAnonymousPermMask(String anonymousPermMask) {
-        this.anonymousPermMask = anonymousPermMask;
-    }
-
-    /**
-     * @return the rootFolder
-     */
-    public String getRootFolder() {
-        return rootFolder;
-    }
-
-    /**
-     * @param rootFolder the rootFolder to set
-     */
-    public void setRootFolder(String rootFolder) {
-        this.rootFolder = rootFolder;
-    }
-
-    /**
-     * @return the readSecurity
-     */
-    public Integer getReadSecurity() {
-        return readSecurity;
-    }
-
-    /**
-     * @param readSecurity the readSecurity to set
-     */
-    public void setReadSecurity(Integer readSecurity) {
-        this.readSecurity = readSecurity;
-    }
-
-    /**
-     * @return the writeSecurity
-     */
-    public Integer getWriteSecurity() {
-        return writeSecurity;
-    }
-
-    /**
-     * @param writeSecurity the writeSecurity to set
-     */
-    public void setWriteSecurity(Integer writeSecurity) {
-        this.writeSecurity = writeSecurity;
-    }
-
-    /**
-     * @return the author
-     */
-    public Integer getAuthor() {
-        return author;
-    }
-
-    /**
-     * @param author the author to set
-     */
-    public void setAuthor(Integer author) {
-        this.author = author;
-    }
-
-    /**
-     * @return the eventSinkAssembly
-     */
-    public String getEventSinkAssembly() {
-        return eventSinkAssembly;
-    }
-
-    /**
-     * @param eventSinkAssembly the eventSinkAssembly to set
-     */
-    public void setEventSinkAssembly(String eventSinkAssembly) {
-        this.eventSinkAssembly = eventSinkAssembly;
-    }
-
-    /**
-     * @return the eventSinkClass
-     */
-    public String getEventSinkClass() {
-        return eventSinkClass;
-    }
-
-    /**
-     * @param eventSinkClass the eventSinkClass to set
-     */
-    public void setEventSinkClass(String eventSinkClass) {
-        this.eventSinkClass = eventSinkClass;
-    }
-
-    /**
-     * @return the eventSinkData
-     */
-    public String getEventSinkData() {
-        return eventSinkData;
-    }
-
-    /**
-     * @param eventSinkData the eventSinkData to set
-     */
-    public void setEventSinkData(String eventSinkData) {
-        this.eventSinkData = eventSinkData;
-    }
-
-    /**
-     * @return the emailInsertsFolder
-     */
-    public String getEmailInsertsFolder() {
-        return emailInsertsFolder;
-    }
-
-    /**
-     * @param emailInsertsFolder the emailInsertsFolder to set
-     */
-    public void setEmailInsertsFolder(String emailInsertsFolder) {
-        this.emailInsertsFolder = emailInsertsFolder;
-    }
-
-    /**
-     * @return the allowDeletion
-     */
-    public Boolean getAllowDeletion() {
-        return allowDeletion;
-    }
-
-    /**
-     * @param allowDeletion the allowDeletion to set
-     */
-    public void setAllowDeletion(Boolean allowDeletion) {
-        this.allowDeletion = allowDeletion;
-    }
-
-    /**
-     * @return the allowMultiResponses
-     */
-    public Boolean getAllowMultiResponses() {
-        return allowMultiResponses;
-    }
-
-    /**
-     * @param allowMultiResponses the allowMultiResponses to set
-     */
-    public void setAllowMultiResponses(Boolean allowMultiResponses) {
-        this.allowMultiResponses = allowMultiResponses;
-    }
-
-    /**
-     * @return the enableAttachments
-     */
-    public Boolean getEnableAttachments() {
-        return enableAttachments;
-    }
-
-    /**
-     * @param enableAttachments the enableAttachments to set
-     */
-    public void setEnableAttachments(Boolean enableAttachments) {
-        this.enableAttachments = enableAttachments;
-    }
-
-    /**
-     * @return the enableModeration
-     */
-    public Boolean getEnableModeration() {
-        return enableModeration;
-    }
-
-    /**
-     * @param enableModeration the enableModeration to set
-     */
-    public void setEnableModeration(Boolean enableModeration) {
-        this.enableModeration = enableModeration;
-    }
-
-    /**
-     * @return the enableVersioning
-     */
-    public Boolean getEnableVersioning() {
-        return enableVersioning;
-    }
-
-    /**
-     * @param enableVersioning the enableVersioning to set
-     */
-    public void setEnableVersioning(Boolean enableVersioning) {
-        this.enableVersioning = enableVersioning;
-    }
-
-    /**
-     * @return the hidden
-     */
-    public Boolean getHidden() {
-        return hidden;
-    }
-
-    /**
-     * @param hidden the hidden to set
-     */
-    public void setHidden(Boolean hidden) {
-        this.hidden = hidden;
-    }
-
-    /**
-     * @return the multipleDataList
-     */
-    public Boolean getMultipleDataList() {
-        return multipleDataList;
-    }
-
-    /**
-     * @param multipleDataList the multipleDataList to set
-     */
-    public void setMultipleDataList(Boolean multipleDataList) {
-        this.multipleDataList = multipleDataList;
-    }
-
-    /**
-     * @return the ordered
-     */
-    public Boolean getOrdered() {
-        return ordered;
-    }
-
-    /**
-     * @param ordered the ordered to set
-     */
-    public void setOrdered(Boolean ordered) {
-        this.ordered = ordered;
-    }
-
-    /**
-     * @return the showUser
-     */
-    public Boolean getShowUser() {
-        return showUser;
-    }
-
-    /**
-     * @param showUser the showUser to set
-     */
-    public void setShowUser(Boolean showUser) {
-        this.showUser = showUser;
-    }
-
-    /**
-     * @return the fields
-     */
-    public SPFields getFields() {
-        return fields;
-    }
-
-    /**
-     * @param fields the fields to set
-     */
-    public void setFields(SPFields fields) {
-        this.fields = fields;
-    }
-
-    /**
-     * @return the regionalSettings
-     */
-    public SPRegionalSettings getRegionalSettings() {
-        return regionalSettings;
-    }
-
-    /**
-     * @param regionalSettings the regionalSettings to set
-     */
-    public void setRegionalSettings(SPRegionalSettings regionalSettings) {
-        this.regionalSettings = regionalSettings;
-    }
-
-    /**
-     * @return the serverSettings
-     */
-    public SPServerSettings getServerSettings() {
-        return serverSettings;
-    }
-
-    /**
-     * @param serverSettings the serverSettings to set
-     */
-    public void setServerSettings(SPServerSettings serverSettings) {
-        this.serverSettings = serverSettings;
-    }
-
-    /**
-     * @return the mobileDefaultViewUrl
-     */
     public String getMobileDefaultViewUrl() {
         return mobileDefaultViewUrl;
     }
 
-    /**
-     * @param mobileDefaultViewUrl the mobileDefaultViewUrl to set
-     */
-    public void setMobileDefaultViewUrl(String mobileDefaultViewUrl) {
-        this.mobileDefaultViewUrl = mobileDefaultViewUrl;
-    }
-
-    /**
-     * @return the featureId
-     */
     public String getFeatureId() {
         return featureId;
     }
 
-    /**
-     * @param featureId the featureId to set
-     */
-    public void setFeatureId(String featureId) {
-        this.featureId = featureId;
+    public int getServerTemplate() {
+        return serverTemplate;
     }
 
-    /**
-     * @return the majorVersionLimit
-     */
-    public Integer getMajorVersionLimit() {
-        return majorVersionLimit;
+    public Date getCreated() {
+        return created;
     }
 
-    /**
-     * @param majorVersionLimit the majorVersionLimit to set
-     */
-    public void setMajorVersionLimit(Integer majorVersionLimit) {
-        this.majorVersionLimit = majorVersionLimit;
+    public Date getModified() {
+        return modified;
     }
 
-    /**
-     * @return the majorWithMinorVersionsLimit
-     */
-    public Integer getMajorWithMinorVersionsLimit() {
-        return majorWithMinorVersionsLimit;
+    public Date getLastDeleted() {
+        return lastDeleted;
     }
 
-    /**
-     * @param majorWithMinorVersionsLimit the majorWithMinorVersionsLimit to set
-     */
-    public void setMajorWithMinorVersionsLimit(
-            Integer majorWithMinorVersionsLimit) {
-        this.majorWithMinorVersionsLimit = majorWithMinorVersionsLimit;
+    public int getVersion() {
+        return version;
     }
 
-    /**
-     * @return the workFlowId
-     */
-    public String getWorkFlowId() {
-        return workFlowId;
+    public String getDirection() {
+        return direction;
     }
 
-    /**
-     * @param workFlowId the workFlowId to set
-     */
-    public void setWorkFlowId(String workFlowId) {
-        this.workFlowId = workFlowId;
+    public String getThumbnailSize() {
+        return thumbnailSize;
     }
 
-    /**
-     * @return the hasUniqueScopes
-     */
-    public Boolean getHasUniqueScopes() {
-        return hasUniqueScopes;
+    public int getWebImageWidth() {
+        return webImageWidth;
     }
 
-    /**
-     * @param hasUniqueScopes the hasUniqueScopes to set
-     */
-    public void setHasUniqueScopes(Boolean hasUniqueScopes) {
-        this.hasUniqueScopes = hasUniqueScopes;
+    public int getWebImageHeight() {
+        return webImageHeight;
     }
 
-    /**
-     * @return the enableMinorVersion
-     */
-    public Boolean getEnableMinorVersion() {
-        return enableMinorVersion;
+    public String getFlags() {
+        return flags;
     }
 
-    /**
-     * @param enableMinorVersion the enableMinorVersion to set
-     */
-    public void setEnableMinorVersion(Boolean enableMinorVersion) {
-        this.enableMinorVersion = enableMinorVersion;
+    public int getItemCount() {
+        return itemCount;
     }
 
-    /**
-     * @return the requireCheckout
-     */
-    public Boolean getRequireCheckout() {
-        return requireCheckout;
+    public int getAnonymousPermMask() {
+        return anonymousPermMask;
     }
 
-    /**
-     * @param requireCheckout the requireCheckout to set
-     */
-    public void setRequireCheckout(Boolean requireCheckout) {
-        this.requireCheckout = requireCheckout;
+    public String getRootFolder() {
+        return rootFolder;
     }
 
-    /**
-     * @return the sendToLocation
-     */
-    public String getSendToLocation() {
-        return sendToLocation;
+    public int getReadSecurity() {
+        return readSecurity;
     }
 
-    /**
-     * @param sendToLocation the sendToLocation to set
-     */
-    public void setSendToLocation(String sendToLocation) {
-        this.sendToLocation = sendToLocation;
+    public int getWriteSecurity() {
+        return writeSecurity;
     }
 
-    /**
-     * @return the scopeId
-     */
-    public String getScopeId() {
-        return scopeId;
+    public int getAuthorID() {
+        return authorID;
     }
 
-    /**
-     * @param scopeId the scopeId to set
-     */
-    public void setScopeId(String scopeId) {
-        this.scopeId = scopeId;
+    public String getEventSinkAssembly() {
+        return eventSinkAssembly;
     }
 
-    /**
-     * @return the webFullUrl
-     */
-    public String getWebFullUrl() {
-        return webFullUrl;
+    public String getEventSinkClass() {
+        return eventSinkClass;
     }
 
-    /**
-     * @param webFullUrl the webFullUrl to set
-     */
-    public void setWebFullUrl(String webFullUrl) {
-        this.webFullUrl = webFullUrl;
+    public String getEventSinkData() {
+        return eventSinkData;
     }
 
-    /**
-     * @return the webId
-     */
-    public String getWebId() {
-        return webId;
+    public String getEmailInsertsFolder() {
+        return emailInsertsFolder;
     }
 
-    /**
-     * @param webId the webId to set
-     */
-    public void setWebId(String webId) {
-        this.webId = webId;
-    }
-
-    /**
-     * @return the emailAlias
-     */
     public String getEmailAlias() {
         return emailAlias;
     }
 
-    /**
-     * @param emailAlias the emailAlias to set
-     */
-    public void setEmailAlias(String emailAlias) {
-        this.emailAlias = emailAlias;
+    public String getWebFullUrl() {
+        return webFullUrl;
+    }
+
+    public String getWebId() {
+        return webId;
+    }
+
+    public String getSendToLocation() {
+        return sendToLocation;
+    }
+
+    public String getScopeId() {
+        return scopeId;
+    }
+
+    public int getMajorVersionLimit() {
+        return majorVersionLimit;
+    }
+
+    public int getMajorWithMinorVersionsLimit() {
+        return majorWithMinorVersionsLimit;
+    }
+
+    public String getWorkFlowId() {
+        return workFlowId;
+    }
+
+    public boolean isHasUniqueScopes() {
+        return hasUniqueScopes;
+    }
+
+    public boolean isAllowDeletion() {
+        return allowDeletion;
+    }
+
+    public boolean isAllowMultiResponses() {
+        return allowMultiResponses;
+    }
+
+    public boolean isEnableAttachments() {
+        return enableAttachments;
+    }
+
+    public boolean isEnableModeration() {
+        return enableModeration;
+    }
+
+    public boolean isEnableVersioning() {
+        return enableVersioning;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public boolean isMultipleDataList() {
+        return multipleDataList;
+    }
+
+    public boolean isOrdered() {
+        return ordered;
+    }
+
+    public boolean isShowUser() {
+        return showUser;
+    }
+
+    public boolean isEnableMinorVersion() {
+        return enableMinorVersion;
+    }
+
+    public boolean isRequireCheckout() {
+        return requireCheckout;
+    }
+
+    public String getWebAbsluteUrl() {
+        return webAbsluteUrl;
     }
 }
