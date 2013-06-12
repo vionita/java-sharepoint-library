@@ -1,0 +1,93 @@
+package org.korecky.sharepoint.search.request;
+
+import java.io.StringWriter;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamException;
+
+import org.apache.axiom.om.OMElement;
+
+import org.korecky.sharepoint.SpObject;
+import org.korecky.sharepoint.Support;
+
+
+//<SortByProperties>
+//<SortByProperty name="author" direction="Ascending"></SortByProperty>
+//<SortByProperty name="topic" direction="Ascending"></SortByProperty>
+//</SortByProperties>
+
+
+//ATTRIBUTES:
+//---------
+
+//Child Elements
+//---------
+//SortByProperty
+
+public class SortByProperties extends SpObject {
+	private List<SortByProperty> properyCollection = new ArrayList<SortByProperty>();	
+	
+	public SortByProperties() {
+    }    
+
+	public SortByProperties(String xmlString) throws XMLStreamException, ParseException { 
+		OMElement xmlElement = null;
+		xmlElement = Support.stringToOmElement(xmlString);
+
+		if (xmlElement != null) {
+			parse(xmlElement);
+		}
+	}
+
+	public SortByProperties(OMElement xmlElement) throws ParseException {
+		parse(xmlElement);
+	}	
+
+	@Override
+	public void parse(OMElement xmlElement) throws ParseException {		
+		List<SortByProperty> properties = new ArrayList<SortByProperty>();
+		
+		Iterator children = xmlElement.getChildElements();
+		while (children.hasNext()) {
+			OMElement childElement = (OMElement) children.next();
+			if (childElement.getQName().getLocalPart().equals("SortByProperty")) {
+				SortByProperty newProperty = new SortByProperty(childElement);
+				properties.add(newProperty);
+			}
+		}
+		this.setProperyCollection(properties);		
+	}
+
+	@Override
+	public String getAsXmlString() {
+		StringWriter stringWriter = new StringWriter();
+		stringWriter.append("<SortByProperty>");
+		for (SortByProperty property : this.getProperyCollection())
+		{
+			stringWriter.append(property.getAsXmlString());
+		}
+		stringWriter.append("</SortByProperty>");
+		return stringWriter.toString();
+	}
+
+	/**
+	 * Property Collection
+	 * @return
+	 */
+	public List<SortByProperty> getProperyCollection() {
+		return properyCollection;
+	}
+
+	/**
+	 *  Property Collection
+	 * @param properyCollection
+	 */
+	public void setProperyCollection(List<SortByProperty> properyCollection) {
+		this.properyCollection = properyCollection;
+	}	
+	
+}
