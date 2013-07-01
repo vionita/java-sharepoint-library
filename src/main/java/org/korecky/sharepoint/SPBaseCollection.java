@@ -23,4 +23,8 @@ public class SPBaseCollection<T> {
     public int getCount() {
         return items.size();
     }
+
+    public List<T> getItems() {
+        return items;
+    }       
 }

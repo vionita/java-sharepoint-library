@@ -29,9 +29,9 @@ public class TestSuite {
     
     @BeforeClass
     public static void setUpClass() throws Exception {
-        credentials = new NtlmAuthenticator("aaa", "aa", "aa");
+        credentials = new NtlmAuthenticator("aa", "aa", "aa");
         httpProxy = new HttpProxy("127.0.0.1", 8888);
-        site = new SPSite(new URL("https://aaa/"), credentials, httpProxy, true, SPVersion.WSS3);
+        site = new SPSite(new URL("https://aa/"), credentials, httpProxy, true, SPVersion.WSS3);
     }
     
     @AfterClass
