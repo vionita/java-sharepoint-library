@@ -2,12 +2,16 @@ package org.korecky.sharepoint;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.lang.model.type.ArrayType;
+import javax.lang.model.type.TypeKind;
+import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.TypeVisitor;
 
 /**
  *
  * @author vkorecky
  */
-public class SPBaseCollection<T> {
+public class SPBaseCollection<T>{
 
     protected List<T> items;
 
@@ -20,11 +24,11 @@ public class SPBaseCollection<T> {
      *
      * @return
      */
-    public int getCount() {
+    public int getCount() {        
         return items.size();
     }
-
-    public List<T> getItems() {
-        return items;
-    }       
+    
+    public T get(int i){
+        return items.get(i);
+    }    
 }
