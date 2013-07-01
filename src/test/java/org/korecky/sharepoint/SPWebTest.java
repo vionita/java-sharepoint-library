@@ -15,7 +15,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import org.w3c.dom.Element;
 
 /**
  *
@@ -81,8 +80,8 @@ public class SPWebTest {
     @Test
     public void testGetLanguage() {
         System.out.println("getLanguage");
-        int result = instance.getLanguage();
-        assertNotNull(result);
+        long result = instance.getLanguage();
+        assertNotSame(0, result);
     }
 
     /**
@@ -101,7 +100,7 @@ public class SPWebTest {
     @Test
     public void testGetAlerts() throws Exception {
         System.out.println("getAlerts");
-        List result = instance.getAlerts();
+        SPAlertCollection result = instance.getAlerts();
         assertNotNull(result);
     }
 
@@ -121,7 +120,7 @@ public class SPWebTest {
     @Test
     public void testGetLists() throws Exception {
         System.out.println("getLists");
-        List result = instance.getLists();
+        SPListCollection result = instance.getLists();
         assertNotNull(result);
     }
 

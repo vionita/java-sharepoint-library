@@ -47,6 +47,7 @@ public class SPSiteTest {
     public void testGetRootWeb() throws Exception {
         System.out.println("getRootWeb");
         SPWeb result = instance.getRootWeb();
+        result.getId();
         assertNotNull(result);
     }
 
@@ -56,7 +57,7 @@ public class SPSiteTest {
     @Test
     public void testGetAllWebs() throws Exception {
         System.out.println("getAllWebs");
-        List result = instance.getAllWebs();
-        assertNotNull(result);
+        SPWebCollection result = instance.getAllWebs();
+        assertNotSame(0, result.getCount());
     }
 }
