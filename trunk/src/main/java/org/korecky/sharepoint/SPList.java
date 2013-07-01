@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class SPList {
-    
+
     private final String DATE_TIME_PATTERN = "yyyyMMdd HH:mm:ss";
     private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PATTERN);
     private String id;
@@ -88,7 +88,7 @@ public class SPList {
     private boolean enableMinorVersion;
     private boolean requireCheckout;
     private final String webAbsluteUrl;
-    
+
     protected SPList(String webAbsluteUrl) {
         this.webAbsluteUrl = webAbsluteUrl;
     }
@@ -203,6 +203,9 @@ public class SPList {
             if (StringUtils.isNotBlank(rootElement.getAttribute("RequireCheckout"))) {
                 requireCheckout = Boolean.valueOf(rootElement.getAttribute("RequireCheckout"));
             }
+            if (StringUtils.isNotBlank(rootElement.getAttribute("LastDeleted"))) {
+                lastDeleted = formatter.parse(rootElement.getAttribute("LastDeleted"));
+            }
         }
     }
 
@@ -283,9 +286,9 @@ public class SPList {
                 item.loadFromXml(rowElement);
                 itemsCollection.add(item);
             }
-            
+
         }
-        
+
         return itemsCollection;
     }
 
@@ -499,207 +502,207 @@ public class SPList {
         }
         return filesCollection;
     }
-    
+
     public String getId() {
         return id;
     }
-    
+
     public String getTitle() {
         return title;
     }
-    
+
     public String getName() {
         return name;
     }
-    
+
     public String getDescription() {
         return description;
     }
-    
+
     public int getBaseType() {
         return baseType;
     }
-    
+
     public String getImageUrl() {
         return imageUrl;
     }
-    
+
     public String getDocTemplateUrl() {
         return docTemplateUrl;
     }
-    
+
     public String getDefaultViewUrl() {
         return defaultViewUrl;
     }
-    
+
     public String getMobileDefaultViewUrl() {
         return mobileDefaultViewUrl;
     }
-    
+
     public String getFeatureId() {
         return featureId;
     }
-    
+
     public int getServerTemplate() {
         return serverTemplate;
     }
-    
+
     public Date getCreated() {
         return created;
     }
-    
+
     public Date getModified() {
         return modified;
     }
-    
+
     public Date getLastDeleted() {
         return lastDeleted;
     }
-    
+
     public int getVersion() {
         return version;
     }
-    
+
     public String getDirection() {
         return direction;
     }
-    
+
     public String getThumbnailSize() {
         return thumbnailSize;
     }
-    
+
     public int getWebImageWidth() {
         return webImageWidth;
     }
-    
+
     public int getWebImageHeight() {
         return webImageHeight;
     }
-    
+
     public String getFlags() {
         return flags;
     }
-    
+
     public int getItemCount() {
         return itemCount;
     }
-    
+
     public int getAnonymousPermMask() {
         return anonymousPermMask;
     }
-    
+
     public String getRootFolder() {
         return rootFolder;
     }
-    
+
     public int getReadSecurity() {
         return readSecurity;
     }
-    
+
     public int getWriteSecurity() {
         return writeSecurity;
     }
-    
+
     public int getAuthorID() {
         return authorID;
     }
-    
+
     public String getEventSinkAssembly() {
         return eventSinkAssembly;
     }
-    
+
     public String getEventSinkClass() {
         return eventSinkClass;
     }
-    
+
     public String getEventSinkData() {
         return eventSinkData;
     }
-    
+
     public String getEmailInsertsFolder() {
         return emailInsertsFolder;
     }
-    
+
     public String getEmailAlias() {
         return emailAlias;
     }
-    
+
     public String getWebFullUrl() {
         return webFullUrl;
     }
-    
+
     public String getWebId() {
         return webId;
     }
-    
+
     public String getSendToLocation() {
         return sendToLocation;
     }
-    
+
     public String getScopeId() {
         return scopeId;
     }
-    
+
     public int getMajorVersionLimit() {
         return majorVersionLimit;
     }
-    
+
     public int getMajorWithMinorVersionsLimit() {
         return majorWithMinorVersionsLimit;
     }
-    
+
     public String getWorkFlowId() {
         return workFlowId;
     }
-    
+
     public boolean isHasUniqueScopes() {
         return hasUniqueScopes;
     }
-    
+
     public boolean isAllowDeletion() {
         return allowDeletion;
     }
-    
+
     public boolean isAllowMultiResponses() {
         return allowMultiResponses;
     }
-    
+
     public boolean isEnableAttachments() {
         return enableAttachments;
     }
-    
+
     public boolean isEnableModeration() {
         return enableModeration;
     }
-    
+
     public boolean isEnableVersioning() {
         return enableVersioning;
     }
-    
+
     public boolean isHidden() {
         return hidden;
     }
-    
+
     public boolean isMultipleDataList() {
         return multipleDataList;
     }
-    
+
     public boolean isOrdered() {
         return ordered;
     }
-    
+
     public boolean isShowUser() {
         return showUser;
     }
-    
+
     public boolean isEnableMinorVersion() {
         return enableMinorVersion;
     }
-    
+
     public boolean isRequireCheckout() {
         return requireCheckout;
     }
-    
+
     public String getWebAbsluteUrl() {
         return webAbsluteUrl;
     }

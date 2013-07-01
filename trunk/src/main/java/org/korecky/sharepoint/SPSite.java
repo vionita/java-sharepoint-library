@@ -9,11 +9,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  * Represents a collection of sites in a Web application, including a top-level
@@ -25,7 +22,7 @@ import org.w3c.dom.NodeList;
  *
  */
 public class SPSite {
-
+    
     private URL url;
 
     /**
@@ -36,8 +33,8 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, authenticator, null, false);
+    public SPSite(URL url, AbstractAuthenticator authenticator, SPVersion version) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, authenticator, null, false, version);
     }
 
     /**
@@ -49,8 +46,8 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, authenticator, null, trustAllSSLs);
+    public SPSite(URL url, AbstractAuthenticator authenticator, boolean trustAllSSLs, SPVersion version) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, authenticator, null, trustAllSSLs, version);
     }
 
     /**
@@ -62,8 +59,8 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy) throws NoSuchAlgorithmException, KeyManagementException {
-        this(url, authenticator, httpProxy, false);
+    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy, SPVersion version) throws NoSuchAlgorithmException, KeyManagementException {
+        this(url, authenticator, httpProxy, false, version);
     }
 
     /**
@@ -76,12 +73,13 @@ public class SPSite {
      * @throws NoSuchAlgorithmException
      * @throws KeyManagementException
      */
-    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy, boolean trustAllSSLs) throws NoSuchAlgorithmException, KeyManagementException {
+    public SPSite(URL url, AbstractAuthenticator authenticator, HttpProxy httpProxy, boolean trustAllSSLs, SPVersion version) throws NoSuchAlgorithmException, KeyManagementException {
         this.url = url;
         WsContext.setSiteUrl(url);
         WsContext.setAuthenticator(authenticator);
         WsContext.setHttpProxy(httpProxy);
         WsContext.setTrustAllSSLs(trustAllSSLs);
+        WsContext.setSpVersion(version);
         WsContext.configureEnviroment();
     }
 
@@ -115,8 +113,8 @@ public class SPSite {
      *
      * @return NodeList contains web elements
      */
-    public List<SPWeb> getAllWebs() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
-        List<SPWeb> allWebs = null;
+    public SPWebCollection getAllWebs() throws KeyManagementException, NoSuchAlgorithmException, MalformedURLException {
+        SPWebCollection allWebs = null;
         GetAllSubWebCollectionResult result = WsContext.getWebsPort(url).getAllSubWebCollection();
 
         if (result.getContent() != null) {
@@ -125,14 +123,8 @@ public class SPSite {
                     // Parse XML file                    
                     Element rootElement = (Element) content;
                     if (StringUtils.equals(rootElement.getLocalName(), "Webs")) {
-                        allWebs = new ArrayList<SPWeb>();
-                        NodeList webNodeList = rootElement.getElementsByTagName("Web");
-                        for (int i = 0; i < webNodeList.getLength(); i++) {
-                            Element webElement = (Element) webNodeList.item(i);
-                            SPWeb web = new SPWeb();
-                            web.loadFromXml(webElement);
-                            allWebs.add(web);
-                        }
+                        allWebs = new SPWebCollection();
+                        allWebs.loadFromXml(rootElement);
                     }
                 }
             }

@@ -40,6 +40,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.ws.BindingProvider;
+import org.korecky.sharepoint.SPSite;
+import org.korecky.sharepoint.SPVersion;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -54,8 +56,9 @@ public class WsContext {
     private static HttpProxy httpProxy;
     private static boolean trustAllSSLs = false;
     private static URL siteUrl;
+    private static SPVersion spVersion;
 
-     /**
+    /**
      * Get instance of authentication web service
      *
      * @return
@@ -71,7 +74,7 @@ public class WsContext {
         ((BindingProvider) alertsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
         return alertsPort;
     }
-    
+
     /**
      * Get instance of alerts web service
      *
@@ -82,7 +85,7 @@ public class WsContext {
      */
     public static AlertsSoap getAlertsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Alerts.asmx");
-        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Alerts.wsdl").toExternalForm());
+        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/alerts.wsdl").toExternalForm());
         Alerts service = new Alerts(wsdlURL);
         AlertsSoap alertsPort = service.getAlertsSoap();
         authenticate((BindingProvider) alertsPort);
@@ -100,7 +103,7 @@ public class WsContext {
      */
     public static ListsSoap getListsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Lists.asmx");
-        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Lists.wsdl").toExternalForm());
+        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/lists.wsdl").toExternalForm());
         Lists service = new Lists(wsdlURL);
         ListsSoap listsPort = service.getListsSoap();
         ((BindingProvider) listsPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -117,7 +120,7 @@ public class WsContext {
      */
     public static SiteDataSoap getSiteDataPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/SiteData.asmx");
-        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/SiteData.wsdl").toExternalForm());
+        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/sitedata.wsdl").toExternalForm());
         SiteData service = new SiteData(wsdlURL);
         SiteDataSoap siteDataPort = service.getSiteDataSoap();
         ((BindingProvider) siteDataPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -134,7 +137,7 @@ public class WsContext {
      */
     public static ViewsSoap getViewsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Views.asmx");
-        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Views.wsdl").toExternalForm());
+        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/views.wsdl").toExternalForm());
         Views service = new Views(wsdlURL);
         ViewsSoap websPort = service.getViewsSoap();
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -151,7 +154,7 @@ public class WsContext {
      */
     public static WebsSoap getWebsPort(URL webUrl) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         URL wsURL = new URL(webUrl, "/_vti_bin/Webs.asmx");
-        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/Webs.wsdl").toExternalForm());
+        URL wsdlURL = new URL(WsContext.class.getResource("/wsdl/webs.wsdl").toExternalForm());
         Webs service = new Webs(wsdlURL);
         WebsSoap websPort = service.getWebsSoap();
         ((BindingProvider) websPort).getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, wsURL.toString());
@@ -183,21 +186,21 @@ public class WsContext {
         if (trustAllSSLs) {
             // Trust all SSLs, create a trust manager that does not validate certificate chains            
             TrustManager[] trustAllCerts = new TrustManager[]{new X509TrustManager() {
-            @Override
-            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-                return null;
-            }
+                    @Override
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
 
-            @Override
-            public void checkClientTrusted(
-                    java.security.cert.X509Certificate[] certs, String authType) {
-            }
+                    @Override
+                    public void checkClientTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
 
-            @Override
-            public void checkServerTrusted(
-                    java.security.cert.X509Certificate[] certs, String authType) {
-            }
-        }};
+                    @Override
+                    public void checkServerTrusted(
+                            java.security.cert.X509Certificate[] certs, String authType) {
+                    }
+                }};
             // Install the all-trusting trust manager                    
             SSLContext sc = SSLContext.getInstance("SSL");
             sc.init(null, trustAllCerts, new java.security.SecureRandom());
@@ -253,8 +256,14 @@ public class WsContext {
     public static void setSiteUrl(URL siteUrl) {
         WsContext.siteUrl = siteUrl;
     }
-    
-    
+
+    public static SPVersion getSpVersion() {
+        return spVersion;
+    }
+
+    public static void setSpVersion(SPVersion spVersion) {
+        WsContext.spVersion = spVersion;
+    }
 
     private static void authenticate(BindingProvider prov) throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException {
         if (authenticator instanceof BasicAuthenticator) {
