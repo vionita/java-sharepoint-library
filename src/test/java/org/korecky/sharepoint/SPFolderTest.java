@@ -18,22 +18,22 @@ import static org.junit.Assert.*;
  * @author vkorecky
  */
 public class SPFolderTest {
-    
+
     public SPFolderTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -46,8 +46,8 @@ public class SPFolderTest {
         System.out.println("getFiles");
         SPFolder instance = null;
         List expResult = null;
-        List result = instance.getFiles();
-        assertEquals(expResult, result);
+        SPFileCollection result = instance.getFiles();
+        assertNotNull(result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -60,8 +60,8 @@ public class SPFolderTest {
         System.out.println("getSubFolders");
         SPFolder instance = null;
         List expResult = null;
-        List result = instance.getSubFolders();
-        assertEquals(expResult, result);
+        SPFolderCollection result = instance.getSubFolders();
+        assertNotNull(result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

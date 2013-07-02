@@ -8,6 +8,7 @@ import com.microsoft.schemas.sharepoint.soap.alerts.Alert;
 import com.microsoft.schemas.sharepoint.soap.alerts.ErrorType;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -20,22 +21,22 @@ import static org.junit.Assert.*;
  * @author vkorecky
  */
 public class SPAlertTest {
-    
+
     public SPAlertTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -75,9 +76,8 @@ public class SPAlertTest {
     public void testGetId() {
         System.out.println("getId");
         SPAlert instance = null;
-        String expResult = "";
-        String result = instance.getId();
-        assertEquals(expResult, result);
+        UUID result = instance.getId();
+        assertNotNull(result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

@@ -10,6 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -22,25 +23,25 @@ import static org.junit.Assert.*;
  * @author vkorecky
  */
 public class SPListTest {
-    
+
     private SPList instance;
-    
+
     public SPListTest() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
         this.instance = TestSuite.getSite().getRootWeb().getLists().items.get(0);
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -53,8 +54,8 @@ public class SPListTest {
         System.out.println("delete");
         String listName = "Test List";
         String description = "Smazat";
-        List<SPListTemplate> listTemplates = TestSuite.getSite().getRootWeb().getListTemplates();
-        SPList list = TestSuite.getSite().getRootWeb().addList(listName, description, listTemplates.get(1));
+        SPListTemplateCollection listTemplates = TestSuite.getSite().getRootWeb().getListTemplates();
+        SPList list = TestSuite.getSite().getRootWeb().addList(listName, description, listTemplates.getItem(1));
         list.delete();
     }
 
@@ -63,8 +64,8 @@ public class SPListTest {
      */
     @Test
     public void testGetViews() throws Exception {
-        System.out.println("getViews");        
-        List result = instance.getViews();
+        System.out.println("getViews");
+        SPViewCollection result = instance.getViews();
         assertNotNull(result);
     }
 
@@ -76,8 +77,8 @@ public class SPListTest {
         System.out.println("getItems");
         CamlQueryRoot query = null;
         FieldRefDefinitions viewFields = null;
-        int rowLimit = 0;        
-        List result = instance.getItems(query, viewFields, rowLimit);
+        int rowLimit = 0;
+        SPListItemCollection result = instance.getItems(query, viewFields, rowLimit);
         assertNotNull(result);
     }
 
@@ -86,8 +87,8 @@ public class SPListTest {
      */
     @Test
     public void testGetItems_0args() throws Exception {
-        System.out.println("getItems");        
-        List result = instance.getItems();
+        System.out.println("getItems");
+        SPListItemCollection result = instance.getItems();
         assertNotNull(result);
     }
 
@@ -96,8 +97,8 @@ public class SPListTest {
      */
     @Test
     public void testGetItemsFromRoot() throws Exception {
-        System.out.println("getItemsFromRoot");        
-        List result = instance.getItemsFromRoot();
+        System.out.println("getItemsFromRoot");
+        SPListItemCollection result = instance.getItemsFromRoot();
         assertNotNull(result);
     }
 
@@ -106,8 +107,8 @@ public class SPListTest {
      */
     @Test
     public void testGetFolders() throws Exception {
-        System.out.println("getFolders");        
-        List result = instance.getFolders();
+        System.out.println("getFolders");
+        SPFolderCollection result = instance.getFolders();
         assertNotNull(result);
     }
 
@@ -116,8 +117,8 @@ public class SPListTest {
      */
     @Test
     public void testGetFoldersFromRoot() throws Exception {
-        System.out.println("getFoldersFromRoot");        
-        List result = instance.getFoldersFromRoot();
+        System.out.println("getFoldersFromRoot");
+        SPFolderCollection result = instance.getFoldersFromRoot();
         assertNotNull(result);
     }
 
@@ -127,7 +128,7 @@ public class SPListTest {
     @Test
     public void testGetFiles() throws Exception {
         System.out.println("getFiles");
-        List result = instance.getFiles();
+        SPFileCollection result = instance.getFiles();
         assertNotNull(result);
     }
 
@@ -136,8 +137,8 @@ public class SPListTest {
      */
     @Test
     public void testGetFilesFromRoot() throws Exception {
-        System.out.println("getFilesFromRoot");        
-        List result = instance.getFilesFromRoot();
+        System.out.println("getFilesFromRoot");
+        SPFileCollection result = instance.getFilesFromRoot();
         assertNotNull(result);
     }
 
@@ -146,8 +147,8 @@ public class SPListTest {
      */
     @Test
     public void testGetId() {
-        System.out.println("getId");        
-        String result = instance.getId();
+        System.out.println("getId");
+        UUID result = instance.getId();
         assertNotNull(result);
     }
 
@@ -156,7 +157,7 @@ public class SPListTest {
      */
     @Test
     public void testGetTitle() {
-        System.out.println("getTitle");        
+        System.out.println("getTitle");
         String result = instance.getTitle();
         assertNotNull(result);
     }
@@ -166,7 +167,7 @@ public class SPListTest {
      */
     @Test
     public void testGetName() {
-        System.out.println("getName");        
+        System.out.println("getName");
         String result = instance.getName();
         assertNotNull(result);
     }
@@ -176,7 +177,7 @@ public class SPListTest {
      */
     @Test
     public void testGetDescription() {
-        System.out.println("getDescription");        
+        System.out.println("getDescription");
         String result = instance.getDescription();
         assertNotNull(result);
     }
@@ -186,7 +187,7 @@ public class SPListTest {
      */
     @Test
     public void testGetBaseType() {
-        System.out.println("getBaseType");        
+        System.out.println("getBaseType");
         int result = instance.getBaseType();
         assertNotNull(result);
     }
@@ -196,7 +197,7 @@ public class SPListTest {
      */
     @Test
     public void testGetImageUrl() {
-        System.out.println("getImageUrl");        
+        System.out.println("getImageUrl");
         String result = instance.getImageUrl();
         assertNotNull(result);
     }
@@ -206,7 +207,7 @@ public class SPListTest {
      */
     @Test
     public void testGetDocTemplateUrl() {
-        System.out.println("getDocTemplateUrl");        
+        System.out.println("getDocTemplateUrl");
         String result = instance.getDocTemplateUrl();
         assertNotNull(result);
     }
@@ -216,7 +217,7 @@ public class SPListTest {
      */
     @Test
     public void testGetDefaultViewUrl() {
-        System.out.println("getDefaultViewUrl");        
+        System.out.println("getDefaultViewUrl");
         String result = instance.getDefaultViewUrl();
         assertNotNull(result);
     }
@@ -226,7 +227,7 @@ public class SPListTest {
      */
     @Test
     public void testGetMobileDefaultViewUrl() {
-        System.out.println("getMobileDefaultViewUrl");        
+        System.out.println("getMobileDefaultViewUrl");
         String result = instance.getMobileDefaultViewUrl();
         assertNotNull(result);
     }
@@ -236,7 +237,7 @@ public class SPListTest {
      */
     @Test
     public void testGetFeatureId() {
-        System.out.println("getFeatureId");        
+        System.out.println("getFeatureId");
         String result = instance.getFeatureId();
         assertNotNull(result);
     }
@@ -246,7 +247,7 @@ public class SPListTest {
      */
     @Test
     public void testGetServerTemplate() {
-        System.out.println("getServerTemplate");        
+        System.out.println("getServerTemplate");
         int result = instance.getServerTemplate();
         assertNotSame(0, result);
     }
@@ -256,7 +257,7 @@ public class SPListTest {
      */
     @Test
     public void testGetCreated() {
-        System.out.println("getCreated");        
+        System.out.println("getCreated");
         Date result = instance.getCreated();
         assertNotNull(result);
     }
@@ -288,7 +289,7 @@ public class SPListTest {
     public void testGetVersion() {
         System.out.println("getVersion");
         int result = instance.getVersion();
-        assertNotSame(0, result);        
+        assertNotSame(0, result);
     }
 
     /**
@@ -296,7 +297,7 @@ public class SPListTest {
      */
     @Test
     public void testGetDirection() {
-        System.out.println("getDirection");        
+        System.out.println("getDirection");
         String result = instance.getDirection();
         assertNotNull(result);
     }
@@ -306,7 +307,7 @@ public class SPListTest {
      */
     @Test
     public void testGetThumbnailSize() {
-        System.out.println("getThumbnailSize");        
+        System.out.println("getThumbnailSize");
         String result = instance.getThumbnailSize();
         assertNotNull(result);
     }
@@ -316,9 +317,9 @@ public class SPListTest {
      */
     @Test
     public void testGetWebImageWidth() {
-        System.out.println("getWebImageWidth");        
+        System.out.println("getWebImageWidth");
         int result = instance.getWebImageWidth();
-        assertSame(0, result);        
+        assertSame(0, result);
     }
 
     /**
@@ -326,7 +327,7 @@ public class SPListTest {
      */
     @Test
     public void testGetWebImageHeight() {
-        System.out.println("getWebImageHeight");        
+        System.out.println("getWebImageHeight");
         int result = instance.getWebImageHeight();
         assertSame(0, result);
     }
@@ -348,7 +349,7 @@ public class SPListTest {
     public void testGetItemCount() {
         System.out.println("getItemCount");
         int result = instance.getItemCount();
-        assertNotSame(0, result);        
+        assertNotSame(0, result);
     }
 
     /**
@@ -356,9 +357,9 @@ public class SPListTest {
      */
     @Test
     public void testGetAnonymousPermMask() {
-        System.out.println("getAnonymousPermMask");        
+        System.out.println("getAnonymousPermMask");
         int result = instance.getAnonymousPermMask();
-        assertSame(0, result);        
+        assertSame(0, result);
     }
 
     /**
@@ -376,9 +377,9 @@ public class SPListTest {
      */
     @Test
     public void testGetReadSecurity() {
-        System.out.println("getReadSecurity");        
+        System.out.println("getReadSecurity");
         int result = instance.getReadSecurity();
-        assertNotSame(0, result);        
+        assertNotSame(0, result);
     }
 
     /**
@@ -388,7 +389,7 @@ public class SPListTest {
     public void testGetWriteSecurity() {
         System.out.println("getWriteSecurity");
         int result = instance.getWriteSecurity();
-        assertNotSame(0, result);        
+        assertNotSame(0, result);
     }
 
     /**
@@ -396,9 +397,9 @@ public class SPListTest {
      */
     @Test
     public void testGetAuthorID() {
-        System.out.println("getAuthorID");        
+        System.out.println("getAuthorID");
         int result = instance.getAuthorID();
-        assertNotSame(0, result);        
+        assertNotSame(0, result);
     }
 
     /**
@@ -406,7 +407,7 @@ public class SPListTest {
      */
     @Test
     public void testGetEventSinkAssembly() {
-        System.out.println("getEventSinkAssembly");        
+        System.out.println("getEventSinkAssembly");
         String result = instance.getEventSinkAssembly();
         assertNotNull(result);
     }
@@ -446,7 +447,7 @@ public class SPListTest {
      */
     @Test
     public void testGetEmailAlias() {
-        System.out.println("getEmailAlias");        
+        System.out.println("getEmailAlias");
         String result = instance.getEmailAlias();
         assertNotNull(result);
     }
@@ -456,7 +457,7 @@ public class SPListTest {
      */
     @Test
     public void testGetWebFullUrl() {
-        System.out.println("getWebFullUrl");        
+        System.out.println("getWebFullUrl");
         String result = instance.getWebFullUrl();
         assertNotNull(result);
     }
@@ -466,7 +467,7 @@ public class SPListTest {
      */
     @Test
     public void testGetWebId() {
-        System.out.println("getWebId");        
+        System.out.println("getWebId");
         String result = instance.getWebId();
         assertNotNull(result);
     }
@@ -476,7 +477,7 @@ public class SPListTest {
      */
     @Test
     public void testGetSendToLocation() {
-        System.out.println("getSendToLocation");        
+        System.out.println("getSendToLocation");
         String result = instance.getSendToLocation();
         assertNotNull(result);
     }
@@ -486,7 +487,7 @@ public class SPListTest {
      */
     @Test
     public void testGetScopeId() {
-        System.out.println("getScopeId");        
+        System.out.println("getScopeId");
         String result = instance.getScopeId();
         assertNotNull(result);
     }
@@ -496,7 +497,7 @@ public class SPListTest {
      */
     @Test
     public void testGetMajorVersionLimit() {
-        System.out.println("getMajorVersionLimit");        
+        System.out.println("getMajorVersionLimit");
         int result = instance.getMajorVersionLimit();
         assertNotNull(result);
     }
@@ -506,7 +507,7 @@ public class SPListTest {
      */
     @Test
     public void testGetMajorWithMinorVersionsLimit() {
-        System.out.println("getMajorWithMinorVersionsLimit");        
+        System.out.println("getMajorWithMinorVersionsLimit");
         int result = instance.getMajorWithMinorVersionsLimit();
         assertNotNull(result);
     }
@@ -516,7 +517,7 @@ public class SPListTest {
      */
     @Test
     public void testGetWorkFlowId() {
-        System.out.println("getWorkFlowId");        
+        System.out.println("getWorkFlowId");
         String result = instance.getWorkFlowId();
         assertNotNull(result);
     }
@@ -526,8 +527,8 @@ public class SPListTest {
      */
     @Test
     public void testIsHasUniqueScopes() {
-        System.out.println("isHasUniqueScopes");        
-        boolean result = instance.isHasUniqueScopes();        
+        System.out.println("isHasUniqueScopes");
+        boolean result = instance.isHasUniqueScopes();
     }
 
     /**
@@ -535,10 +536,10 @@ public class SPListTest {
      */
     @Test
     public void testIsAllowDeletion() {
-        System.out.println("isAllowDeletion");        
+        System.out.println("isAllowDeletion");
         boolean expResult = true;
         boolean result = instance.isAllowDeletion();
-        assertEquals(expResult, result);        
+        assertEquals(expResult, result);
     }
 
     /**
@@ -546,7 +547,7 @@ public class SPListTest {
      */
     @Test
     public void testIsAllowMultiResponses() {
-        System.out.println("isAllowMultiResponses");        
+        System.out.println("isAllowMultiResponses");
         boolean expResult = false;
         boolean result = instance.isAllowMultiResponses();
         assertEquals(expResult, result);
@@ -557,10 +558,10 @@ public class SPListTest {
      */
     @Test
     public void testIsEnableAttachments() {
-        System.out.println("isEnableAttachments");        
+        System.out.println("isEnableAttachments");
         boolean expResult = true;
         boolean result = instance.isEnableAttachments();
-        assertEquals(expResult, result);        
+        assertEquals(expResult, result);
     }
 
     /**
@@ -568,7 +569,7 @@ public class SPListTest {
      */
     @Test
     public void testIsEnableModeration() {
-        System.out.println("isEnableModeration");        
+        System.out.println("isEnableModeration");
         boolean expResult = false;
         boolean result = instance.isEnableModeration();
         assertEquals(expResult, result);
@@ -579,7 +580,7 @@ public class SPListTest {
      */
     @Test
     public void testIsEnableVersioning() {
-        System.out.println("isEnableVersioning");        
+        System.out.println("isEnableVersioning");
         boolean expResult = false;
         boolean result = instance.isEnableVersioning();
         assertEquals(expResult, result);
@@ -590,10 +591,10 @@ public class SPListTest {
      */
     @Test
     public void testIsHidden() {
-        System.out.println("isHidden");        
+        System.out.println("isHidden");
         boolean expResult = false;
         boolean result = instance.isHidden();
-        assertEquals(expResult, result);        
+        assertEquals(expResult, result);
     }
 
     /**
@@ -601,7 +602,7 @@ public class SPListTest {
      */
     @Test
     public void testIsMultipleDataList() {
-        System.out.println("isMultipleDataList");        
+        System.out.println("isMultipleDataList");
         boolean expResult = false;
         boolean result = instance.isMultipleDataList();
         assertEquals(expResult, result);
@@ -612,7 +613,7 @@ public class SPListTest {
      */
     @Test
     public void testIsOrdered() {
-        System.out.println("isOrdered");        
+        System.out.println("isOrdered");
         boolean expResult = false;
         boolean result = instance.isOrdered();
         assertEquals(expResult, result);
@@ -623,7 +624,7 @@ public class SPListTest {
      */
     @Test
     public void testIsShowUser() {
-        System.out.println("isShowUser");        
+        System.out.println("isShowUser");
         boolean expResult = true;
         boolean result = instance.isShowUser();
         assertEquals(expResult, result);
@@ -634,7 +635,7 @@ public class SPListTest {
      */
     @Test
     public void testIsEnableMinorVersion() {
-        System.out.println("isEnableMinorVersion");        
+        System.out.println("isEnableMinorVersion");
         boolean expResult = false;
         boolean result = instance.isEnableMinorVersion();
         assertEquals(expResult, result);
@@ -645,7 +646,7 @@ public class SPListTest {
      */
     @Test
     public void testIsRequireCheckout() {
-        System.out.println("isRequireCheckout");        
+        System.out.println("isRequireCheckout");
         boolean expResult = false;
         boolean result = instance.isRequireCheckout();
         assertEquals(expResult, result);
@@ -656,7 +657,7 @@ public class SPListTest {
      */
     @Test
     public void testGetWebAbsluteUrl() {
-        System.out.println("getWebAbsluteUrl");        
+        System.out.println("getWebAbsluteUrl");
         String result = instance.getWebAbsluteUrl();
         assertNotNull(result);
     }

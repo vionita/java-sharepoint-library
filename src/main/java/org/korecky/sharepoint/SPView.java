@@ -1,6 +1,7 @@
 package org.korecky.sharepoint;
 
 import java.text.ParseException;
+import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
 
@@ -10,7 +11,7 @@ import org.w3c.dom.Element;
  */
 public class SPView {
 
-    String name;
+    UUID id;
     boolean defaultView;
     SPViewType type;
     String displayName;
@@ -36,7 +37,10 @@ public class SPView {
     public void loadFromXml(Element rootElement) throws ParseException {
         // Parse XML file                            
         if (StringUtils.contains(rootElement.getLocalName(), "View")) {
-            name = rootElement.getAttribute("Name");
+            String guid = rootElement.getAttribute("Name");
+            guid = StringUtils.remove(guid, "{");
+            guid = StringUtils.remove(guid, "}");
+            id = UUID.fromString(guid);
             displayName = rootElement.getAttribute("DisplayName");
             url = rootElement.getAttribute("Url");
             contentTypeID = rootElement.getAttribute("ContentTypeID");
@@ -56,8 +60,8 @@ public class SPView {
         }
     }
 
-    public String getName() {
-        return name;
+    public UUID getId() {
+        return id;
     }
 
     public boolean isDefaultView() {

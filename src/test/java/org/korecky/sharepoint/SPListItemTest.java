@@ -8,6 +8,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -21,22 +22,22 @@ import org.w3c.dom.Element;
  * @author vkorecky
  */
 public class SPListItemTest {
-    
+
     public SPListItemTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -76,8 +77,8 @@ public class SPListItemTest {
         System.out.println("getAttachments");
         SPListItem instance = null;
         List expResult = null;
-        List result = instance.getAttachments();
-        assertEquals(expResult, result);
+        SPAttachmentCollection result = instance.getAttachments();
+        assertNotNull(result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
@@ -205,8 +206,8 @@ public class SPListItemTest {
         System.out.println("getUniqueId");
         SPListItem instance = null;
         String expResult = "";
-        String result = instance.getUniqueId();
-        assertEquals(expResult, result);
+        UUID result = instance.getUniqueId();
+        assertNotNull(result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }

@@ -4,6 +4,7 @@
  */
 package org.korecky.sharepoint;
 
+import java.util.UUID;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -17,22 +18,22 @@ import org.w3c.dom.Element;
  * @author vkorecky
  */
 public class SPViewTest {
-    
+
     public SPViewTest() {
     }
-    
+
     @BeforeClass
     public static void setUpClass() {
     }
-    
+
     @AfterClass
     public static void tearDownClass() {
     }
-    
+
     @Before
     public void setUp() {
     }
-    
+
     @After
     public void tearDown() {
     }
@@ -54,14 +55,12 @@ public class SPViewTest {
      * Test of getName method, of class SPView.
      */
     @Test
-    public void testGetName() {
+    public void testGetId() {
         System.out.println("getName");
         SPView instance = null;
         String expResult = "";
-        String result = instance.getName();
-        assertEquals(expResult, result);
-        // TODO review the generated test code and remove the default call to fail.
-        fail("The test case is a prototype.");
+        UUID result = instance.getId();
+        assertNotNull(result);
     }
 
     /**

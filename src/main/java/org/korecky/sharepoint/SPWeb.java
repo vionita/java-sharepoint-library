@@ -39,7 +39,7 @@ import org.xml.sax.SAXException;
  *
  */
 public class SPWeb {
-
+    
     private final String DATE_TIME_PATTERN = "yyyyMMdd HH:mm:ss";
     private final SimpleDateFormat formatter = new SimpleDateFormat(DATE_TIME_PATTERN);
     UUID id;
@@ -69,7 +69,7 @@ public class SPWeb {
      */
     protected SPWeb() {
     }
-
+    
     public void loadFromXml(Element rootElement) {
         // Parse XML file                            
         if (StringUtils.equals(rootElement.getLocalName(), "Web")) {
@@ -407,25 +407,16 @@ public class SPWeb {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public List<SPListTemplate> getListTemplates() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
-        List<SPListTemplate> listTemplatesCollection = null;
+    public SPListTemplateCollection getListTemplates() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException {
+        SPListTemplateCollection listTemplatesCollection = null;
         GetListTemplatesResult result = WsContext.getWebsPort(new URL(url)).getListTemplates();
         if (result.getContent() != null) {
             for (Object content : result.getContent()) {
                 if (content instanceof Element) {
                     // Parse XML file                    
                     Element rootElement = (Element) content;
-                    if (StringUtils.equals(rootElement.getLocalName(), "ListTemplates")) {
-                        listTemplatesCollection = new ArrayList<SPListTemplate>();
-                        NodeList listTemplateNodeList = rootElement.getElementsByTagName("ListTemplate");
-                        for (int i = 0; i < listTemplateNodeList.getLength(); i++) {
-                            Element listTemplateElement = (Element) listTemplateNodeList.item(i);
-                            SPListTemplate listTemplate = new SPListTemplate(url);
-                            listTemplate.loadFromXml(listTemplateElement);
-                            listTemplatesCollection.add(listTemplate);
-                        }
-
-                    }
+                    listTemplatesCollection = new SPListTemplateCollection(url);
+                    listTemplatesCollection.loadFromXml(rootElement);
                 }
             }
         }

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Represents an alert, which generates periodic e-mail or Short Message Service
@@ -25,7 +27,7 @@ import java.util.Map;
  */
 public class SPAlert {
 
-    private String id;
+    private UUID id;
     private String title;
     private boolean active;
     private SPEventType eventType;
@@ -41,7 +43,10 @@ public class SPAlert {
     }
 
     public void loadFromAlert(Alert tmpAlert) {
-        id = tmpAlert.getId();
+        String guid = tmpAlert.getId();
+        guid = StringUtils.remove(guid, "{");
+        guid = StringUtils.remove(guid, "}");
+        id = UUID.fromString(guid);
         title = tmpAlert.getTitle();
         alertForUrl = tmpAlert.getAlertForTitle();
         alertForUrl = tmpAlert.getAlertForUrl();
@@ -72,7 +77,7 @@ public class SPAlert {
      */
     public ErrorType delete(Alert tmpAlert) throws NoSuchAlgorithmException, MalformedURLException, KeyManagementException {
         ArrayOfString arrayStr = new ArrayOfString();
-        arrayStr.getString().add(id);
+        arrayStr.getString().add(String.valueOf(id));
         ArrayOfDeleteFailure failureArray = WsContext.getAlertsPort(new URL(webAbsluteUrl)).deleteAlerts(arrayStr);
         return failureArray.getDeleteFailure().get(0).getError();
     }
@@ -82,7 +87,7 @@ public class SPAlert {
      *
      * @return
      */
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -140,7 +145,7 @@ public class SPAlert {
      */
     public Map<String, String> getProperties() {
         Map<String, String> properties = new HashMap<String, String>();
-        properties.put("id", id);
+        properties.put("id", String.valueOf(id));
         properties.put("Title", title);
         properties.put("AlertForTitle", alertForUrl);
         properties.put("AlertForUrl", alertForUrl);

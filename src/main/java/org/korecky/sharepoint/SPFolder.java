@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,14 +42,14 @@ public class SPFolder {
         this.webId = webId;
     }
 
-    public List<SPFile> getFiles() throws SAXException, IOException, ParserConfigurationException, NoSuchAlgorithmException, KeyManagementException {
+    public SPFileCollection getFiles() throws SAXException, IOException, ParserConfigurationException, NoSuchAlgorithmException, KeyManagementException, ParseException {
         GetListItems.Query query = new GetListItems.Query();
         Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">0</Value></Eq></Where></Query>");
         query.getContent().add(docQuery.getDocumentElement());
         GetListItems.QueryOptions queryOptions = new GetListItems.QueryOptions();
         Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"False\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc><Folder>" + url + "</Folder></QueryOptions>");
         queryOptions.getContent().add(doc.getDocumentElement());
-        List<SPFile> filesCollection = null;
+        SPFileCollection filesCollection = null;
         GetListItemsResponse.GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(listName, null, query, null, "0", queryOptions, webId);
         for (Object content : result.getContent()) {
             if (content instanceof Element) {
@@ -56,28 +57,22 @@ public class SPFolder {
                 NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
                 for (int i = 0; i < dataNodeList.getLength(); i++) {
                     Element dataElement = (Element) dataNodeList.item(i);
-                    filesCollection = new ArrayList<SPFile>();
-                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
-                    for (int j = 0; j < rowNodeList.getLength(); j++) {
-                        Element rowElement = (Element) rowNodeList.item(j);
-                        SPFile file = new SPFile(name, webAbsluteUrl);
-                        file.loadFromXml(rowElement);
-                        filesCollection.add(file);
-                    }
+                    filesCollection = new SPFileCollection(name, webAbsluteUrl);
+                    filesCollection.loadFromXml(dataElement);
                 }
             }
         }
         return filesCollection;
     }
 
-    public List<SPFolder> getSubFolders() throws SAXException, ParserConfigurationException, IOException, NoSuchAlgorithmException, KeyManagementException {
+    public SPFolderCollection getSubFolders() throws SAXException, ParserConfigurationException, IOException, NoSuchAlgorithmException, KeyManagementException, ParseException {
         GetListItems.Query query = new GetListItems.Query();
         Document docQuery = WsContext.stringToDom("<Query><Where><Eq><FieldRef Name=\"FSObjType\"/><Value Type=\"Lookup\">1</Value></Eq></Where></Query>");
         query.getContent().add(docQuery.getDocumentElement());
         GetListItems.QueryOptions queryOptions = new GetListItems.QueryOptions();
         Document doc = WsContext.stringToDom("<QueryOptions><ViewAttributes IncludeRootFolder=\"False\" /><IncludeMandatoryColumns>TRUE</IncludeMandatoryColumns><DateInUtc>TRUE</DateInUtc><Folder>" + url + "</Folder></QueryOptions>");
         queryOptions.getContent().add(doc.getDocumentElement());
-        List<SPFolder> foldersCollection = null;
+        SPFolderCollection foldersCollection = null;
         GetListItemsResponse.GetListItemsResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getListItems(listName, null, query, null, "0", queryOptions, webId);
         for (Object content : result.getContent()) {
             if (content instanceof Element) {
@@ -85,14 +80,8 @@ public class SPFolder {
                 NodeList dataNodeList = rootElement.getElementsByTagNameNS("urn:schemas-microsoft-com:rowset", "data");
                 for (int i = 0; i < dataNodeList.getLength(); i++) {
                     Element dataElement = (Element) dataNodeList.item(i);
-                    foldersCollection = new ArrayList<SPFolder>();
-                    NodeList rowNodeList = dataElement.getElementsByTagNameNS("#RowsetSchema", "row");
-                    for (int j = 0; j < rowNodeList.getLength(); j++) {
-                        Element rowElement = (Element) rowNodeList.item(j);
-                        SPFolder folder = new SPFolder(name, webAbsluteUrl, webId);
-                        folder.loadFromXml(rowElement);
-                        foldersCollection.add(folder);
-                    }
+                    foldersCollection = new SPFolderCollection(name, webAbsluteUrl, webId);
+                    foldersCollection.loadFromXml(dataElement);
                 }
             }
         }
@@ -122,8 +111,8 @@ public class SPFolder {
                 if (strArray.length > 1) {
                     Calendar calendar = DatatypeConverter.parseDateTime(strArray[1]);
                     modified = calendar.getTime();
-                }                
-            }            
+                }
+            }
         }
     }
 
