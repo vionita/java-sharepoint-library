@@ -132,8 +132,8 @@ public class SPWebTest {
         System.out.println("addList");
         String listName = "Test List";
         String description = "Smazat";
-        List<SPListTemplate> listTemplates = instance.getListTemplates();
-        SPList result = instance.addList(listName, description, listTemplates.get(1));
+        SPListTemplateCollection listTemplates = instance.getListTemplates();
+        SPList result = instance.addList(listName, description, listTemplates.getItem(1));
         assertNotNull(result);
         result.delete();
     }
@@ -144,7 +144,7 @@ public class SPWebTest {
     @Test
     public void testGetListTemplates() throws Exception {
         System.out.println("getListTemplates");
-        List result = instance.getListTemplates();
+        SPListTemplateCollection result = instance.getListTemplates();
         assertNotNull(result);
     }
 }

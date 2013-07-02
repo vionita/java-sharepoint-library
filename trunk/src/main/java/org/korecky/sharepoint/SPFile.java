@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Element;
@@ -21,6 +22,8 @@ public class SPFile extends SPFileBase {
     private Date created;
     private Date modified;
     private boolean exists;
+    // TODO: parse more attributes include uniqueId
+    private UUID uniqueId;
 
     public SPFile(String listName, String webAbsluteUrl) {
         super(listName, webAbsluteUrl);
@@ -110,5 +113,9 @@ public class SPFile extends SPFileBase {
 
     public Date getModified() {
         return modified;
+    }
+    
+    public UUID getUniqueId() {
+        return uniqueId;
     }
 }

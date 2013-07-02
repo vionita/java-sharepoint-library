@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Attr;
@@ -42,7 +43,7 @@ public class SPListItem {
     private boolean hasAttachments;
     private String linkTitle;
     private int owshiddenversion;
-    private String uniqueId;
+    private UUID uniqueId;
     private Date created;
     private Date modified;
     private String metaInfo;
@@ -90,7 +91,10 @@ public class SPListItem {
                 } else if ((StringUtils.equals(attribute.getName(), "ows_UniqueId")) && (StringUtils.isNotBlank(attribute.getValue()))) {
                     String[] uniqueIdArray = attribute.getValue().split("#");
                     if (uniqueIdArray.length > 1) {
-                        uniqueId = uniqueIdArray[1];
+                        String guid = uniqueIdArray[1];
+                        guid = StringUtils.remove(guid, "{");
+                        guid = StringUtils.remove(guid, "}");
+                        uniqueId = UUID.fromString(guid);
                     }
                 } else if ((StringUtils.equals(attribute.getName(), "ows_Created")) && (StringUtils.isNotBlank(attribute.getValue()))) {
                     Calendar calendar = DatatypeConverter.parseDateTime(attribute.getValue());
@@ -141,23 +145,15 @@ public class SPListItem {
      * @throws KeyManagementException
      * @throws MalformedURLException
      */
-    public List<SPAttachment> getAttachments() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, URISyntaxException {
-        List<SPAttachment> attachmentCollection = new ArrayList<SPAttachment>();
+    public SPAttachmentCollection getAttachments() throws NoSuchAlgorithmException, KeyManagementException, MalformedURLException, ParseException, URISyntaxException {
+        SPAttachmentCollection attachmentCollection = new SPAttachmentCollection(listName, webAbsluteUrl);
         GetAttachmentCollectionResult result = WsContext.getListsPort(new URL(webAbsluteUrl)).getAttachmentCollection(listName, String.valueOf(id));
         if (result.getContent() != null) {
             for (Object content : result.getContent()) {
                 if (content instanceof Element) {
                     // Parse XML file                    
                     Element rootElement = (Element) content;
-                    if (StringUtils.equals(rootElement.getLocalName(), "Attachments")) {
-                        NodeList attachmentNodeList = rootElement.getElementsByTagName("Attachment");
-                        for (int i = 0; i < attachmentNodeList.getLength(); i++) {
-                            Element attachmentElement = (Element) attachmentNodeList.item(i);
-                            SPAttachment attachment = new SPAttachment(listName, webAbsluteUrl);
-                            attachment.loadFromXml(attachmentElement);
-                            attachmentCollection.add(attachment);
-                        }
-                    }
+                    attachmentCollection.loadFromXml(rootElement);
                 }
             }
         }
@@ -246,7 +242,7 @@ public class SPListItem {
         return owshiddenversion;
     }
 
-    public String getUniqueId() {
+    public UUID getUniqueId() {
         return uniqueId;
     }
 
@@ -284,5 +280,5 @@ public class SPListItem {
 
     public String getListName() {
         return listName;
-    }    
+    }
 }
