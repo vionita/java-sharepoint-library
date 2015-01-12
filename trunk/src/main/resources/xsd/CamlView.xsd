@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="CamlView" targetNamespace="http://schemas.microsoft.com/sharepoint/" elementFormDefault="qualified" xmlns="http://schemas.microsoft.com/sharepoint/" xmlns:mstns="http://schemas.microsoft.com/sharepoint/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified">
-  <xs:include id="CoreDefA" schemaLocation="coredefinitions.xsd"/>
+  <xs:include id="CoreDefA" schemaLocation="CoreDefinitions.xsd"/>
   <xs:include id="CamlQueryA" schemaLocation="CamlQuery.xsd"/>
   <xs:complexType name="CamlViewRoot">
     <xs:complexContent>

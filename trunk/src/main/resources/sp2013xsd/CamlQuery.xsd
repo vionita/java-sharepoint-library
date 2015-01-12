@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="CamlQuery" targetNamespace="http://schemas.microsoft.com/sharepoint/" elementFormDefault="qualified" xmlns="http://schemas.microsoft.com/sharepoint/" xmlns:mstns="http://schemas.microsoft.com/sharepoint/" xmlns:xs="http://www.w3.org/2001/XMLSchema" attributeFormDefault="unqualified">
-  <xs:include id="CoreDef" schemaLocation="coredefinitions.xsd" />
+  <xs:include id="CoreDef" schemaLocation="CoreDefinitions.xsd" />
   <xs:complexType name="CamlQueryRoot" mixed="true">
     <xs:all>
       <xs:element name="Where" type="LogicalJoinDefinition" minOccurs="0" maxOccurs="1" />
