@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema id="WSS" targetNamespace="http://schemas.microsoft.com/sharepoint/" elementFormDefault="qualified" xmlns="http://schemas.microsoft.com/sharepoint/" xmlns:mstns="http://schemas.microsoft.com/sharepoint/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" attributeFormDefault="unqualified">  
-  <xs:include id="CoreDefinitions" schemaLocation="coredefinitions.xsd" />
+  <xs:include id="CoreDefinitions" schemaLocation="CoreDefinitions.xsd" />
   <xs:include id="CommandUI" schemaLocation="cui.xsd" />
 
   <xs:complexType name="FeatureDefinition">
