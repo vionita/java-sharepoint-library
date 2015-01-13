@@ -97,7 +97,7 @@ abstract class SPFileBase {
      */
     public String getAbsoluteUrl() throws MalformedURLException {
         URL webUrl = new URL(webAbsluteUrl);
-        URL urlRequest = new URL(webUrl, url);
+        URL urlRequest = new URL(webUrl.toString() + url);
         return urlRequest.toString();
     }
 
